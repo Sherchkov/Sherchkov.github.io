@@ -1,0 +1,22 @@
+{
+  "name": "tensorproject",
+  "version": "1.0.0",
+  "description": "create social network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sherchkov/ProjectTensor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sherchkov/ProjectTensor/issues"
+  },
+  "homepage": "https://github.com/Sherchkov/ProjectTensor#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}
