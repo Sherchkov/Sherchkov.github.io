@@ -1,4 +1,4 @@
-define(['base/component', 'server/json', "base/helpers", 'css!component/information/information.min'], function (Component, json) {
+	define(['base/component', 'server/json', "base/helpers", 'css!component/information/information.min'], function (Component, json) {
 	'use strict';
 
 	let data = json.information;
@@ -85,7 +85,7 @@ define(['base/component', 'server/json', "base/helpers", 'css!component/informat
 	    }
 
 	}
-	
+
 
 
 	return Information;

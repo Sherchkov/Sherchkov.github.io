@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+}
+
+body {
+    background: #f6f6f6;
+}
+
+.wrapper {
+    width: 340px;
+    margin: 10% auto;
+}
+
+.auth {
+    display: grid;
+    background:white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.auth__main {
+    display: grid;
+    justify-content: center;
+    background: #5c6c8a;
+    font-weight: bold;
+    color: white;
+    padding: 1em;
+}
+
+p {
+    margin-bottom: 0.9em;
+}
+.auth__login {
+    padding: 1em;
+}
+
+.auth__login_view {
+    width: 20px;
+    height: 20px;
+    border-radius: 1em;
+}
+
+.auth__password_view {
+    width: 18px;
+    height: 18px;
+    border-radius: 1em;
+    background: white;
+}
+
+.auth__button {
+    text-align: center;
+    padding-bottom: 1em;
+}
