@@ -1,0 +1,13 @@
+.content-feed__title{color:#bababa;font-size:1.4rem}.message{position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;width:280px;color:#000;padding:10px 0;border-bottom:1px solid #ddd}.message-img__avatar{display:block;margin-right:10px;width:30px;height:30px;border-radius:50%;-o-object-fit:cover;object-fit:cover}.message-content{font-size:1.3rem;width:240px}.message-content__title{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.message-content__name{-webkit-box-flex:1;-ms-flex:1;flex:1;color:#5c6c8a;font-weight:700;overflow-x:hidden;-o-text-overflow:ellipsis;text-overflow:ellipsis;white-space:nowrap;margin-right:5px}.message-content__text{margin-top:5px;max-height:45px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:break-word;word-wrap:break-word;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto}
+
+
+.content-feed_mobile{
+	max-height: 250px;
+	overflow-y: auto;
+}
+.messageMobile{
+	width: 100%;
+}
+.message-content_mobile{
+	flex: 1;
+}

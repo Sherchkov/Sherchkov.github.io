@@ -1,0 +1,33 @@
+.content-link{
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-auto-rows: auto;
+	align-items: start;
+	justify-items:center;
+	grid-column-gap: 5px;
+	grid-row-gap: 10px;
+}
+.link-element{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	font-size: 1.2rem;
+}
+.link-element__img{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5px;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+}
+.link-element__img img{
+	width: 30px;
+	height: 30px;
+}
+
+.link-element__title{
+	text-align: center;
+	color: #000000;
+}

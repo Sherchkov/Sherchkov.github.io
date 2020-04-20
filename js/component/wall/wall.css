@@ -1,0 +1,89 @@
+/*Пост*/
+.post{
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ddd;
+	position: relative;
+	width: 100%;
+}
+.post:last-child{
+	margin-bottom: 0;
+	padding-bottom: 0px;
+	border-bottom: none;
+}
+.post-data{
+	position: relative;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+}
+.post-data__delete{
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+.post-data__delete img{
+	width: 20px;
+	height: 20px;
+	object-fit: cover;
+}
+.post-data__link{
+	width: 50px;
+	margin-right: 10px;
+}
+.post-data{
+	display: grid;
+	grid-template-columns: 60px 1fr;
+	font-size: 1.3rem;
+}
+.post-data__link{
+	grid-row: span 2 / auto;
+	grid-row-start: span 2;
+	grid-row-end: auto;
+}
+.post-data__img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+.post-data__name,.post-data__date{
+	margin-right: 25px;
+	display: block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+} 
+.post-data__name{
+	align-self: end;
+	margin-bottom: 2px;
+	font-weight: bold;
+	color: #5c6c8a;
+}
+.post-data__date{
+	align-self: start;
+	margin-top: 2px;
+	color: #bababa;
+	font-weight: 600;
+}
+.post-text{
+	margin: 10px 0;
+	font-size: 1.4rem;
+}
+.post-img{
+	display: flex;
+	flex-direction: column;
+}
+.post-img__picture{
+	display: block;
+	width: 100%;
+	margin-bottom: 10px;
+	max-height: 300px;
+	flex:1;
+	object-fit: cover;
+	border-radius: 5px;
+}

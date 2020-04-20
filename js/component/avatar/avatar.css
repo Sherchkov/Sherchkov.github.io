@@ -1,0 +1,63 @@
+.content-photo{
+	position: relative;
+	display: flex;
+}
+
+.content-photo__img{
+	display: block;
+	width: 100%;
+	max-height: 400px;
+	object-fit: cover;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.photo-edit{
+	display: flex;
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 20px;
+	border-radius: 0 0 5px 5px; 
+	height: 40px;
+	max-height: 0;
+	transition: max-height 0.3s ease-out;
+	background: #000000;
+	opacity: 0.5;
+	cursor: pointer;
+}
+.photo-edit__active{
+	max-height: 40px;
+    transition: max-height 0.3s ease-out;
+}
+.photo-edit__icon{
+	width: 20px;
+	height: 20px;
+	object-fit: cover;
+}
+
+/*Мобил*/
+.content-photo_mobile{
+	padding: 10px;
+	padding-left: 0px;
+}
+.photo-edit_mobile{
+
+	display: flex;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	align-items: center;
+	justify-content: flex-end;
+	background: transparent;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;	
+}
+.content-photo__img_mobile{
+	width: 75px;
+	height: 75px;
+	border-radius: 50%;
+}
