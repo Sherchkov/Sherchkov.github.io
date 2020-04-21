@@ -1,4 +1,4 @@
-define(["base/component", "base/helpers", "css!component/auth/style.css"], function (Component) {
+define(["base/component", "css!component/auth/style.css"], function (Component) {
     class auth extends Component {
         render() {
             return `<div class="auth">
