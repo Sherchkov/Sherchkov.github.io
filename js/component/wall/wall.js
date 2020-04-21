@@ -1,14 +1,26 @@
 // eslint-disable-next-line no-undef
 define(['base/component', 'server/json', 'css!component/wall/wall.min'], function (Component, json) {
 	'use strict';
-/*после переделки структуры удалить*/
-	let wall = json.wall;
 
 	class Wall extends Component {
 		constructor() {
 			super();
 			this.wall = json.wall;
-		}
+			this.useCSS = {
+				postImage : 'post-img__picture',
+				buttonDelete : 'post-data__delete',
+				post : 'post',
+				postData : 'post-data',
+				postLink : 'post-data__link',
+				postAva : 'post-data__img',
+				postMaker : 'post-data__name',
+				postDate : 'post-data__date',
+				postText : 'post-text',
+				postImgs : 'post-img',
+				contentWall :'content-wall', 
+				contentDefault :'content_default'
+				};
+			}
 
 		_getRoundSeconds(dateNow, dateCreate) {
 			return Math.floor((dateNow - dateCreate)/1000);
@@ -165,47 +177,47 @@ define(['base/component', 'server/json', 'css!component/wall/wall.min'], functio
 		render() {
 			let posts = '';
 			
-			for (let i = 0; i < wall.length; i++){
-				let post = wall[i];
+			for (let post of this.wall) {
 				let images = '';
 				let date = '';
-				if (post.img.length) {
-					for (let j = 0; j < post.img.length; j++){
-						images += `<img src="${post.img[j]}" alt="картинка" class="post-img__picture">`;
+				let rubbish = '';
+
+				if (post.img.length !== 0){
+					for (let image of post.img) {
+						images += `<img src="${image}" alt="Картинка поста" class="${this.useCSS.postImage}">`;
 					}
 				}
-				let rubbish = (post.dalete) ? '<div class="post-data__delete" title="удалить пост"><img src="img/icons/svg/rubbish.svg" alt="Удалить"></div>' : '';
-				
+
+				if (post.delete) {
+					rubbish = `<div class="${this.useCSS.buttonDelete}" title="Удалить пост"><img src="img/icons/svg/rubbish.svg" alt="Удалить"></div>`;
+				}
+
 				date = this._defineDate(post.date);
 
 				posts += ` 
-					<div class="post">
-						<div class="post-data">
-							<a href="${post.href}" class="post-data__link" target="_blank">
-								<img src="${post.avatar}" alt="${post.name}" class="post-data__img">
+					<div class="${this.useCSS.post}">
+						<div class="${this.useCSS.postData}">
+							<a href="${post.href}" class="${this.useCSS.postLink}" target="_blank">
+								<img src="${post.avatar}" alt="${post.name}" class="${this.useCSS.postAva}">
 							</a>
-							<a href="#" target="_blank" class="post-data__name">${ post.family + post.name }</a>
-							<span class="post-data__date">${date}</span>
+							<a href="#" target="_blank" class="${this.useCSS.postMaker}">${post.family} ${post.name}</a>
+							<span class="${this.useCSS.postDate}">${date}</span>
 							${rubbish}
 						</div>
-						<div class="post-text">${post.text}</div>
-						<div class="post-img">
+						<div class="${this.useCSS.postText}">${post.text}</div>
+						<div class="${this.useCSS.postImgs}">
 							${images}
 						</div>
 					</div>
 	            `;
-
-			}
-			
+			}		
 
 			return `
-				<div class="content-wall content_default">
+				<div class="${this.useCSS.contentWall} ${this.useCSS.contentDefault}">
 					${posts}
 				</div>`;
 		}
 	}
-
-
 
 	return Wall;
 });  

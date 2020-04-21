@@ -30,7 +30,7 @@ define(function(){
 				img : ['img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				dalete : true,
+				delete : true,
 				comments: [
 					{
 						name : '',
@@ -59,7 +59,7 @@ define(function(){
 				img : ['img/post/wall2.jpg', 'img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				dalete : false,
+				delete : false,
 				comments: [
 					{
 						name : '',
