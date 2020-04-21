@@ -8,9 +8,10 @@ require.config({
 		// плагины для require
 		text: 'libs/requirejs/text',
 		css: 'libs/requirejs/native-css',
-
+		
 		app: 'app',
 		component: 'component',
+		auth: 'component/auth',
 		modal: 'component/modal',
 		base: 'component/base',
 		page: 'component/page',
