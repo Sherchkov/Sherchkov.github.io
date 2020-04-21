@@ -1,10 +1,11 @@
-define(["base/component", "css!component/auth/style.css"], function (Component) {
-    class auth extends Component {
+define(['base/component', 'css!component/auth/style.css'], function (Component) {
+    'use strict';
+    class Auth extends Component {
         render() {
             return `<div class="auth">
                 <div class="auth__main">Авторизация</div>
                 <div class="auth__login">
-                    <form>
+                    <form id="authorization">
                         <p>
                             <img src="img/icons/system/auth/login.jpg" class="auth__login_view">
                             <input type="text" size="20" placeholder="login" name="login" pattern="^[a-zA-Z]+$">
@@ -16,11 +17,65 @@ define(["base/component", "css!component/auth/style.css"], function (Component) 
                     </form>
                 </div>
                 <div class="auth__button">
-                    <button>Войти</button>
-                    <button>Зарегистрироваться</button>
+                    <button class="auth__button_enter">Войти</button>
+                    <button class="auth__button_register">Зарегистрироваться</button>
+                </div>
+                <div class="auth__success">
+                    <img src="img/icons/system/success.jpeg" class="auth__success_ok">
                 </div>
             </div>`;
         }
+
+        afterMount() {
+            this._sign = this.getContainer().querySelector('.auth__button_enter');
+            this.subscribeTo(this._sign, 'click', this.sign.bind(this));
+            this._register = this.getContainer().querySelector('.auth__button_register');
+            this.subscribeTo(this._register, 'click', this.registerPerson.bind(this));
+        }
+
+        sign() {
+            const urlencoded = new URLSearchParams();
+
+            urlencoded.append("login", document.forms["authorization"].elements["login"].value);
+            urlencoded.append("password", document.forms["authorization"].elements["password"].value);
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: urlencoded,
+                "credentials": "include"
+            };
+
+            fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => console.log('error', error));
+        }
+
+        registerPerson() {
+            const urlencoded = new URLSearchParams();
+
+            urlencoded.append("login", document.forms["authorization"].elements["login"].value);
+            urlencoded.append("password", document.forms["authorization"].elements["password"].value);
+
+            this._success = this.getContainer().querySelector('.auth__success');
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: urlencoded,
+                "credentials" : "include"
+            };
+
+            fetch("https://tensor-school.herokuapp.com/user/create", requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                        this._success.innerHTML += 'Пользователь успешно зарегистрирован!';
+                        this._success.style.display = 'block';
+                })
+                .catch(error => console.log('error', error));
+        }
     }
-    return auth;
+    return Auth;
 });

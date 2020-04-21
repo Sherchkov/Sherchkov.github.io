@@ -50,3 +50,16 @@ p {
     text-align: center;
     padding-bottom: 1em;
 }
+
+.auth__success {
+    display: none;
+    text-align: center;
+    padding-bottom: 1em;
+}
+
+.auth__success_ok {
+    width: 15px;
+    height: 15px;
+    border-radius: 7em;
+    background: white;
+}
