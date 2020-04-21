@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
 // eslint-disable-next-line no-undef
 require.config({
-	baseUrl: "js",
+	baseUrl: 'js',
 	paths: {
 
 		// плагины для require
-		text: "libs/requirejs/text",
-		css: "libs/requirejs/native-css",
+		text: 'libs/requirejs/text',
+		css: 'libs/requirejs/native-css',
 
-		app: "app",
-		component: "component",
-		modal: "component/modal",
-		base: "component/base",
-		page: "component/page",
-		server: "server",
+		app: 'app',
+		component: 'component',
+		modal: 'component/modal',
+		base: 'component/base',
+		page: 'component/page',
+		server: 'server',
 	}
 });
 
@@ -30,4 +30,4 @@ class AbstractFactory {
 const factory = new AbstractFactory();
 let modal;
 
-require(["app/main"]);
+require(['app/main']);
