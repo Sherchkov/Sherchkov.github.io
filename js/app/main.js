@@ -9,3 +9,8 @@ if ( window.innerWidth > 800 ) {
 	    profile.mount(document.body);
 	});
 }
+
+// define(["page/Authorization"], function(authorization){
+// 	const profile = factory.create(authorization, {});
+// 	profile.mount(document.body);
+// });
