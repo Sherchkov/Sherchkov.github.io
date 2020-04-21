@@ -25,12 +25,28 @@ define(function(){
 				name : 'Марина',
 				family : 'Злотова',
 				avatar : 'img/avatar/avatar1.jpg',
-				date : '2020-04-17T00:00:00',
+				date : '2020-04-16T00:00:00',
 				text: 'Тебе, моя красотуля',
 				img : ['img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				dalete : true
+				dalete : true,
+				comments: [
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					} ,
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					}
+				]
 			},
 			{
 				id : 2,
@@ -43,7 +59,23 @@ define(function(){
 				img : ['img/post/wall2.jpg', 'img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				dalete : false
+				dalete : false,
+				comments: [
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					} ,
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					}
+				]
 			}
 		],
 		avatar : {
