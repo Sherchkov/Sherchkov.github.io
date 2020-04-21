@@ -1,16 +1,17 @@
 /*Base/Component*/
-define(['./Composite'], function (Composite) {
+define(['./composite'], function (Composite) {
 
     'use strict';
     /**
      * Компонент базовый
-     * на вход принимает options, которые можно только читать! 
+     * на вход принимает options, которые можно только читать!
      * имеет внутреннее состояние state, которое может менять
      * имеет 3 хука: mount, update, unmount
      * прехуки выполняются до и после хуков.
      * хуки переопределять нельзя, прехуки не имеют реализации в базе, реализуются при наследовании если необходимо
      */
     class Component {
+        position;
         constructor(options) {
             this.options = {...this.getDefaultOptions(), ...options};
             this.state = {};
@@ -29,17 +30,16 @@ define(['./Composite'], function (Composite) {
         /**
          * помещает верстку компонента в dom
          * @param {DOMElement} container контейнер в котором строиться верстка, куда поместить
-         * @param {String} position insertAdjacentElement позиция куда помесить, до, в, вконец, после
          */
-        mount(container, position) {
-            // прехук до монтирования        
+        mount(container) {
+            // прехук до монтирования
             this._beforeMount();
             // создаем новый компонент в доме
             const newComponent = document.createElement('div');
             // помещаем туда верстку
             newComponent.innerHTML = this.toString();
             // перекладываем верстку в нужный контейнер
-            container.insertAdjacentElement(position || 'beforeend', newComponent.firstElementChild);
+            container.insertAdjacentElement(this.position || 'beforeend', newComponent.firstElementChild);
             // подчищаем за собой
             newComponent.remove();
             // меняем состояние что компонент смонтирован
@@ -191,7 +191,7 @@ define(['./Composite'], function (Composite) {
             // ищем контейнер компонента в верстке и доставляем ему id
             return template.replace(regexp, `<$1 id="${this.id}">`);
         }
-        
+
         // поиск компонента среди детей по его id
         getById(id) {
             // сначала в своих
