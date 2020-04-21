@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 define(function(){
 	let answer  = {
 		header : {
@@ -26,7 +27,7 @@ define(function(){
 				avatar : 'img/avatar/avatar1.jpg',
 				date : '2020-04-17T00:00:00',
 				text: 'Тебе, моя красотуля',
-				img : ['img/gallery/cat1.jpg'],
+				img : ['img/post/wall1.jpg'],
 				audio : [],
 				video : [],
 				dalete : true
@@ -39,7 +40,7 @@ define(function(){
 				avatar : 'img/avatar/avatar1.jpg',
 				date : '2020-04-17T00:00:00',
 				text: 'Текст 2',
-				img : ['img/gallery/cat1.jpg', 'img/gallery/cat2.jpg'],
+				img : ['img/post/wall2.jpg', 'img/post/wall1.jpg'],
 				audio : [],
 				video : [],
 				dalete : false
