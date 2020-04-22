@@ -1,4 +1,4 @@
-	define(['base/component', 'server/json', "base/helpers", 'css!component/information/information.min'], function (Component, json) {
+	define(['base/component', "component/action/dataPerson", 'server/json', "base/helpers", 'css!component/information/information.min'], function (Component, dataPerson, json) {
 	'use strict';
 
 	let data = json.information;
@@ -44,6 +44,7 @@
 
 
 	    afterMount() {
+			dataPerson();
 	        this.subscribeTo(this.getContainer(), 'click', this.onSwitchDetails.bind(this));
 	    }
 	    /**

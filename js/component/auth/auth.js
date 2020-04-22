@@ -61,7 +61,6 @@ define(['base/component', 'css!component/auth/style.css'], function (Component) 
                             this._success.style.display = 'block';
                         } else {
                             document.body.innerHTML = "";
-                            console.log(result.id);
                             if (window.innerWidth > 800) {
                                 require(["page/profile"], function (Profile) {
                                     const profile = factory.create(Profile, {});
