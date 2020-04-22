@@ -1,4 +1,4 @@
-define(['modal/Modal', 'css!component/modal/Modal.min'], function (Modal) {
+define(['modal/Modal', 'css!component/modal/Modal'], function (Modal) {
 	'use strict';
 
 	class ActionModal{
