@@ -25,6 +25,8 @@ define(function(){
 			dstep = config.dstep || 1,
 			position = config.position || 0,
 			transform = 0,
+			classItem = config.classItem || 'slider-container__item_modal',
+			classImg = config.classImg || 'slider-container__img_max',
 			arrowLeft = config.leftButton || element.querySelector('.slider-arrowLeft'),
 			arrowRight = config.RightButton || element.querySelector('.slider-arrowRight');
 
@@ -84,21 +86,32 @@ define(function(){
 		   * @param {position} - Позиция нового элемента
 		  */
 		function addSlide(direction,position){
+
 			if (amountElementItems === itemsLenght) {
 				return;
 			}
+			let qt = getCountVisible();
+			console.log("qt", qt);
+
+			if (classItem === 'slider-container__item_gallery') {
+				qt = 3;
+			}else{
+				qt -= 1;
+			}
+
 			let slideHTML = document.createElement('div');
-			slideHTML.className = 'slider-container__item slider-container__item_one';
-			slideHTML.setAttribute('data-position', position);
-			slideHTML.innerHTML = `<img src="${items[position]}" alt="фотография" class="slider-container__img slider-container__img_max">`;
+			slideHTML.className = 'slider-container__item ' + classItem;
+			slideHTML.setAttribute('data-position', position + qt);
+			slideHTML.innerHTML = `<img src="${items[position + qt]}" alt="фотография" class="slider-container__img ${classImg}">`;
 
 			if (direction === 'prev') {
 				elementContainer.prepend(slideHTML);
 			}
 			if (direction === 'next') {
 				elementContainer.append(slideHTML);
-				elementContainer.style.transform = 'translateX(' + (transform - 100) + '%)';
+				elementContainer.style.transform = 'translateX(' + (transform - step) + '%)';
 			}
+
 		}
 
 		/**
@@ -177,7 +190,10 @@ define(function(){
 				arrowLeft.style.display = 'block';
 				position++;
 
-				if (amountElementItems !== itemsLenght && position< items.length  && !searchSlide(position) ) {
+				if (amountElementItems !== itemsLenght && position + qt - 1< items.length ) {
+					console.log("items.length", items.length);
+					console.log("position", position);
+					console.log(position + qt - 1)
 					addSlide('next', position)
 				}
 
