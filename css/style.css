@@ -5,6 +5,9 @@
 html{
 	font-size: 10px;
 }
+.html_overflow{
+	overflow-y: hidden;
+}
 
 body {
   font-family: Roboto, sans-serif;
