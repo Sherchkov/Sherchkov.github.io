@@ -28,6 +28,6 @@ class AbstractFactory {
 }
 // eslint-disable-next-line no-unused-vars
 const factory = new AbstractFactory();
-let modal;
+let modal, modalslider, modalAddPhoto;
 
 require(['app/main']);
