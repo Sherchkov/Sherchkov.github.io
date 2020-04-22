@@ -23,6 +23,13 @@ define(['base/component'], function (Component) {
 	    }
 
 	    afterMount() {
+	    	let html = document.getElementsByTagName('html')[0],
+	    		WidthBefore = html.clientWidth;
+
+	    	html.classList.add('html_overflow');
+	    	let WidthAfter = html.clientWidth;
+	    	html.style.marginRight = `${WidthAfter-WidthBefore}px`;
+
 	        this._closeButton = this.getContainer().querySelector('.modal__close');
 	        this.subscribeTo(this._closeButton, 'click', this.onClose.bind(this));
 	        this.subscribeTo(this.getContainer(), 'click', this.onCloseModal.bind(this));
@@ -39,6 +46,9 @@ define(['base/component'], function (Component) {
 	    }
 
 	    onClose(event) {
+	    	let html = document.getElementsByTagName('html')[0]
+	    	html.classList.remove('html_overflow');
+	    	html.style.marginRight = '0px';
 	        this.unmount();
 	    }
 
