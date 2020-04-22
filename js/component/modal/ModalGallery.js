@@ -72,7 +72,7 @@ define(['base/component'], function (Component) {
 	    		}
 
 	    		modalslider = factory.create(ModalSlider, {
-	    			position : position,
+	    			positionItem : position,
 	    			items : items
 	    		});
 	    		modalslider.mount(document.body);
