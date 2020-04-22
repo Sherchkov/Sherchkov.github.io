@@ -85,12 +85,12 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 
 	    	require(['modal/ModalSlider'], function(ModalSlider){
 
-	    		if (  typeof(modalslider) !== "undefined" ) {
+	    		if (  typeof(modalslider) !== 'undefined' ) {
 	    		    modalslider.unmount();
 	    		}
 
 	    		modalslider = factory.create(ModalSlider, {
-	    			position : position,
+	    			positionItem : position,
 	    			items : items
 	    		});
 	    		modalslider.mount(document.body);
@@ -99,7 +99,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 
 	    addPhoto(){
 	    	require(['modal/ModalAddPhoto'], function(ModalSlider){
-	    		if (  typeof(modalAddPhoto) !== "undefined" ) {
+	    		if (  typeof(modalAddPhoto) !== 'undefined' ) {
 	    		    modalAddPhoto.unmount();
 	    		}
 
