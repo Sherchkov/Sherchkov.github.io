@@ -7,7 +7,7 @@ define(['base/component', 'component/action/slider'], function (Component, slide
 	    	console.log("options", options);
 
 	    	this.items = options.items;
-	        this.position = options.position;
+	        this.positionItem = options.positionItem;
 
 	        return `
 	            <div class="modalSlidder">
@@ -20,8 +20,8 @@ define(['base/component', 'component/action/slider'], function (Component, slide
 	                          <svg class="slider-arrowLeft__icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="306px" height="306px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;" xml:space="preserve"><polygon points="247.35,35.7 211.65,0 58.65,153 211.65,306 247.35,270.3 130.05,153 "/></svg>
 	                        </div>
 	                        <div class="slider-container">
-	                          <div class="slider-container__item slider-container__item_modal" data-position="${options.position}">
-	                            <img src="${options.items[options.position]}" alt="фотография" class="slider-container__img slider-container__img_max">
+	                          <div class="slider-container__item slider-container__item_modal" data-position="${this.positionItem}">
+	                            <img src="${this.items[this.positionItem]}" alt="фотография" class="slider-container__img slider-container__img_max">
 	                          </div>
 	                        </div>
 	                        <div class="slider-arrowRight sliderRight" title="Вперед">
@@ -54,7 +54,7 @@ define(['base/component', 'component/action/slider'], function (Component, slide
 	    	slider(
 	    	    document.getElementById(this.id),
 	    	    {
-	    	        position: this.position,
+	    	        position: this.positionItem,
 	    	        items: this.items,
 	    	    }
 	    	);
