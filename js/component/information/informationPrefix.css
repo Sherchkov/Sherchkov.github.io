@@ -1,3 +1,6 @@
+.content-data{
+	overflow-y: hidden;
+}
 .content-data__name,.content_data__aboutMe{
 	overflow: hidden;
 	overflow-wrap: break-word;
