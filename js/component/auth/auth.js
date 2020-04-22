@@ -54,13 +54,14 @@ define(['base/component', 'css!component/auth/style.css'], function (Component) 
                 };
 
                 fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
-                    .then(response => response.text())
+                    .then(response => response.json())
                     .then(result => {
                         if (result == "Unauthorized") {
                             this._success.innerHTML = 'Пользователь не зарегистрирован!';
                             this._success.style.display = 'block';
                         } else {
                             document.body.innerHTML = "";
+                            console.log(result.id);
                             if (window.innerWidth > 800) {
                                 require(["page/profile"], function (Profile) {
                                     const profile = factory.create(Profile, {});
