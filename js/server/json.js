@@ -24,26 +24,58 @@ define(function(){
 				href : '#',
 				name : 'Марина',
 				family : 'Злотова',
-				avatar : 'img/avatar/avatar1.jpg',
-				date : '2020-04-17T00:00:00',
-				text: 'Тебе, моя красотуля',
+				avatar : 'img/avatar/friend1.jpg',
+				date : '2020-04-21T23:56:00',
+				text: 'Но она влюблена в своего космонавта',
 				img : ['img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				dalete : true
+				delete : true,
+				comments: [
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					} ,
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					}
+				]
 			},
 			{
 				id : 2,
 				href : '#',
-				name : 'Марина',
-				family : 'Злотова',
-				avatar : 'img/avatar/avatar1.jpg',
-				date : '2020-04-17T00:00:00',
-				text: 'Текст 2',
+				name : 'Миша',
+				family : 'Голосов',
+				avatar : 'img/avatar/friend2.jpg',
+				date : '2020-04-22T01:50:00',
+				text: 'Я Свободен!!!',
 				img : ['img/post/wall2.jpg', 'img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				dalete : false
+				delete : false,
+				comments: [
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					} ,
+					{
+						name : '',
+						family : '',
+						avatar : '',
+						date : '',
+						text: ''
+					}
+				]
 			}
 		],
 		avatar : {
