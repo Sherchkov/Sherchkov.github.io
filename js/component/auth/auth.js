@@ -21,7 +21,7 @@ define(['base/component', 'css!component/auth/style.css'], function (Component) 
                     <button class="auth__button_register">Зарегистрироваться</button>
                 </div>
                 <div class="auth__success">
-                    <img src="img/icons/system/success.jpeg" class="auth__success_ok">
+                        <img src="img/icons/system/success.jpeg" class="auth__success_ok">
                 </div>
             </div>`;
         }
@@ -60,7 +60,7 @@ define(['base/component', 'css!component/auth/style.css'], function (Component) 
                             this._success.innerHTML = 'Пользователь не зарегистрирован!';
                             this._success.style.display = 'block';
                         } else {
-                            this.unmount();
+                            document.body.innerHTML = "";
                             if (window.innerWidth > 800) {
                                 require(["page/profile"], function (Profile) {
                                     const profile = factory.create(Profile, {});
@@ -105,7 +105,7 @@ define(['base/component', 'css!component/auth/style.css'], function (Component) 
                         this._success.innerHTML = 'Пользователь уже зарегистрирован!';
                         this._success.style.display = 'block';
                     } else {
-                        this._success.innerHTML = 'Пользователь успешно зарегистрирован!';
+                        this._success.innerHTML += 'Пользователь успешно зарегистрирован!';
                         this._success.style.display = 'block';
                     }
                 })
