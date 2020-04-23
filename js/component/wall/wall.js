@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-define(['base/component', 'server/json', 'css!component/wall/wall.min'], function (Component, json) {
+define(['base/component', 'server/json', 'css!component/wall/wall'], function (Component, json) {
 	'use strict';
 
 	class Wall extends Component {
@@ -10,6 +10,9 @@ define(['base/component', 'server/json', 'css!component/wall/wall.min'], functio
 				postImage : 'post-img__picture',
 				buttonDelete : 'post-data__delete',
 				post : 'post',
+				postHeader : 'post-data_header',
+				postButton : 'post-data_header__button',
+				postTitle : 'post-data_header__title',
 				postData : 'post-data',
 				postLink : 'post-data__link',
 				postAva : 'post-data__img',
@@ -194,7 +197,7 @@ define(['base/component', 'server/json', 'css!component/wall/wall.min'], functio
 
 				date = this._defineDate(post.date);
 
-				posts += ` 
+				posts = ` 
 					<div class="${this.useCSS.post}">
 						<div class="${this.useCSS.postData}">
 							<a href="${post.href}" class="${this.useCSS.postLink}" target="_blank">
@@ -209,11 +212,15 @@ define(['base/component', 'server/json', 'css!component/wall/wall.min'], functio
 							${images}
 						</div>
 					</div>
-	            `;
+	            ` + posts;
 			}		
 
 			return `
 				<div class="${this.useCSS.contentWall} ${this.useCSS.contentDefault}">
+					<div class="${this.useCSS.postHeader}">
+						<span class="${this.useCSS.postTitle}">Мои записи</span>
+						<span class="${this.useCSS.postButton}">добавить</span>
+					</div>
 					${posts}
 				</div>`;
 		}

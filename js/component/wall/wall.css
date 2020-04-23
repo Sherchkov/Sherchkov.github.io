@@ -18,6 +18,36 @@
 	align-items: center;
 	width: 100%;
 }
+
+.post-data_header{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin: 3px 0 10px 0;
+}
+
+.post-data_header__title, .post-data_header__button {
+	font-size: 1.4rem;
+}
+.post-data_header__title{
+	margin-left: 6px;
+}
+
+.post-data_header__button{
+	margin-right: 6px;
+	color: #729ee6;
+	cursor: pointer;
+	padding-bottom: 1px;
+	border-bottom: 1px solid #ffffff;
+}
+
+.post-data_header__button:hover{
+	border-bottom: 1px solid  #729ee6;
+}
+
 .post-data__delete{
 	position: absolute;
 	right: 0;
