@@ -22,9 +22,11 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	    }
 
 	    afterMount() {
+			this._logout = this.getContainer().querySelector('.header__menu');
+			this.subscribeTo(this._logout, 'click', this.logout.bind(this));
 	        this.subscribeTo(this.getContainer(), 'click', this.onSwitchData.bind(this));
 	    }
-	    
+
 	    //переключение Редактировать/Сохранить
 	    onSwitchData(event){
 	        let element = event.target;
@@ -42,7 +44,7 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	                src : element.getAttribute('src'),
 	                title : element.getAttribute('title'),
 	                alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
-	            }); 
+	            });
 	        }
 	    }
 
@@ -78,7 +80,7 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	    }
 
 	    /**
-	       * установка курсора при клике в блоке contenteditable = "true" при пустом контенте 
+	       * установка курсора при клике в блоке contenteditable = "true" при пустом контенте
 	       * @param {event} событие для установки курсора
 	      */
 	    setCursorPosition(event){
@@ -95,7 +97,7 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	    onSaveData(element){
 	        // Дата рождения
 	        let date = document.querySelector('.content-data-params__date');
-	        let dateValue = date.value;  
+	        let dateValue = date.value;
 	        let newDate = renderBirthday(dateValue);
 	        let symbol = renderHoroscope(dateValue);
 	        if (newDate === 'error' || symbol === 'error') {
@@ -114,7 +116,7 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	        }
 	        aboutMe.setAttribute("title", updateText);
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
-	        //отображаем изменения 
+	        //отображаем изменения
 	        this.renderSaveData(element,newDate,symbol);
 	    }
 
@@ -150,7 +152,23 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	            el.setAttribute("disabled", "disabled");
 	        });
 	    }
-	    
+
+		logout() {
+			fetch('https://tensor-school.herokuapp.com/user/logout', {
+				'method' : 'GET',
+				credentials: 'include'
+			}).then(response => {
+				if (response.status == '200') {
+					document.body.innerHTML = "";
+					require(["page/Authorization"], function(authorization){
+						const profile = factory.create(authorization, {});
+						profile.mount(document.body);
+					});
+				}
+			})
+				.catch(error => console.log('error', error));
+		}
+
 	}
 
 	return Header;
