@@ -59,7 +59,7 @@ define(function(){
 				img : ['img/post/wall2.jpg', 'img/post/wall1.jpg'],
 				audio : [],
 				video : [],
-				delete : false,
+				delete : true,
 				comments: [
 					{
 						name : '',

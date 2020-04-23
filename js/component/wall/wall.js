@@ -224,6 +224,40 @@ define(['base/component', 'server/json', 'css!component/wall/wall'], function (C
 					${posts}
 				</div>`;
 		}
+
+		afterMount() {
+			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+		}
+
+		chooseAction(event){
+			if (event.target.classList.contains('post-data_header__button')) {
+				this.createPost();
+			} else if (event.target.classList.contains('post-img__picture')) {
+				this.openPost();
+			} else if (event.target.alt === 'Удалить') {
+				this.deletePost();
+			}
+		}
+
+		createPost(){
+			event.stopPropagation();
+		}
+
+		openPost(){
+			event.stopPropagation();
+		}
+
+		deletePost(){
+			event.stopPropagation();
+
+			let postForDelete = event.target;
+
+			while (postForDelete.className !== 'post') {
+				postForDelete = postForDelete.parentElement;
+			}
+			postForDelete.remove();
+			postForDelete = null;
+		}
 	}
 
 	return Wall;
