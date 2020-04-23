@@ -1,5 +1,6 @@
 define(['base/component', 'css!component/auth/style.css'], function (Component) {
     'use strict';
+    document.title = "Авторизация";
     class Auth extends Component {
         render() {
             return `<div class="auth">
