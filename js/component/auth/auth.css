@@ -1,3 +1,4 @@
+/* ::-webkit-scrollbar { width: 0px; height: 3px;} */
 .join{
 	margin: 50px auto;
 	width: 400px;
@@ -80,7 +81,7 @@
 .join-form__input_birthReg::-webkit-calendar-picker-indicator{
 	color: transparent;
 	 opacity: 1;
-	 background: url(../img/calendar.svg) no-repeat center;
+	 background: url(../../../img/icons/svg/calendar_white.svg) no-repeat center;
 	 background-size: contain;
 	 cursor: pointer;
 } 
