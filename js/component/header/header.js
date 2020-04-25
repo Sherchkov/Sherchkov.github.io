@@ -172,14 +172,14 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 				credentials: 'include'
 			}).then(response => {
 				if (response.status == '200') {
-					profile.z
+					page.unmount();
 					require(["page/Authorization"], function(authorization){
-						const profile = factory.create(authorization, {});
-						profile.mount(document.body);
+						page = factory.create(authorization, {});
+						page.mount(document.body);
 					});
 				}
 			})
-				.catch(error => console.log('error', error));
+			.catch(error => console.log('error', error));
 		}
 
 	}
