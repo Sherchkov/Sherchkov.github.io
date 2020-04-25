@@ -1,117 +1,173 @@
-define(['base/component', 'css!component/auth/style.css'], function (Component) {
+define(['base/component', 'css!component/auth/auth'], function (Component) {
     'use strict';
     document.title = "Авторизация";
+
     class Auth extends Component {
+        
         render() {
-            return `<div class="auth">
-                <div class="auth__main">Авторизация</div>
-                <div class="auth__login">
-                    <form id="authorization">
-                        <p>
-                            <img src="img/icons/system/auth/login.jpg" class="auth__login_view">
-                            <input type="text" size="20" placeholder="login" name="login" pattern="^[a-zA-Z]+$">
-                        </p>
-                        <p>
-                            <img src="img/icons/system/auth/block.jpg" class="auth__password_view">
-                            <input type="password" size="20" name="password" placeholder="password">
-                        </p>
-                    </form>
+            return `
+                <div class="join">
+                    <div class="join-header">
+                        <div class="join-header__signIn">
+                            <button class="join__switch join-switch_signIn join__switch_bottom">Войти</button>
+                        </div>
+                        <div class="join-header__signUp">
+                            <button class="join__switch join-switch_signUp">Зарегистрироваться</button>
+                        </div>
+                    </div>
+                    <div class="join-container">
+                        <div class="join-formEnter">
+                            <div class="join-formEnter__error"></div>
+                            <div class="join-form__container">
+                                <span class="join-form__title">Логин<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_logEneter" type="text">
+                                <span class="join-form__title">Пароль<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_passEneter" type="password">
+                                <button class="join-form__send join-form__send_enter">Войти</button>
+                            </div>  
+                        </div>
+                        <div class="join-formReg join-form_none">
+                            <div class="join-formReg__error"></div>
+                            <div class="join-form__container">
+                                <span class="join-form__title">Логин<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_logReg" type="text">
+                                <span class="join-form__title">Пароль<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_passReg" type="password">
+                                <span class="join-form__title">Повторите пароль<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_passRecReg" type="password">
+                                <span class="join-form__title">Имя</span>
+                                <input class="join-form__input join-form__input_nameReg" type="text">
+                                <span class="join-form__title">Фамиллия</span>
+                                <input class="join-form__input join-form__input_familyReg" type="text">
+                                <span class="join-form__title">Город</span>
+                                <input class="join-form__input join-form__input_cityReg" type="text">
+                                <span class="join-form__title">Дата рождения</span>
+                                <input class="join-form__input join-form__input_birthReg" type="date">
+                                <span class="join-form__title">Образование</span>
+                                <input class="join-form__input join-form__input_educationReg" type="text">
+                                <span class="join-form__title">Работа</span>
+                                <input class="join-form__input join-form__input_jobReg" type="text">
+                                <span class="join-form__title">Семейное положение</span>
+                                <input class="join-form__input join-form__input_stateReg" type="text">
+                                <button class="join-form__send join-form__send_reg">Зарегистрироваться</button>
+                            </div>  
+                        </div>
+                    </div>
                 </div>
-                <div class="auth__button">
-                    <button class="auth__button_enter">Войти</button>
-                    <button class="auth__button_register">Зарегистрироваться</button>
-                </div>
-                <div class="auth__success">
-                        <img src="img/icons/system/success.jpeg" class="auth__success_ok">
-                </div>
-            </div>`;
+            `;
         }
 
         afterMount() {
-            this._sign = this.getContainer().querySelector('.auth__button_enter');
-            this.subscribeTo(this._sign, 'click', this.sign.bind(this));
-            this._register = this.getContainer().querySelector('.auth__button_register');
-            this.subscribeTo(this._register, 'click', this.registerPerson.bind(this));
+            this._enterTitle = this.getContainer().querySelector('.join-switch_signIn');
+            this._regTitle = this.getContainer().querySelector('.join-switch_signUp');
+            this._formEnter = this.getContainer().querySelector('.join-formEnter');
+            this._formReg = this.getContainer().querySelector('.join-formReg');
+            this._buttonEnter = this.getContainer().querySelector('.join-form__send_enter');
+            this._buttonReg = this.getContainer().querySelector('.join-form__send_reg');
+
+            this.subscribeTo(this._enterTitle, 'click', this.ShowFormEnter.bind(this));
+            this.subscribeTo(this._regTitle, 'click', this.ShowFormReg.bind(this));
+            this.subscribeTo(this._buttonEnter, 'click', this.Enter.bind(this));
+            /*this.subscribeTo(this._buttonReg, 'click', this.Registration.bind(this));*/
         }
 
-        sign() {
-            this._success = this.getContainer().querySelector('.auth__success');
+        ShowFormEnter(){
+          this._enterTitle.classList.add('join__switch_bottom');
+          this._regTitle.classList.remove('join__switch_bottom');
+          this._formEnter.classList.remove('join-form_none');
+          this._formReg.classList.add('join-form_none');
+        }
 
-            if (document.forms["authorization"].elements["login"].value == '' ||
-                document.forms["authorization"].elements["password"].value == '') {
-                this._success.innerHTML = 'Введенные поля пустые!';
-                this._success.style.display = 'block';
-            } else {
-                const urlencoded = new URLSearchParams();
+        ShowFormReg(){
+          this._regTitle.classList.add('join__switch_bottom');
+          this._enterTitle.classList.remove('join__switch_bottom');
+          this._formEnter.classList.add('join-form_none');
+          this._formReg.classList.remove('join-form_none');
+        }
 
-                urlencoded.append("login", document.forms["authorization"].elements["login"].value);
-                urlencoded.append("password", document.forms["authorization"].elements["password"].value);
 
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: urlencoded,
-                    "credentials": "include"
-                };
 
-                fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result == "Unauthorized") {
-                            this._success.innerHTML = 'Пользователь не зарегистрирован!';
-                            this._success.style.display = 'block';
-                        } else {
-                            document.body.innerHTML = "";
-                            if (window.innerWidth > 800) {
-                                require(["page/profile"], function (Profile) {
-                                    const profile = factory.create(Profile, {});
-                                    profile.mount(document.body);
-                                });
-                            } else {
-                                require(["page/ProfileMobile"], function (profileMobile) {
-                                    const profile = factory.create(profileMobile, {});
-                                    profile.mount(document.body);
-                                });
-                            }
-                        }
-                    })
-                    .catch(error => console.log('error', error));
+        Enter(){
+            let login = document.querySelector('.join-form__input_logEneter').value,
+                password = document.querySelector('.join-form__input_passEneter').value,
+                errorEnter = document.querySelector('.join-formEnter__error');
+
+            errorEnter.innerText = '';
+
+            if (!this.check(login, 'login', errorEnter) || !this.check(password, 'password', errorEnter)) {
+                return;
             }
-        }
-        registerPerson() {
-            this._success = this.getContainer().querySelector('.auth__success');
+            let urlencoded = new URLSearchParams();
 
-            if (document.forms["authorization"].elements["login"].value == '' ||
-                document.forms["authorization"].elements["password"].value == '') {
-                this._success.innerHTML = 'Введенные поля пустые!';
-                this._success.style.display = 'block';
-            } else {
-            const urlencoded = new URLSearchParams();
+            urlencoded.append("login", login);
+            urlencoded.append("password", password);
 
-            urlencoded.append("login", document.forms["authorization"].elements["login"].value);
-            urlencoded.append("password", document.forms["authorization"].elements["password"].value);
-
-            this._success = this.getContainer().querySelector('.auth__success');
-
-            const requestOptions = {
+            let requestOptions = {
                 method: 'POST',
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: urlencoded,
-                "credentials" : "include"
+                "credentials": "include"
             };
 
-            fetch("https://tensor-school.herokuapp.com/user/create", requestOptions)
+            fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
                 .then(response => {
-                    if (response.status == '400') {
-                        this._success.innerHTML = 'Пользователь уже зарегистрирован!';
-                        this._success.style.display = 'block';
+                    console.log("response", response);
+                    if ( response.ok ) {
+                        return response.json();  
+                    }else{
+                      if (response.status === 401) {
+                          errorEnter.innerText = 'Ошибка: Логин или пароль неправильно введен';
+                      }else{
+                          errorEnter.innerText = 'Ошибка сервера';
+                      }
+                      return response.error();
+                    }
+                })
+                .then(result => {
+                    console.log("result", result);
+                    page.unmount();
+                    if (window.innerWidth > 800) {
+                        require(["page/profile"], function (Profile) {
+                            page = factory.create(Profile, {});
+                            page.mount(document.body);
+                        });
                     } else {
-                        this._success.innerHTML += 'Пользователь успешно зарегистрирован!';
-                        this._success.style.display = 'block';
+                        require(["page/ProfileMobile"], function (profileMobile) {
+                            page = factory.create(profileMobile, {});
+                            page.mount(document.body);
+                        });
                     }
                 })
                 .catch(error => console.log('error', error));
-        }}
+        }
+
+
+        check(input, parametr,errorEnter){
+            if ( parametr === 'login') {
+                if ( input.length < 3 || input.length > 15 ) {
+                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите логин, содержащий не меньше 3 и не больше 20 символов.'; 
+                    return false;
+                }
+                if ( !/^[A-z0-9]{3,15}$/i.test(input) ) {
+                    errorEnter.innerText = 'Ошибка: Логин должен содержать только латинские буквы и цифры.'; 
+                    return false;
+                }
+            }else if ( parametr === 'password') {
+                if ( input.length < 3 || input.length > 20 ) {
+                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите пароль, содержащий не меньше 3 и не больше 20 символов.'; 
+                    return false;
+                }
+                if ( !/^[A-z0-9.-_]{3,20}$/i.test(input) ) {
+                    console.log("input", input);
+                    errorEnter.innerText = 'Ошибка: Пароль должен содержать латинские буквы и цифры, а также символы .-_'; 
+                    return false;
+                }
+            }else{
+                return false;
+            }
+
+            return true;
+        }
     }
     return Auth;
 });
