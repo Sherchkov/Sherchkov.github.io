@@ -78,7 +78,7 @@
 .content-data-params__date::-webkit-calendar-picker-indicator{
 	color: transparent;
 	 opacity: 1;
-	 background: url(../img/icons/svg/calendar.svg) no-repeat center;
+	 background: url(../../../img/icons/svg/calendar.svg) no-repeat center;
 	 background-size: contain;
 	 cursor: pointer;
 } 
