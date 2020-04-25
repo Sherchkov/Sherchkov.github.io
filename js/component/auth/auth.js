@@ -30,25 +30,25 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                             <div class="join-formReg__error"></div>
                             <div class="join-form__container">
                                 <span class="join-form__title">Логин<sup class="join-form__sub">*</sup></span>
-                                <input class="join-form__input join-form__input_logReg" type="text" value="Login">
+                                <input class="join-form__input join-form__input_logReg" type="text">
                                 <span class="join-form__title">Пароль<sup class="join-form__sub">*</sup></span>
-                                <input class="join-form__input join-form__input_passReg" type="password" value="password">
+                                <input class="join-form__input join-form__input_passReg" type="password">
                                 <span class="join-form__title">Повторите пароль<sup class="join-form__sub">*</sup></span>
-                                <input class="join-form__input join-form__input_passRepReg" type="password" value="password">
+                                <input class="join-form__input join-form__input_passRepReg" type="password">
                                 <span class="join-form__title">Имя</span>
-                                <input class="join-form__input join-form__input_nameReg" type="text" value="Имя">
+                                <input class="join-form__input join-form__input_nameReg" type="text">
                                 <span class="join-form__title">Фамиллия</span>
-                                <input class="join-form__input join-form__input_familyReg" type="text" value="Фамилия">
+                                <input class="join-form__input join-form__input_familyReg" type="text">
                                 <span class="join-form__title">Город</span>
-                                <input class="join-form__input join-form__input_cityReg" type="text" value="Уфа">
+                                <input class="join-form__input join-form__input_cityReg" type="text">
                                 <span class="join-form__title">Дата рождения</span>
-                                <input class="join-form__input join-form__input_birthReg" type="date" value="1997-03-16">
+                                <input class="join-form__input join-form__input_birthReg" type="date">
                                 <span class="join-form__title">Образование</span>
-                                <input class="join-form__input join-form__input_educationReg" type="text" value="УГНТУ">
+                                <input class="join-form__input join-form__input_educationReg" type="text">
                                 <span class="join-form__title">Работа</span>
-                                <input class="join-form__input join-form__input_jobReg" type="text" value="Работа мечты">
+                                <input class="join-form__input join-form__input_jobReg" type="text">
                                 <span class="join-form__title">Семейное положение</span>
-                                <input class="join-form__input join-form__input_stateReg" type="text" value="Холост">
+                                <input class="join-form__input join-form__input_stateReg" type="text">
                                 <button class="join-form__send join-form__send_reg">Зарегистрироваться</button>
                             </div>  
                         </div>
@@ -158,18 +158,23 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 return false;
             }
 
+            let name = 'Скрыто';
+            if (document.querySelector('.join-form__input_nameReg').value || document.querySelector('.join-form__input_familyReg').value) {
+                name = document.querySelector('.join-form__input_nameReg').value + ' ' + document.querySelector('.join-form__input_familyReg').value;
+            }
+
             let data = {
               data : {
-                name : `${document.querySelector('.join-form__input_nameReg').value + ' ' + document.querySelector('.join-form__input_familyReg').value}` || 'Скрыто',
-                birth_date : document.querySelector('.join-form__input_birthReg').value,
+                name : name,
+                birth_date : document.querySelector('.join-form__input_birthReg').value || '0000-00-00T00:00:00',
                 city : document.querySelector('.join-form__input_cityReg').value || 'Скрыто',
                 family_state : document.querySelector('.join-form__input_stateReg').value || 'Скрыто',
                 education : document.querySelector('.join-form__input_educationReg').value || 'Скрыто',
                 job : document.querySelector('.join-form__input_jobReg').value || 'Скрыто',
               }
             }
-
-
+            console.log(data)
+            return;
             let urlencoded = new URLSearchParams();
             urlencoded.append('login', login);
             urlencoded.append('password', password);
