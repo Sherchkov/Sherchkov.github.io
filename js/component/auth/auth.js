@@ -173,8 +173,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 job : document.querySelector('.join-form__input_jobReg').value || 'Скрыто',
               }
             }
-            console.log(data)
-            return;
+
             let urlencoded = new URLSearchParams();
             urlencoded.append('login', login);
             urlencoded.append('password', password);
