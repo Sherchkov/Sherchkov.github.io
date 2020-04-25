@@ -1,0 +1,102 @@
+.join{
+	margin: 50px auto;
+	width: 400px;
+	padding: 20px 50px;
+	border-radius: 20px;
+	background: rgba(9, 32, 63, .9);
+}
+.join-header{
+	width: 100%;
+    margin: 40px 0 15px;
+}
+.join-header__signIn,.join-header__signUp{
+	padding-left: 10px;
+	font-size: 18px;
+	display: inline;
+	text-align: left;
+	text-transform: uppercase;
+	padding-right: 10px;
+	color: #ffffff;
+}
+.join__switch {
+	padding-bottom: 10px;
+    color: #ffffff;
+    border: none;
+    border-bottom: solid 2px transparent;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+    cursor: pointer;
+    background: transparent;
+    outline: none;	
+}
+.join__switch_bottom{
+	border-bottom-color: #1059FF
+}
+.join-form_none{
+	display: none;
+}
+.join-formEnter__error,.join-formReg__error{
+	min-height: 40px;
+	line-height: 20px;
+	background: transparent;
+	color: #ff0000;
+	padding-left: 10px;
+	font-size: 14px;
+}
+.join-form__title{
+	display: block;
+	margin-left: 10px;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 16px;
+	margin-top: 20px;
+}
+.join-form__sub{
+	display: inline-block;
+	margin-left: 5px;
+	font-size: 14px;
+	color: red;
+	line-height: 1;
+    position: relative;
+    vertical-align: baseline;
+}
+.join-form__input{
+	display: block;
+	width: 390px;
+	color: #ffffff;
+	background: rgba(255,255,255,.2);
+	border: none;
+	height: 20px;
+	margin-top: 10px;
+	padding: 7px 5px 7px 10px;
+	border-radius: 10px;
+	font-size: 16px;
+	outline: none;
+}
+.join-form__input_birthReg::-webkit-inner-spin-button,
+.join-form__input_birthReg::-webkit-clear-button {
+  display: none;
+}
+.join-form__input_birthReg::-webkit-calendar-picker-indicator{
+	color: transparent;
+	 opacity: 1;
+	 background: url(../img/calendar.svg) no-repeat center;
+	 background-size: contain;
+	 cursor: pointer;
+} 
+
+.join-form__send{
+	display: block;
+	width: 100%;
+	height: 34px;
+	color: #ffffff;
+	background: #729ee6;
+	border: none;
+	font-size: 16px;
+	margin-top: 20px;
+	border-radius: 10px;
+	padding: 7px 10px;
+	font-size: 16px;
+	cursor: pointer;
+	outline: none;
+}
