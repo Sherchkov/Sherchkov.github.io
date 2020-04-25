@@ -59,6 +59,8 @@
 	padding: 3px;
 	border: 1px solid transparent;
 	border-radius: 5px;
+	background: #ffffff;
+	color: #000000;
 }
 
 .content-data-params__date{
