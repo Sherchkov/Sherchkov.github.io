@@ -3,7 +3,7 @@ fetch("https://tensor-school.herokuapp.com/user/current", {
 })
 .then(response => response.status)
 .then(status => {
-	if (status == '200') {
+	if (status === '200') {
 		if ( window.innerWidth > 800 ) {
 			require(["page/profile"], function (Profile) {
 				page = factory.create(Profile, {});
