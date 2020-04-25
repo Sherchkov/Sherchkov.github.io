@@ -38,10 +38,63 @@
 	object-fit: cover;
 	cursor: pointer;
 }
-.header__menu{
+.header-menu{
+	position: relative;
 	height: 18px;
-	width: 10px;
 	padding: 3px;
-	object-fit: cover;
 	cursor: pointer;
 }
+.header-menu_icon{
+	height: 18px;
+	width: 10px;
+	object-fit: cover;
+}
+
+.header-menu__list{
+	display: none;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    background: #000;
+    color: #fff;
+    vertical-align: middle;
+    padding: 1px 6px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 2;
+}
+.header-menu__list_active{
+	display: block;
+}
+
+.header-menu__list::before,
+.header-menu__list::after {
+  z-index: 3;
+  content: '';
+  position: absolute;
+  right: -7px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  top: -14px;
+  border: 7px solid transparent;
+  border-bottom: 7px solid #000;
+}
+.header-menu__list::after {
+  border-bottom: 7px solid #000;
+  top: -14px;
+}
+
+.header-menu__item{
+	display: block;
+    text-align: right;
+    color: #fff;
+    font-size: 1.3rem;
+    padding: 2px 6px;
+    margin: 3px 0;
+    cursor: pointer;
+} 
+
+.header-menu__item:hover{
+	color: #828181;
+}
+
