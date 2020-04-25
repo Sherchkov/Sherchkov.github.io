@@ -1,4 +1,4 @@
-define(['base/component', 'component/avatar/avatar', 'server/json', "base/helpers", 'css!component/information/information.min'], function (Component, Avatar, json) {
+define(['base/component', 'component/avatar/avatar', 'server/json', "base/helpers", 'css!component/information/information'], function (Component, Avatar, json) {
 	'use strict';
 
 	let data = json.information;
