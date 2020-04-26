@@ -15,6 +15,7 @@ require.config({
 		base: 'component/base',
 		page: 'component/page',
 		server: 'server',
+		jquery: 'libs/jquery-3.5.0.min'
 	}
 });
 
@@ -28,6 +29,6 @@ class AbstractFactory {
 }
 // eslint-disable-next-line no-unused-vars
 const factory = new AbstractFactory();
-let modal, modalslider, modalAddPhoto;
+let modal, modalslider, modalAddPhoto, user_id;
 
 require(['app/main']);

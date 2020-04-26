@@ -59,14 +59,10 @@ define(['base/component',
 
 		createModalVideo(event){
 			let element = event.target;
-			console.log(element);
 			switch (element.dataset.id) {
 				case '0':{
 					new ActionModal({
 						children : ModalFan,
-						//src : element.getAttribute('src'),
-						//title : element.getAttribute('title'),
-						//alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
 					}); 
 					break;
 				}
@@ -79,7 +75,8 @@ define(['base/component',
 				}
 				case '2':{
 					new ActionModal({
-						children : ModalFriends
+						children : ModalFriends,
+						theme: 'white'
 					}); 
 					break;
 				}
@@ -99,7 +96,8 @@ define(['base/component',
 				}
 				case '5':{
 					new ActionModal({
-						children : ModalMusic
+						children : ModalMusic,
+						theme: 'white'
 					}); 
 					break;
 				}

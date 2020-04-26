@@ -1,16 +1,26 @@
-define(['base/component'], function (Component) {
+// eslint-disable-next-line no-undef
+define(['base/component', 'component/action/music', 'server/json', 'css!component/modal/ModalMusic'], function (Component, audioPlayer, json) {
 	'use strict';
 
-	class ModalPhotos extends Component{
-	    render(options) {
+	class ModalMusic extends Component{
+		render() {
+		
+			let items = json.music;
+			let str = `<div class="modal-audio">
+							<span class="modal-audio__title">Моя музыка</span>
+							<audio src="" controls class="audioPlayer"></audio>
+							<ul class="playlist">`;
+			
+			items.forEach((item) => {
+				str += `<li><a href="${item.src}">${item.name}</a></li>`;
+			});
 
-	        return ` 
-	           <div class="modal-video">
-	             <div style="color: white">Музыка</div>
-	           </div> 
-	        `;
-	    }
+			return str + '</ul></div>';
+		}
+
+		afterMount() {
+			audioPlayer();
+		}
 	}
-	
-	return ModalPhotos;
+	return ModalMusic;
 });  

@@ -130,7 +130,47 @@ define(function(){
 				audio : [],
 				video : []
 			}
+		],
+		music: [{
+			name: 'Tom Rosental - All of Them Dreams',
+			src: 'mp3/All of Them Dreams.mp3'
+		},{
+			name: 'The XX - Crystalised',
+			src: 'mp3/Crystalised.mp3'
+		},{
+			name: 'The Irrepressible - In This Shirt',
+			src: 'mp3/In This Shirt.mp3'
+		},{
+			name: 'Tom Rosental - It\'s OK',
+			src: 'mp3/It\'s OK.mp3'
+		},
+		{
+			name: 'The XX - Night Time',
+			src: 'mp3/Night Time.mp3'
+		}],
+		friends: [
+			{
+				name: 'Марина',
+				surname: 'Злотова',
+				img: 'img/avatar/friend1.jpg'
+			},
+			{
+				name: 'Миша',
+				surname: 'Голосов',
+				img: 'img/avatar/friend2.jpg'
+			},
+			{
+				name: 'Андрей',
+				surname: 'Алексеев',
+				img: 'img/avatar/friend3.jpg'
+			},
+			{
+				name: 'Владимир',
+				surname: 'Петров',
+				img: 'img/avatar/friend4.jpg'
+			},
 		]
+
 	};
 
 	return answer;
