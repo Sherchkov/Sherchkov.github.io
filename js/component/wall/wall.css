@@ -80,6 +80,7 @@
 	height: 50px;
 	border-radius: 50%;
 	object-fit: cover;
+	cursor: pointer;
 }
 .post-data__name,.post-data__date{
 	margin-right: 25px;
@@ -116,4 +117,5 @@
 	flex:1;
 	object-fit: cover;
 	border-radius: 5px;
+	cursor: pointer;
 }

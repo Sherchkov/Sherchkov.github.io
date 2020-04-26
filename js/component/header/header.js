@@ -1,4 +1,4 @@
-define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json', "base/helpers", 'css!component/header/header.min'], function (Component, ActionModal, ModalPhoto, json) {
+define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json', "base/helpers", 'css!component/header/header'], function (Component, ActionModal, ModalPhoto, json) {
 	'use strict';
 
 	let photo = json.header.photo,
@@ -16,13 +16,19 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	              <div class="header__photo">
 	                <img class="header__img modalPhoto" src="${photo}" alt="${altAndTitle}" title="${altAndTitle}">
 	              </div>
-	              <img class="header__menu" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
+	              <div class="header-menu">
+	              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
+					<div class="header-menu__list">
+					  <div class="header-menu__item header-menu_logout">Выход</div>
+					</div>	
+	              </div>
+	              
 	            </div>
 	        </header>`;
 	    }
 
 	    afterMount() {
-			this._logout = this.getContainer().querySelector('.header__menu');
+			this._logout = this.getContainer().querySelector('.header-menu_logout');
 			this.subscribeTo(this._logout, 'click', this.logout.bind(this));
 	        this.subscribeTo(this.getContainer(), 'click', this.onSwitchData.bind(this));
 	    }
@@ -38,13 +44,15 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	            }else if(name === 'save'){
 	                this.onSaveData(element);
 	            }
-	        }else if ( element.classList.contains("modalPhoto") ) {
+	        }else if ( element.classList.contains('modalPhoto') ) {
 	            new ActionModal({
 	                children : ModalPhoto,
 	                src : element.getAttribute('src'),
 	                title : element.getAttribute('title'),
 	                alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
 	            });
+	        }else if ( element.classList.contains('header-menu_icon') ) {
+	        	this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
 	        }
 	    }
 
@@ -153,20 +161,25 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	        });
 	    }
 
+	    //Показывает или скрывает кнопку меню(выхода)
+	   	showMenu(){
+	   		this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
+	   	} 
+
 		logout() {
 			fetch('https://tensor-school.herokuapp.com/user/logout', {
 				'method' : 'GET',
 				credentials: 'include'
 			}).then(response => {
 				if (response.status == '200') {
-					document.body.innerHTML = "";
+					page.unmount();
 					require(["page/Authorization"], function(authorization){
-						const profile = factory.create(authorization, {});
-						profile.mount(document.body);
+						page = factory.create(authorization, {});
+						page.mount(document.body);
 					});
 				}
 			})
-				.catch(error => console.log('error', error));
+			.catch(error => console.log('error', error));
 		}
 
 	}

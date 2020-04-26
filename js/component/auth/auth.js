@@ -1,117 +1,270 @@
-define(['base/component', 'css!component/auth/style.css'], function (Component) {
+define(['base/component', 'css!component/auth/auth'], function (Component) {
     'use strict';
     document.title = "Авторизация";
+
     class Auth extends Component {
+        
         render() {
-            return `<div class="auth">
-                <div class="auth__main">Авторизация</div>
-                <div class="auth__login">
-                    <form id="authorization">
-                        <p>
-                            <img src="img/icons/system/auth/login.jpg" class="auth__login_view">
-                            <input type="text" size="20" placeholder="login" name="login" pattern="^[a-zA-Z]+$">
-                        </p>
-                        <p>
-                            <img src="img/icons/system/auth/block.jpg" class="auth__password_view">
-                            <input type="password" size="20" name="password" placeholder="password">
-                        </p>
-                    </form>
+            return `
+                <div class="join">
+                    <div class="join-header">
+                        <div class="join-header__signIn">
+                            <button class="join__switch join-switch_signIn join__switch_bottom">Войти</button>
+                        </div>
+                        <div class="join-header__signUp">
+                            <button class="join__switch join-switch_signUp">Зарегистрироваться</button>
+                        </div>
+                    </div>
+                    <div class="join-container">
+                        <div class="join-formEnter">
+                            <div class="join-formEnter__error"></div>
+                            <div class="join-form__container">
+                                <span class="join-form__title">Логин<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_logEneter" type="text">
+                                <span class="join-form__title">Пароль<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_passEneter" type="password">
+                                <button class="join-form__send join-form__send_enter">Войти</button>
+                            </div>  
+                        </div>
+                        <div class="join-formReg join-form_none">
+                            <div class="join-formReg__error"></div>
+                            <div class="join-form__container">
+                                <span class="join-form__title">Логин<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_logReg" type="text">
+                                <span class="join-form__title">Пароль<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_passReg" type="password">
+                                <span class="join-form__title">Повторите пароль<sup class="join-form__sub">*</sup></span>
+                                <input class="join-form__input join-form__input_passRepReg" type="password">
+                                <span class="join-form__title">Имя</span>
+                                <input class="join-form__input join-form__input_nameReg" type="text">
+                                <span class="join-form__title">Фамиллия</span>
+                                <input class="join-form__input join-form__input_familyReg" type="text">
+                                <span class="join-form__title">Город</span>
+                                <input class="join-form__input join-form__input_cityReg" type="text">
+                                <span class="join-form__title">Дата рождения</span>
+                                <input class="join-form__input join-form__input_birthReg" type="date">
+                                <span class="join-form__title">Образование</span>
+                                <input class="join-form__input join-form__input_educationReg" type="text">
+                                <span class="join-form__title">Работа</span>
+                                <input class="join-form__input join-form__input_jobReg" type="text">
+                                <span class="join-form__title">Семейное положение</span>
+                                <input class="join-form__input join-form__input_stateReg" type="text">
+                                <button class="join-form__send join-form__send_reg">Зарегистрироваться</button>
+                            </div>  
+                        </div>
+                    </div>
                 </div>
-                <div class="auth__button">
-                    <button class="auth__button_enter">Войти</button>
-                    <button class="auth__button_register">Зарегистрироваться</button>
-                </div>
-                <div class="auth__success">
-                        <img src="img/icons/system/success.jpeg" class="auth__success_ok">
-                </div>
-            </div>`;
+            `;
         }
 
         afterMount() {
-            this._sign = this.getContainer().querySelector('.auth__button_enter');
-            this.subscribeTo(this._sign, 'click', this.sign.bind(this));
-            this._register = this.getContainer().querySelector('.auth__button_register');
-            this.subscribeTo(this._register, 'click', this.registerPerson.bind(this));
+            this._enterTitle = this.getContainer().querySelector('.join-switch_signIn');
+            this._regTitle = this.getContainer().querySelector('.join-switch_signUp');
+            this._formEnter = this.getContainer().querySelector('.join-formEnter');
+            this._formReg = this.getContainer().querySelector('.join-formReg');
+            this._buttonEnter = this.getContainer().querySelector('.join-form__send_enter');
+            this._buttonReg = this.getContainer().querySelector('.join-form__send_reg');
+
+            this.subscribeTo(this._enterTitle, 'click', this.ShowFormEnter.bind(this));
+            this.subscribeTo(this._regTitle, 'click', this.ShowFormReg.bind(this));
+            this.subscribeTo(this._buttonEnter, 'click', this.Enter.bind(this));
+            this.subscribeTo(this._buttonReg, 'click', this.Registration.bind(this));
         }
 
-        sign() {
-            this._success = this.getContainer().querySelector('.auth__success');
+        ShowFormEnter(){
+          this._enterTitle.classList.add('join__switch_bottom');
+          this._regTitle.classList.remove('join__switch_bottom');
+          this._formEnter.classList.remove('join-form_none');
+          this._formReg.classList.add('join-form_none');
+        }
 
-            if (document.forms["authorization"].elements["login"].value == '' ||
-                document.forms["authorization"].elements["password"].value == '') {
-                this._success.innerHTML = 'Введенные поля пустые!';
-                this._success.style.display = 'block';
-            } else {
-                const urlencoded = new URLSearchParams();
+        ShowFormReg(){
+          this._regTitle.classList.add('join__switch_bottom');
+          this._enterTitle.classList.remove('join__switch_bottom');
+          this._formEnter.classList.add('join-form_none');
+          this._formReg.classList.remove('join-form_none');
+        }
 
-                urlencoded.append("login", document.forms["authorization"].elements["login"].value);
-                urlencoded.append("password", document.forms["authorization"].elements["password"].value);
+        Enter(){
+            let login = document.querySelector('.join-form__input_logEneter').value,
+                password = document.querySelector('.join-form__input_passEneter').value,
+                errorEnter = document.querySelector('.join-formEnter__error');
 
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: urlencoded,
-                    "credentials": "include"
-                };
+            errorEnter.innerText = '';
 
-                fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result == "Unauthorized") {
-                            this._success.innerHTML = 'Пользователь не зарегистрирован!';
-                            this._success.style.display = 'block';
-                        } else {
-                            document.body.innerHTML = "";
-                            if (window.innerWidth > 800) {
-                                require(["page/profile"], function (Profile) {
-                                    const profile = factory.create(Profile, {});
-                                    profile.mount(document.body);
-                                });
-                            } else {
-                                require(["page/ProfileMobile"], function (profileMobile) {
-                                    const profile = factory.create(profileMobile, {});
-                                    profile.mount(document.body);
-                                });
-                            }
-                        }
-                    })
-                    .catch(error => console.log('error', error));
+            if (!this.check(login, 'login', errorEnter) || !this.check(password, 'password', errorEnter)) {
+                return;
             }
+            let urlencoded = new URLSearchParams();
+
+            urlencoded.append("login", login);
+            urlencoded.append("password", password);
+
+            let requestOptions = {
+                method: 'POST',
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: urlencoded,
+                "credentials": "include"
+            };
+
+            fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
+                .then(response => {
+                    console.log("response", response);
+                    if ( response.ok ) {
+                        return response.json();  
+                    }else{
+                      if (response.status === 401) {
+                          errorEnter.innerText = 'Ошибка: Логин или пароль неправильно введен';
+                      }else{
+                          errorEnter.innerText = 'Ошибка сервера';
+                      }
+                      return response.error();
+                    }
+                })
+                .then(result => {
+                    user_id = result.id;
+                    page.unmount();
+                    if (window.innerWidth > 800) {
+                        require(["page/profile"], function (Profile) {
+                            page = factory.create(Profile, {});
+                            page.mount(document.body);
+                        });
+                    } else {
+                        require(["page/ProfileMobile"], function (profileMobile) {
+                            page = factory.create(profileMobile, {});
+                            page.mount(document.body);
+                        });
+                    }
+                })
+                .catch(error => console.log('error', error));
         }
-        registerPerson() {
-            this._success = this.getContainer().querySelector('.auth__success');
 
-            if (document.forms["authorization"].elements["login"].value == '' ||
-                document.forms["authorization"].elements["password"].value == '') {
-                this._success.innerHTML = 'Введенные поля пустые!';
-                this._success.style.display = 'block';
-            } else {
-            const urlencoded = new URLSearchParams();
+        Registration(){
+            let login = document.querySelector('.join-form__input_logReg').value,
+                password = document.querySelector('.join-form__input_passReg').value,
+                repeat_password = document.querySelector('.join-form__input_passRepReg').value,  
+                errorEnter = document.querySelector('.join-formReg__error');
 
-            urlencoded.append("login", document.forms["authorization"].elements["login"].value);
-            urlencoded.append("password", document.forms["authorization"].elements["password"].value);
+            errorEnter.innerText = '';
 
-            this._success = this.getContainer().querySelector('.auth__success');
+            if (!this.check(login, 'login', errorEnter) || !this.check(password, 'password', errorEnter)) {
+                window.scrollTo(pageXOffset, 0);
+                return;
+            }
+        
+            if (password !== repeat_password) {
+                errorEnter.innerText = 'Ошибка: Пароли не совпадают';
+                window.scrollTo(pageXOffset, 0);
+                return false;
+            }
 
-            const requestOptions = {
+            let name = 'Скрыто';
+            if (document.querySelector('.join-form__input_nameReg').value || document.querySelector('.join-form__input_familyReg').value) {
+                name = document.querySelector('.join-form__input_nameReg').value + ' ' + document.querySelector('.join-form__input_familyReg').value;
+            }
+
+            let data = {
+              data : {
+                name : name,
+                birth_date : document.querySelector('.join-form__input_birthReg').value || '0000-00-00T00:00:00',
+                city : document.querySelector('.join-form__input_cityReg').value || 'Скрыто',
+                family_state : document.querySelector('.join-form__input_stateReg').value || 'Скрыто',
+                education : document.querySelector('.join-form__input_educationReg').value || 'Скрыто',
+                job : document.querySelector('.join-form__input_jobReg').value || 'Скрыто',
+              }
+            }
+
+            let urlencoded = new URLSearchParams();
+            urlencoded.append('login', login);
+            urlencoded.append('password', password);
+
+            fetch('https://tensor-school.herokuapp.com/user/create', {
                 method: 'POST',
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: urlencoded,
                 "credentials" : "include"
-            };
-
-            fetch("https://tensor-school.herokuapp.com/user/create", requestOptions)
-                .then(response => {
-                    if (response.status == '400') {
-                        this._success.innerHTML = 'Пользователь уже зарегистрирован!';
-                        this._success.style.display = 'block';
-                    } else {
-                        this._success.innerHTML += 'Пользователь успешно зарегистрирован!';
-                        this._success.style.display = 'block';
+            })
+            .then(response => {
+                if ( response.ok ) {
+                    return response.json();
+                }else{
+                    console.log("response", response);  
+                    if (response.status === 400) {
+                        window.scrollTo(pageXOffset, 0);
+                        errorEnter.innerText = 'Ошибка: Логин или пароль введены не правильно или такой login уже зарегистрирован';
+                    }else{
+                        errorEnter.innerText = 'Ошибка сервера';
                     }
-                })
-                .catch(error => console.log('error', error));
-        }}
+                    return response.error();
+                }      
+            })
+            .then(result => {
+                user_id = result.id;
+                setTimeout(this.updateUser(data),3000);
+            })
+            .catch(error => console.log('error', error));
+        }   
+
+
+        updateUser(data){
+            console.log("data", data);
+            fetch('https://tensor-school.herokuapp.com/user/update', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body : JSON.stringify(data),
+                credentials: 'include'
+            })
+            .then(response => {
+                this.loadpage();
+            })
+            .catch(error => {
+                this.loadpage();
+                console.log('error', error);
+            });  
+        }
+
+        check(input, parametr,errorEnter){
+            if ( parametr === 'login') {
+                if ( input.length < 3 || input.length > 15 ) {
+                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите логин, содержащий не меньше 3 и не больше 20 символов.'; 
+                    return false;
+                }
+                if ( !/^[A-z0-9]{3,15}$/i.test(input) ) {
+                    errorEnter.innerText = 'Ошибка: Логин должен содержать только латинские буквы и цифры.'; 
+                    return false;
+                }
+            }else if ( parametr === 'password') {
+                if ( input.length < 3 || input.length > 20 ) {
+                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите пароль, содержащий не меньше 3 и не больше 20 символов.'; 
+                    return false;
+                }
+                if ( !/^[A-z0-9.-_]{3,20}$/i.test(input) ) {
+                    console.log("input", input);
+                    errorEnter.innerText = 'Ошибка: Пароль должен содержать латинские буквы и цифры, а также символы .-_'; 
+                    return false;
+                }
+            }else{
+                return false;
+            }
+
+            return true;
+        }
+
+        loadpage(){
+            page.unmount();
+            if ( window.innerWidth > 800 ) {
+                require(["page/profile"], function (Profile) {
+                    page = factory.create(Profile, {});
+                    page.mount(document.body);
+                });
+            } else {
+                require(["page/ProfileMobile"], function(profileMobile){
+                    page = factory.create(profileMobile, {});
+                    page.mount(document.body);
+                });
+            }
+        }
+
     }
     return Auth;
 });

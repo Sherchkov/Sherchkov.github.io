@@ -18,11 +18,9 @@ a{
 	text-decoration: none;
 	cursor: pointer;
 }
-textarea, input[type="text"]{
+textarea, input[type="text"], input[type="pasword"]{
 	outline: none;
 	resize: none;
-	background: transparent;
-	color: #000000;
 }
 input[type="date"]{
 	outline: none;
@@ -67,12 +65,22 @@ input[type="date"]{
 	border: 1px solid #ddd;
 	background: #ffffff;
 }
-
-
-
-
-
-
+/*Страница авторизации*/
+.PageStart{
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: 100vh;
+	margin: 0 -10px;
+	background-color: #000000;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.7))), url(../img/bigBackground.jpg);
+	background-image: linear-gradient(top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('../img/bigBackground.jpg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	background-attachment: fixed;
+	overflow-x: hidden;
+}
 
 /*Мобильная версия*/
 .MainPageMobile{
@@ -82,43 +90,4 @@ input[type="date"]{
 
 
 
-.content-data-head{
-	display: flex;
-	align-items: center;
-}
-/* .content-photo_mobile{
-	padding-left: 0px;
-}
-.photo-edit_mobile{
-	left: 0;
-}
-.content-photo__img_mobile{
-	width: 75px;
-	height: 75px;
-	border-radius: 50%;
-} */
-/* .content-feed_mobile{
-	max-height: 250px;
-	overflow-y: auto;
-}
-.messageMobile{
-	width: 100%;
-}
-.message-content_mobile{
-	flex: 1;
-} */
 
-
-
-/* @media (max-width: 600px) {
-	.slider-container__item_four{
-		flex: 0 0 33.3333%;
-		width: 33.3333%;
-	}
-}
-@media (max-width: 400px) {
-	.slider-container__item_four{
-		flex: 0 0 50%;
-		width: 50%;
-	}
-} */

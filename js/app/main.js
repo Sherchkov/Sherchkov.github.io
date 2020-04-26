@@ -1,26 +1,29 @@
 fetch("https://tensor-school.herokuapp.com/user/current", {
 	credentials: 'include'
 })
-	.then(response => response.status)
-	.then(status => {
-		if (status == '200') {
-			if ( window.innerWidth > 800 ) {
-				require(["page/profile"], function (Profile) {
-					const profile = factory.create(Profile, {});
-					profile.mount(document.body);
-				});
-			} else {
-				require(["page/ProfileMobile"], function(profileMobile){
-					const profile = factory.create(profileMobile, {});
-					profile.mount(document.body);
-				});
-			}
-		}
-		else {
-			require(["page/Authorization"], function(authorization){
-				const profile = factory.create(authorization, {});
-				profile.mount(document.body);
-			});
-		}
-	})
-	.catch(error => console.log('error', error));
+.then(response => {
+	if ( response.ok ) {
+	    return response.json();  
+	}else{
+		require(["page/Authorization"], function(Authorization){
+			page = factory.create(Authorization, {});
+			page.mount(document.body);
+		});
+	  	return response.error();
+	}
+})
+.then(result => {
+	user_id = result.id;
+	if ( window.innerWidth > 800 ) {
+		require(["page/profile"], function (Profile) {
+			page = factory.create(Profile, {});
+			page.mount(document.body);
+		});
+	} else {
+		require(["page/ProfileMobile"], function(profileMobile){
+			page = factory.create(profileMobile, {});
+			page.mount(document.body);
+		});
+	}
+})
+.catch(error => console.log('error', error));
