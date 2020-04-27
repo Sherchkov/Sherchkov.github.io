@@ -54,6 +54,15 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 		openPost(){
 			event.stopPropagation();
+		/*	let items = this.items;
+			// eslint-disable-next-line no-undef
+			require(['modal/ActionModal', 'modal/ModalOpenPost'], function(ActionModal, ModalOpenPost){
+				new ActionModal({
+					children : ModalOpenPost,
+					theme: 'white',
+					items : items
+				});  
+			});*/
 		}
 
 		deletePost(){
