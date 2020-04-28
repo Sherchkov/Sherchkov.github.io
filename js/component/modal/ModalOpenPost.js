@@ -16,6 +16,9 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             return `${newPost.outerHTML}`;
         }
         afterMount() {
+            
+            document.querySelector('.modal-content').classList.add('modal-content_big');
+           
             let imgs = document.querySelectorAll('.modal .post-img__picture');
             for(let img of imgs) {
                 img.classList.remove('post-img__picture');
