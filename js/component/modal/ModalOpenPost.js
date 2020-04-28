@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-define(['base/component', 'css!component/wall/wall'], function (Component) {
+define(['base/component'], function (Component) {
     'use strict';
 
     class ModalOpenPost extends Component{

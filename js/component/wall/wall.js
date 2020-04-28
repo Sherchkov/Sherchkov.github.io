@@ -26,12 +26,26 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 		}
 
 		afterMount() {	
+			this.subscribeTo(this.getContainer(), 'click', this.createPost.bind(this));
+
 			for (let post of this.wall) {
 				// eslint-disable-next-line no-undef
 				let postForMount = factory.create(Post, post);
 				let path = document.getElementById(this.id);
 				postForMount.mount(path);
 			}
+		}
+
+		createPost(){
+			event.stopPropagation();
+			console.log('hi');
+			// eslint-disable-next-line no-undef
+			require(['modal/ActionModal', 'modal/ModalCreatePost'], function(ActionModal, ModalCreatePost){
+				new ActionModal({
+					children : ModalCreatePost,
+					theme: 'white'
+				});  
+			});
 		}
 	}
 

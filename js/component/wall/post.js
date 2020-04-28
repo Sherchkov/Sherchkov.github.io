@@ -213,17 +213,11 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		}
 
 		chooseAction(event){
-			if (event.target.classList.contains('post-data_header__button')) {
-				this.createPost();
-			} else if (event.target.classList.contains('post-img__picture')) {
+			if (event.target.classList.contains('post-img__picture')) {
 				this.openPost();
 			} else if (event.target.alt === 'Удалить') {
 				this.deletePost();
 			}
-		}
-
-		createPost(){
-			event.stopPropagation();
 		}
 
 		openPost(){
