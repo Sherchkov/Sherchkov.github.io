@@ -38,7 +38,6 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 		createPost(){
 			event.stopPropagation();
-			console.log('hi');
 			// eslint-disable-next-line no-undef
 			require(['modal/ActionModal', 'modal/ModalCreatePost'], function(ActionModal, ModalCreatePost){
 				new ActionModal({

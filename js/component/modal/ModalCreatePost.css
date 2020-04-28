@@ -21,7 +21,7 @@
     justify-content: space-between;
 }
 
-.createrPost__buttonCrete:hover, .createrPost__buttonAdd:hover{
+.createrPost__buttonCreate:hover, .createrPost__buttonAdd:hover{
     text-decoration: underline;
     cursor: pointer;
 }

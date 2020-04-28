@@ -9,34 +9,39 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                         <p class='createrPost__text createrPost__header'>Создание записи</p>
                         <textarea class='createrPost__fieldForText' placeholder="Введите текст записи"></textarea>
                         <div class='createrPost__text createrPost__buttons'>
-                            <p class='createrPost__buttonCrete'>Добавить фото к записи</p>
-                            <p class='createrPost__buttonAdd'>Сохранить</p>
+                            <p class='createrPost__buttonAdd'>Добавить фото к записи</p>
+                            <p class='createrPost__buttonCreate'>Сохранить</p>
                         </div>
                     </div>`;
-//             let post = document.getElementById(options.id);
-//             let newPost = post.cloneNode(true);
-//             newPost.id = this.generateId();
-//             this.id = newPost.id;
-
-//             let button = newPost.querySelector('.post-data__delete');
-//             button.remove();
-
-//             return `${newPost.outerHTML}`;
-//         }
-//         afterMount() {
-            
-//             document.querySelector('.modal-content').classList.add('modal-content_big');
-           
-//             let imgs = document.querySelectorAll('.modal .post-img__picture');
-//             for(let img of imgs) {
-//                 img.classList.remove('post-img__picture');
-//                 img.classList.add('post-img__picturePopup');
-//             }
         }
+
         afterMount() {
             
             document.querySelector('.modal-content').classList.add('modal-content_big');
-           
+            this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+            
+        }
+
+        chooseAction(event){
+			if (event.target.classList.contains('createrPost__buttonCreate')) {
+				this.createPost();
+			} else if (event.target.classList.contains('createrPost__buttonAdd')) {
+				this.addFoto();
+			}
+        }
+        
+        addFoto(){
+            event.stopPropagation();
+        }
+
+        createPost(){
+            event.stopPropagation();
+            this.Close();
+        }
+
+        Close() {
+            let event = new Event('click');
+            document.querySelector('.modal').dispatchEvent(event);
         }
         
     }
