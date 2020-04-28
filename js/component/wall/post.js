@@ -179,12 +179,12 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 
             if (this.post.img.length !== 0){
                 for (let image of this.post.img) {
-                    images += `<img src="${image}" alt="Картинка поста" class="${this.useCSS.postImage}">`;
+                    images += `<img src="${image}" alt="Картинка записи" class="${this.useCSS.postImage}">`;
                 }
             }
 
             if (this.post.delete) {
-                rubbish = `<div class="${this.useCSS.buttonDelete}" title="Удалить пост"><img src="img/icons/svg/rubbish.svg" alt="Удалить"></div>`;
+                rubbish = `<div class="${this.useCSS.buttonDelete}" title="Удалить запись"><img src="img/icons/svg/rubbish.svg" alt="Удалить"></div>`;
             }
 
             date = this._defineDate(this.post.date);
@@ -228,15 +228,15 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 
 		openPost(){
 			event.stopPropagation();
-		/*	let items = this.items;
+			let id = this.id;
 			// eslint-disable-next-line no-undef
 			require(['modal/ActionModal', 'modal/ModalOpenPost'], function(ActionModal, ModalOpenPost){
 				new ActionModal({
 					children : ModalOpenPost,
 					theme: 'white',
-					items : items
+					id : id
 				});  
-			});*/
+			});
 		}
 
 		deletePost(){
