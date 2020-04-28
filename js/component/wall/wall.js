@@ -16,67 +16,23 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			}
 
 		render() {
-			let posts = '';
-			
-			for (let post of this.wall) {
-				let postObj = new Post(post);
-				posts = postObj.render() + posts;
-			}
-
 			return `
 				<div class="${this.useCSS.contentWall} ${this.useCSS.contentDefault}">
 					<div class="${this.useCSS.postHeader}">
 						<span class="${this.useCSS.postTitle}">Мои записи</span>
 						<span class="${this.useCSS.postButton}">добавить</span>
 					</div>
-					${posts}
 				</div>`;
 		}
 
-		afterMount() {
-            console.log('hi');
-			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
-		}
-
-		chooseAction(event){
-			if (event.target.classList.contains('post-data_header__button')) {
-				this.createPost();
-			} else if (event.target.classList.contains('post-img__picture')) {
-				this.openPost();
-			} else if (event.target.alt === 'Удалить') {
-				this.deletePost();
+		afterMount() {	
+			for (let post of this.wall) {
+				// eslint-disable-next-line no-undef
+				let postForMount = factory.create(Post, post);
+				let path = document.getElementById(this.id);
+				postForMount.mount(path);
 			}
 		}
-
-		createPost(){
-			event.stopPropagation();
-		}
-
-		openPost(){
-			event.stopPropagation();
-		/*	let items = this.items;
-			// eslint-disable-next-line no-undef
-			require(['modal/ActionModal', 'modal/ModalOpenPost'], function(ActionModal, ModalOpenPost){
-				new ActionModal({
-					children : ModalOpenPost,
-					theme: 'white',
-					items : items
-				});  
-			});*/
-		}
-
-		deletePost(){
-			event.stopPropagation();
-
-			let postForDelete = event.target;
-
-			while (postForDelete.className !== 'post') {
-				postForDelete = postForDelete.parentElement;
-			}
-			postForDelete.remove();
-			postForDelete = null;
-		}
-
 	}
 
 	return Wall;

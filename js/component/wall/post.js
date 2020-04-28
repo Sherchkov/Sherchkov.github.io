@@ -206,7 +206,50 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
                 </div>
             `;
         return fullPost;
-        }
+		}
+		
+		afterMount() {
+			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+		}
+
+		chooseAction(event){
+			if (event.target.classList.contains('post-data_header__button')) {
+				this.createPost();
+			} else if (event.target.classList.contains('post-img__picture')) {
+				this.openPost();
+			} else if (event.target.alt === 'Удалить') {
+				this.deletePost();
+			}
+		}
+
+		createPost(){
+			event.stopPropagation();
+		}
+
+		openPost(){
+			event.stopPropagation();
+		/*	let items = this.items;
+			// eslint-disable-next-line no-undef
+			require(['modal/ActionModal', 'modal/ModalOpenPost'], function(ActionModal, ModalOpenPost){
+				new ActionModal({
+					children : ModalOpenPost,
+					theme: 'white',
+					items : items
+				});  
+			});*/
+		}
+
+		deletePost(){
+			event.stopPropagation();
+
+			let postForDelete = event.target;
+
+			while (postForDelete.className !== 'post') {
+				postForDelete = postForDelete.parentElement;
+			}
+			postForDelete.remove();
+			postForDelete = null;
+		}
 
 	}
 	
