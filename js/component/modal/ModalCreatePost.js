@@ -1,11 +1,18 @@
 // eslint-disable-next-line no-undef
-define(['base/component', 'css!component/wall/wall'], function (Component) {
+define(['base/component', 'css!component/modal/ModalCreatePost'], function (Component) {
     'use strict';
 
     class ModalCreatePost extends Component{
 
-        render(options) {
-            return '<div>В разработке)))</div>';
+        render() {
+            return `<div class='createrPost'>
+                        <p class='createrPost__text createrPost__header'>Создание записи</p>
+                        <textarea class='createrPost__fieldForText' placeholder="Введите текст записи"></textarea>
+                        <div class='createrPost__text createrPost__buttons'>
+                            <p class='createrPost__buttonCrete'>Добавить фото к записи</p>
+                            <p class='createrPost__buttonAdd'>Сохранить</p>
+                        </div>
+                    </div>`;
 //             let post = document.getElementById(options.id);
 //             let newPost = post.cloneNode(true);
 //             newPost.id = this.generateId();
