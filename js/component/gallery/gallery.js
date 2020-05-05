@@ -127,7 +127,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    			positionItem : position,
 	    		});
 	    		modalslider.mount(document.body);
-	    	})
+	    	});
 	    }
 
 	    addPhoto(){
@@ -137,7 +137,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    		}
 	    		modalAddPhoto = factory.create(ModalAddPhoto, {});
 	    		modalAddPhoto.mount(document.body);
-	    	})
+	    	});
 	    }
 	}
 
