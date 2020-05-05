@@ -87,13 +87,15 @@ define(['base/component',
 					break;
 				}
 				case '4':{
-					require(['modal/ModalGallery'], function(ModalGallery){ 
-						if (  typeof(modalGallery) !== 'undefined' ) {
-						    modalGallery.unmount();
-						}
-						modalGallery = factory.create(ModalGallery, {});
-						modalGallery.mount(document.body);
-					});
+					if (globalSliderPhotos.length) {
+						require(['modal/ModalGallery'], function(ModalGallery){ 
+							if (  typeof(modalGallery) !== 'undefined' ) {
+							    modalGallery.unmount();
+							}
+							modalGallery = factory.create(ModalGallery, {});
+							modalGallery.mount(document.body);
+						});
+					}
 					break;
 				}
 				case '5':{
