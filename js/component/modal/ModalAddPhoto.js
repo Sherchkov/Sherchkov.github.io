@@ -95,7 +95,7 @@ define(['base/component'], function (Component) {
 	    	if (event.dataTransfer) {
 	    		fileList = event.dataTransfer.files;
 	    	}else{
-	    		fileList = this.fileInput.files
+	    		fileList = this.fileInput.files;
 	    	}
 	    	//Если файлов нет, то return
 	    	if (!fileList) {
@@ -171,7 +171,7 @@ define(['base/component'], function (Component) {
 	    	})
 	    	.catch(error => {
 	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
-	    		console.log('error', error)
+	    		console.log('error', error);
 	    	});
 	      
 	    }
@@ -199,6 +199,7 @@ define(['base/component'], function (Component) {
 	    	
 	    	if ( document.querySelector('.content-gallery .slider-container__empty') ) {
 	    		document.querySelector('.content-gallery .slider-container__empty').remove();
+	    		document.querySelector('.content-gallery .content-gallery__title').classList.add('content-gallery__title_js');
 	    	}
 
 	    	this.elementContainer = document.querySelector('.content-gallery .slider-container');
@@ -260,7 +261,7 @@ define(['base/component'], function (Component) {
 	    	if ( image.getAttribute('data-id') === 0 ) {
 	    		return false;
 	    	}
-	    	let photo_id = image.getAttribute('data-id')
+	    	let photo_id = image.getAttribute('data-id');
 	    	this.deleteImg(photo_id);
 
 	    	for (let i = 0; i < this.imgList.length; i++){
@@ -301,20 +302,20 @@ define(['base/component'], function (Component) {
 	    	  return;
 	    	})
 	    	.catch(error => {
-	    		console.log('error', error)
+	    		console.log('error', error);
 	    	});
 	    }
 
 	    //Если мы вышли с окна, то все что загрузили на сервер удаляет
-	    onClose(event) {;
+	    onClose(event) {
 	    	for (let i = 0; i < this.imgList.length; i++){
-	    		this.deleteImg(this.imgList[i].id)
+	    		this.deleteImg(this.imgList[i].id);
 	    	}
 	    	this.imgList = [];
 	    	if ( document.querySelector('.modal') ) {
 	    		document.querySelector('.modal').style.opacity = 1;
 	    	}else{
-	    		let html = document.getElementsByTagName('html')[0]
+	    		let html = document.getElementsByTagName('html')[0];
 	    		html.classList.remove('html_overflow');
 	    		html.style.marginRight = '0px';
 	    	}
