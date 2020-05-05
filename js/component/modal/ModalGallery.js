@@ -278,7 +278,7 @@ define(['base/component'], function (Component) {
 	     	}
 	     	valueTransform = valueTransform + step;
 	     	container.style.transform = 'translateX(' + valueTransform + '%)';
-	     	if (valueTransform === 0) {
+	     	if (Math.abs(valueTransform) < 1) {
 	     		arrowLeft.style.display = 'none';
 	     	}
 	   	}
