@@ -213,7 +213,9 @@ define(['base/component'], function (Component) {
 	    			this.onClose();
 	    		}
 	    	}else{
-	    		document.querySelector('.content-gallery .slider__bufer').innerHTML = 'add';
+	    		if ( !document.querySelector('.content-gallery .slider__bufer').innerHTML ) {
+	    			document.querySelector('.content-gallery .slider__bufer').innerHTML = 'add';
+	    		}
 	    	}
 
 	    	for (let i = 0; i < this.imgList.length; i++){
