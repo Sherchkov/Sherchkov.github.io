@@ -85,6 +85,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    		        </div>`;
 	    		}
 	    		document.querySelector('.content-gallery .slider-container').innerHTML = sliderContainer;
+	    		document.querySelector('.content-gallery .content-gallery__title').classList.add('content-gallery__title_js');
 	    	}
 	    	slider(
 	    		document.getElementById(this.id),
@@ -94,7 +95,6 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    			classImg : 'slider-container__img_min',
 	    		}
 	    	);
-	    	document.querySelector('.content-gallery .content-gallery__title').classList.add('content-gallery__title_js');
 	    }
 
 	    createBigGallery(){
