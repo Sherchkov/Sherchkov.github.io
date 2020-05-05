@@ -4,26 +4,36 @@ define(['base/component'], function (Component) {
 	class ModalAddPhoto extends Component {
 	    
 	    render(options) {
-
 	        return `
 				<div class="modalAddPhoto">
 				    <button class="modal__close">
 				      <svg class="modal__close_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
 				    </button>
-				    <div class="modal-content modal-content_white">
-					    <div class="drop">
-					      <div class="drop__head">
-					        <svg class="drop__svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 63 63" style="enable-background:new 0 0 63 63;" xml:space="preserve"><g id="group-17svg"><path id="path-1_7_" d="M56.728,56.508H5.456C2.157,56.508,0,54.041,0,50.893V22.52c0-3.266,2.268-6.025,5.456-6.025h15.155l1.145-5.444c0.675-2.707,3.063-4.559,5.82-4.559h7.577c2.757,0,5.146,1.852,5.808,4.505l1.156,5.498h14.611c3.168,0,6.272,2.759,6.272,6.025v28.373C63,54.094,60.061,56.508,56.728,56.508z M5.456,19.496C3.92,19.496,3,20.909,3,22.52v28.373c0,1.515,0.785,2.614,2.456,2.614h51.272c1.649,0,3.272-1.099,3.272-2.614V22.52c0-1.611-1.756-3.024-3.272-3.024H40.899c-0.71,0-1.322-0.497-1.467-1.191l-1.394-6.636c-0.315-1.258-1.507-2.176-2.885-2.176h-7.577c-1.378,0-2.569,0.918-2.897,2.23l-1.382,6.582c-0.146,0.694-0.758,1.191-1.468,1.191H5.456z"/><path id="path-2_7_" d="M30.762,45.981c-5.511,0-9.994-4.485-9.994-9.996c0-5.513,4.483-9.997,9.994-9.997c5.509,0,9.993,4.484,9.993,9.997C40.755,41.496,36.271,45.981,30.762,45.981z M30.762,28.989c-3.857,0-6.994,3.138-6.994,6.996c0,3.857,3.137,6.995,6.994,6.995c3.856,0,6.993-3.138,6.993-6.995C37.755,32.127,34.618,28.989,30.762,28.989z"/><path id="path-3_7_" d="M30.762,51.34c-8.465,0-15.352-6.889-15.352-15.355c0-8.468,6.887-15.356,15.352-15.356c8.464,0,15.35,6.888,15.35,15.356C46.112,44.451,39.226,51.34,30.762,51.34z M30.762,23.629c-6.811,0-12.352,5.543-12.352,12.356c0,6.812,5.541,12.354,12.352,12.354c6.81,0,12.35-5.542,12.35-12.354C43.112,29.172,37.572,23.629,30.762,23.629z"/><path id="path-4_7_" d="M17.573,13.494h-8c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5h8c0.828,0,1.5,0.672,1.5,1.5S18.401,13.494,17.573,13.494z"/><path id="path-5_7_" d="M49.433,11.494h0.622c2.379,0,3.945,1.881,3.945,4.261v1.741h-8v-1.741C46,13.375,47.054,11.494,49.433,11.494z"/></g></svg>
-					      </div>
-					      <div class="drop__title">Перетащите cюда фотографию</div>
-					    </div>
-				    </div>
+			        <div class="modal-content modal-content_white modal-content_big">
+			    	    <div class="drop">
+			    	    	<div class="drop-container">
+			    				<div class="drop-container__empty">
+			    					<img class="drop-container__emptyImg" src="img/icons/svg/photo-camera.svg" alt="Камера">
+			    				</div>
+			    				<div class="drop-container__list">
+			    				</div>
+			    			</div>
+			    	      	<div class="drop__title">
+			    	      		<input class="drop__input drop__input_none" id="fileDrop" type="file" accept=".jpg, .jpeg, .png" multiple>
+			    	      		<span>Перетащите cюда фотографии или нажмите</span>
+			    	      		<label class="drop__label" id="fileDropLabel" for="fileDrop" name="file">Сюда</label>
+			    	      	</div>
+			    	      	<div class="drop__message"></div>
+							<div class="drop__send"><button class="drop__sendButton">Опубликовать</button></div>
+			    	    </div>
+			        </div>
 				</div>
 	        `;
 	    }
 
+	    
 	    beforeMount(){
-
+	    	//Если открыто модальное окно modal, то скрываем.
 			if ( document.querySelector('.modal') ) {
 				document.querySelector('.modal').style.opacity = 0;
 			}
@@ -31,7 +41,7 @@ define(['base/component'], function (Component) {
 		}
 
 	    afterMount() {
-	    	if ( !document.querySelector('.modal') ) {
+	    	if ( !document.querySelector('.modal')  ) {
 				let html = document.getElementsByTagName('html')[0],
 					WidthBefore = html.clientWidth;
 
@@ -39,26 +49,268 @@ define(['base/component'], function (Component) {
 				let WidthAfter = html.clientWidth;
 				html.style.marginRight = `${WidthAfter-WidthBefore}px`;	
 			}
-	    	
-	    	
+	    	//Очищаем list файлов
+	    	this.imgList = [];
+			this.area = document.querySelector('.drop');
+			this.fileInput = document.querySelector('.drop__input');
+			this.sendButton = document.querySelector('.drop__sendButton');
+			//Добавляет обработчики для перетаскивания элемента
+			this.subscribeTo(this.area, 'dragenter', this.defaultListener.bind(this));
+			this.subscribeTo(this.area, 'dragleave', this.defaultListener.bind(this));
+			this.subscribeTo(this.area, 'dragover', this.defaultListener.bind(this));
+			this.subscribeTo(this.area, 'drop', this.dropArea.bind(this));
+			this.subscribeTo(this.fileInput, 'change', this.dropArea.bind(this));
 
+			//Обработчик закрытие окна
 	        this._closeButton = this.getContainer().querySelector('.modal__close');
 	        this.subscribeTo(this._closeButton, 'click', this.onClose.bind(this));
-	        this.subscribeTo(this.getContainer(), 'click', this.onCloseModal.bind(this));
+	        this.subscribeTo(this.getContainer(), 'click', this.onClick.bind(this));
 	    }
 
 	    beforeUnmount() {
 	        delete this._closeButton;
 	    }
 
-	    onCloseModal(){
-	    	if ( event.target.classList.contains('modalAddPhoto') ) {
-	    	    this.onClose();
+	    //Добавляет действие для dragover и dragenter
+	    defaultListener(event){
+	    	event.preventDefault();
+	    	event.stopPropagation();
+	    	if (event.type === 'dragover' || event.type === 'dragenter') {
+	    		this.area.classList.add('drop_border');
+	    	}else{
+	    		this.area.classList.remove('drop_border');
 	    	}
 	    }
 
-	    onClose(event) {
+	    //event - событие при отпускание файлов в заданное поле
+	    dropArea(event){
+	    	event.preventDefault();
+	    	event.stopPropagation();
+
+	    	this.area.classList.remove('drop_border');
+	    	let dropMessage = document.querySelector('.modalAddPhoto .drop__message'); 
+	    	let fileList;
+	    	dropMessage.innerText = '';
+	    	//Заносит файлы в переменную fileList
+	    	if (event.dataTransfer) {
+	    		fileList = event.dataTransfer.files;
+	    	}else{
+	    		fileList = this.fileInput.files
+	    	}
+	    	//Если файлов нет, то return
+	    	if (!fileList) {
+	    		return;
+	    	}
+	    	//Если файлов больше 5, то выдает ошибку
+	    	if (fileList.length > 5) {
+	    		dropMessage.innerText = 'Нельзя загрузить больше 5 фотографии одновременно';
+	    		return;
+	    	}
+	    	//Проходит по каждому файлу и загружаем его на сервер
+	   		for (let i = 0; i < fileList.length; i++){
+	        	this.uploadFile(fileList[i]);
+	    	}
+	    }
+
+	    //file - переданный файл
+	    //list - объект в DOM, где отображаются загруженные фотографии
+	    //classIMG - добавляем рандомный класс для file, чтобы его потом можно было найти
+	    uploadFile(file){
+	    	let list = document.querySelector('.modalAddPhoto .drop-container__list'),
+	    		classIMG = 'photo' + Math.random().toString(32).slice(2),
+	    		item = document.createElement('div');
+
+	    	//Предварительно отрисовывает контайнер для будущей фотографии
+	    	item.className = 'drop-container__item '+ classIMG;
+	    	item.innerHTML = `
+		   		<img src="img/icons/gif/load.gif" alt="photo" class="drop-container__img" data-id="0">
+		   		<div class="drop-container__itemDelete drop-container__itemDelete_none" title="Удалить">
+		   		  <svg class="drop-container__itemDelete_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
+		   		</div>
+		   		<div class="drop-container__error drop-container__error_none">
+		   		  <span class="drop-container__error_sp">Ошибка</span>
+		   		</div>
+	    	`;
+	    	list.append(item);
+	    	//Если list был пуст, то удаляет иконку камеры
+	    	document.querySelector('.modalAddPhoto .drop-container__empty').classList.add('drop-container__empty_none');
+	    	//Получет расширение и размер фотографии на валидность 
+	    	let exp = file.name.split('.').pop();
+	    	if ( !/^(jpg|jpeg|png)$/i.test( file.name.split('.').pop() ) ) {
+	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
+	    		document.querySelector(`.${classIMG} .drop-container__error_sp`).innerText = 'Неверный тип файла';
+	    		return;
+	    	}
+	    	if ( file.size > 5242880 ) {
+	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
+	    		document.querySelector(`.${classIMG} .drop-container__error_sp`).innerText = 'Допустимый размер фото 5мб';
+	    		return;
+	    	}
+	    	//Загружаем фотографию на сервер. После загрузки отображаем ее в DOM
+	    	fetch(globalUrlServer + '/photo/upload', {
+	    	  method : 'POST',
+	    	  headers: {"Content-Type": "image/png"},
+	    	  body: file,
+	    	  credentials: 'include'
+	    	})
+	    	.then(response => {
+	    	  if ( response.ok ) {
+	    	  	return response.json();
+	    	  }else{
+	    	  	document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
+	    	  	return response.error();
+	    	  }
+	    	  
+	    	})
+	    	.then(result => {
+	    	  this.imgList.push(result);
+	    	  document.querySelector(`.${classIMG} img`).setAttribute('src', globalUrlServer+result.path);
+	    	  document.querySelector(`.${classIMG} img`).setAttribute('data-id', result.id);
+	    	  document.querySelector(`.${classIMG} .drop-container__itemDelete`).classList.remove('drop-container__itemDelete_none');
+	    	  this.sendButton.classList.add('drop__sendButton_active'); 
+	    	})
+	    	.catch(error => {
+	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
+	    		console.log('error', error)
+	    	});
+	      
+	    }
+
+	    //Контроллер кликов по фотографии
+	    onClick(){
+	    	if ( event.target.closest('.drop-container__itemDelete') ) {
+	    	    this.deleteImgElement(event.target.closest('.drop-container__itemDelete'));
+	    	}else if ( event.target.classList.contains('modalAddPhoto') ) {
+	    	    this.onClose();
+	    	}else if (event.target.classList.contains('drop__sendButton')) {
+	    		this.sendPhoto();
+	    	}
+	    }
+
+	    //Если нажата кнопка опубликовать, то заносит фотографии в глобальную переменную globalSliderPhotos и отрисвывает их в большой или малой галерее
+	    sendPhoto(){
+	    	this.addPhotoInModal(this.imgList);
+	    	for (let i = 0; i < this.imgList.length; i++){
+	    		globalSliderPhotos.push(this.imgList[i]);
+	    	}
+	    	document.querySelector('.drop-container__list').innerHTML = '';
+	    	document.querySelector('.modalAddPhoto .drop-container__empty').classList.remove('drop-container__empty_none');
+	    	this.sendButton.classList.remove('drop__sendButton_active');
 	    	
+	    	if ( document.querySelector('.content-gallery .slider-container__empty') ) {
+	    		document.querySelector('.content-gallery .slider-container__empty').remove();
+	    	}
+
+	    	this.elementContainer = document.querySelector('.content-gallery .slider-container');
+	    	this.elementItems = this.elementContainer.querySelectorAll('.slider-container__item');
+
+	    	if (this.elementItems.length) {
+	    		this.qt = Math.round(parseFloat(getComputedStyle(this.elementContainer).width) / parseFloat(getComputedStyle(this.elementItems[0]).width));
+	    		if (this.elementItems.length >= this.qt) {
+	    			document.querySelector('.content-gallery .slider-arrowRight').style.display = 'block';
+	    			this.imgList = [];
+	    			this.onClose();
+	    		}
+	    	}else{
+	    		document.querySelector('.content-gallery .slider__bufer').innerHTML = 'add';
+	    	}
+
+	    	for (let i = 0; i < this.imgList.length; i++){
+	    		let slideHTML = document.createElement('div');
+	    		slideHTML.className = 'slider-container__item slider-container__item_gallery';
+	    		slideHTML.setAttribute('data-id', this.imgList[i].id);
+	    		slideHTML.innerHTML = `<img src="${globalUrlServer+ this.imgList[i].path}" alt="фотография" class="slider-container__img slider-container__img_min">`;	
+	    		this.elementContainer.append(slideHTML);
+	    	}
+
+	    	this.elementItems = this.elementContainer.querySelectorAll('.slider-container__item');
+	    	this.qt = Math.round(parseFloat(getComputedStyle(this.elementContainer).width) / parseFloat(getComputedStyle(this.elementItems[0]).width));
+
+	    	if ( this.elementContainer.querySelectorAll('.slider-container__item').length > this.qt ) {
+	    		document.querySelector('.content-gallery .slider-arrowRight').style.display = 'block';
+	    	}
+
+	    	this.imgList = [];
+	    	this.onClose();
+	    }		
+
+	    //Отрисовывает новые фотографии в большой галерее если требуется
+	    addPhotoInModal(items){
+	    	let modalGallery = document.querySelector('.modalGallery');
+	    	if (modalGallery) {
+	    		let idLastImg = modalGallery.querySelector('.galleryBig__imgContainer:last-child').querySelector('.galleryBig__imgDelete').getAttribute('data-id');
+	    		if (Number(idLastImg) === globalSliderPhotos[globalSliderPhotos.length - 1].id) {
+	    			for(let i = 0; i < items.length; i++){
+	    				let imgBlock = document.createElement('div');
+	    				imgBlock.className = 'galleryBig__imgContainer';
+	    				imgBlock.innerHTML = `
+		    				<img class="galleryBig__img" src="${globalUrlServer + items[i].path}" alt="фотография"><div class="galleryBig__imgDelete" title="Удалить" data-id="${items[i].id}">
+								<svg class="galleryBig__imgDelete_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
+							</div>
+						`;
+						modalGallery.querySelector('.galleryBig__container').append(imgBlock);
+	    			}
+	    		}
+	    	}
+	    }
+
+	    //Удаляет фотографию в DOM
+	    deleteImgElement(element){
+	    	let image = element.parentElement.querySelector('.drop-container__img');
+	    	if ( image.getAttribute('data-id') === 0 ) {
+	    		return false;
+	    	}
+	    	let photo_id = image.getAttribute('data-id')
+	    	this.deleteImg(photo_id);
+
+	    	for (let i = 0; i < this.imgList.length; i++){
+	    		if (this.imgList[i].photo_id  === Number(photo_id) ) {
+	    			this.imgList.splice(i, 1);
+	    			break;
+	    		}
+	    	}
+
+	    	if (!this.imgList.length) {
+	    		this.sendButton.classList.remove('drop__sendButton_active');
+	    	}
+	    	element.parentElement.remove();
+	    	if ( !document.querySelector('.modalAddPhoto .drop-container__list div') ) {
+	    		document.querySelector('.modalAddPhoto .drop-container__empty').classList.remove('drop-container__empty_none');
+	    	}
+	    }
+
+	    //Удаляет фотографию с сервера
+	    deleteImg(photo_id){
+	    	let urlencoded = new URLSearchParams();
+            urlencoded.append("photo_id", photo_id);
+	    	fetch(globalUrlServer + '/photo/delete', {
+	    	  method : 'POST',
+	    	  headers: {"Content-Type": "application/x-www-form-urlencoded"},
+	    	  body: urlencoded,
+	    	  credentials: 'include'
+	    	})
+	    	.then(response => {
+	    	  if ( response.ok ) {
+	    	  	return response.text();
+	    	  }else{
+	    	  	return response.error();
+	    	  }
+	    	  
+	    	} )
+	    	.then(result => {
+	    	  return;
+	    	})
+	    	.catch(error => {
+	    		console.log('error', error)
+	    	});
+	    }
+
+	    //Если мы вышли с окна, то все что загрузили на сервер удаляет
+	    onClose(event) {;
+	    	for (let i = 0; i < this.imgList.length; i++){
+	    		this.deleteImg(this.imgList[i].id)
+	    	}
+	    	this.imgList = [];
 	    	if ( document.querySelector('.modal') ) {
 	    		document.querySelector('.modal').style.opacity = 1;
 	    	}else{
