@@ -99,6 +99,9 @@
 	transition: transform 0s ease;
 	transform: translateX(0%);
 }
+.slider-containe_duration{
+	transition-duration: 0s;
+}
 .slider-container__item{
 	display: flex;
 	align-items: center;
@@ -132,7 +135,7 @@
 	width:auto;
     object-fit: contain;
 }
-.slider-bufer{
+.slider__bufer{
 	display: none;
 }
 
