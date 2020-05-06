@@ -68,12 +68,15 @@
 	justify-content: center;
 }
 .drop{
-	margin-left: 50px;
-	margin-top: 50px;
+	margin: 50px;
 	height: calc(100% - 100px);
 	width: calc(100% - 100px);
 	flex-direction: column;
-	border: 2px dashed #000000;
+	border: 4px dashed #000000;
+	min-height: 400px;
+}
+.drop_border{
+	border-style: solid;
 }
 .modal-photo__img{
 	max-height: 100%;
@@ -82,16 +85,129 @@
     width: auto;
     object-fit: contain;
 }
-.drop__svg{
-	height: 200px;
-	width: 200px;
+.drop-container{
 }
+.drop-container__empty{
+  width: 150px;
+  height: 150px;
+}
+.drop-container__emptyImg{
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+.drop-container__list{
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.drop-container__empty_none,.drop-container__list_none{
+  display: none;
+}
+.drop-container__item{
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+}
+.drop-container__img{
+  width: 150px;
+  height: 150px;
+}
+.drop-container__itemDelete{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  background:rgba(0,0,0,.2);
+  opacity: 0;
+}
+
+.drop-container__item:hover .drop-container__itemDelete{
+  transition: all 0.5s ease-out;
+  opacity: 1;
+}
+
+.drop-container__itemDelete_icon{
+  stroke: #000000;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+}
+.drop-container__error{
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  background: #ffffff;
+  color: #000;
+  font-weight: bold;
+  border: 1px solid #000;
+  z-index: 1;
+  text-align: center;
+}
+.drop-container__itemDelete_none,.drop-container__error_none{
+  display: none;
+}
+
 .drop__title{
-	text-align: center;
-	font-size: 3rem;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 3rem;
 }
 
-
+.drop__input_none{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    z-index: -500;
+}
+.drop__label{
+  text-transform: uppercase;
+  color: #729ee6;
+  cursor: pointer;
+}
+.drop__send{
+	margin: 10px 0;
+	text-align: center;
+	height: 34px;
+}
+.drop__sendButton{
+	display: none;
+	width: 100%;
+	height: 34px;
+	color: #ffffff;
+	background: #729ee6;
+	border: none;
+	border-radius: 10px;
+	padding: 7px 10px;
+	font-size: 16px;
+	cursor: pointer;
+	outline: none;
+}
+.drop__sendButton_active{
+	display: block;
+}
+.drop__message{
+	margin: 10px 0;
+	text-align: center;
+	font-size: 14px;
+	color: #ff0000;
+}
 
 
 
@@ -141,6 +257,8 @@
 }
 
 .galleryBig__imgContainer{
+	width: 100%;
+	min-height: 100px;
 	position: relative;
 }
 
@@ -190,4 +308,5 @@
 	background: transparent;
 	cursor:pointer;
 	color: #ffffff;
+	outline: none;
 }

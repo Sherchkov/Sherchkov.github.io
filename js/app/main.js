@@ -16,12 +16,12 @@ fetch("https://tensor-school.herokuapp.com/user/current", {
 	user_id = result.id;
 	if ( window.innerWidth > 800 ) {
 		require(["page/profile"], function (Profile) {
-			page = factory.create(Profile, {});
+			page = factory.create(Profile, result);
 			page.mount(document.body);
 		});
 	} else {
 		require(["page/ProfileMobile"], function(profileMobile){
-			page = factory.create(profileMobile, {});
+			page = factory.create(profileMobile, result);
 			page.mount(document.body);
 		});
 	}

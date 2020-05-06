@@ -122,16 +122,17 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                     }
                 })
                 .then(result => {
+                    console.log("result", result);
                     user_id = result.id;
                     page.unmount();
                     if (window.innerWidth > 800) {
                         require(["page/profile"], function (Profile) {
-                            page = factory.create(Profile, {});
+                            page = factory.create(Profile, result);
                             page.mount(document.body);
                         });
                     } else {
                         require(["page/ProfileMobile"], function (profileMobile) {
-                            page = factory.create(profileMobile, {});
+                            page = factory.create(profileMobile, result);
                             page.mount(document.body);
                         });
                     }
@@ -160,18 +161,16 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
 
             let name = 'Скрыто';
             if (document.querySelector('.join-form__input_nameReg').value || document.querySelector('.join-form__input_familyReg').value) {
-                name = document.querySelector('.join-form__input_nameReg').value + ' ' + document.querySelector('.join-form__input_familyReg').value;
+                name = document.querySelector('.join-form__input_familyReg').value + ' ' + document.querySelector('.join-form__input_nameReg').value;
             }
 
             let data = {
-              data : {
                 name : name,
                 birth_date : document.querySelector('.join-form__input_birthReg').value || '0000-00-00T00:00:00',
                 city : document.querySelector('.join-form__input_cityReg').value || 'Скрыто',
                 family_state : document.querySelector('.join-form__input_stateReg').value || 'Скрыто',
                 education : document.querySelector('.join-form__input_educationReg').value || 'Скрыто',
                 job : document.querySelector('.join-form__input_jobReg').value || 'Скрыто',
-              }
             }
 
             let urlencoded = new URLSearchParams();
@@ -199,8 +198,11 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 }      
             })
             .then(result => {
+                console.log("result", result);
                 user_id = result.id;
-                setTimeout(this.updateUser(data),3000);
+                this.updateUser(data);
+                this.loadpage(data,result.id,result.computed_data.last_activity);
+               /* setTimeout(this.updateUser(data),3000);*/
             })
             .catch(error => console.log('error', error));
         }   
@@ -215,10 +217,8 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 credentials: 'include'
             })
             .then(response => {
-                this.loadpage();
             })
             .catch(error => {
-                this.loadpage();
                 console.log('error', error);
             });  
         }
@@ -250,16 +250,26 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
             return true;
         }
 
-        loadpage(){
+        loadpage(data, id, last_activity){
+            /*let date = new Date().toLocaleString();
+            date = `${date.substring(6,10)}-${date.substring(3,5)}-${date.substring(0,2)}T${date.substring(12)}`;*/
+            let result = {
+                computed_data : {
+                    'last_activity' : last_activity, 
+                    'photo_ref' : null
+                },
+                data : data,
+                id : id,
+            }
             page.unmount();
             if ( window.innerWidth > 800 ) {
                 require(["page/profile"], function (Profile) {
-                    page = factory.create(Profile, {});
+                    page = factory.create(Profile, result);
                     page.mount(document.body);
                 });
             } else {
                 require(["page/ProfileMobile"], function(profileMobile){
-                    page = factory.create(profileMobile, {});
+                    page = factory.create(profileMobile, result);
                     page.mount(document.body);
                 });
             }

@@ -1,7 +1,5 @@
-define(['base/component', 'modal/ActionModal', 'modal/ModalDrop', 'modal/ModalPhoto', 'server/json', 'css!component/avatar/avatar.min'], function (Component, ActionModal, ModalDrop, ModalPhoto, json) {
+define(['base/component', 'css!component/avatar/avatar.min'], function (Component) {
 	'use strict';
-
-	let avatar = json.avatar.photo;
 
 	class Avatar extends Component {
 	    render(options) {
@@ -10,11 +8,17 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalDrop', 'modal/ModalPh
 	    	}else{
 	    		this.mobile = false;
 	    	}
-	        let avatar = json.avatar.photo;
+
+	    	if (options.computed_data.photo_ref) {
+	    		this.avatar = globalUrlServer + options.computed_data.photo_ref;
+	    	}else{
+	    		this.avatar = 'img/avatar/avatar_default.png';
+	    	}
+
 	        if ( options.mobile ) {
 	        	return `
 	        	    <div class="content-photo content-photo_mobile">
-	        	      <img src="${avatar}" alt="Профиль" class="content-photo__img modalPhoto content-photo__img_mobile">
+	        	      <img src="${this.avatar}" alt="Профиль" class="content-photo__img modalPhoto content-photo__img_mobile">
 	        	      <div class="photo-edit_mobile">
 	        	        <img class="photo-edit__icon" src="img/icons/system/editMobil.png" alt="Редактировать" title="Редактировать">
 	        	      </div>
@@ -23,15 +27,13 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalDrop', 'modal/ModalPh
 	        }else{
 	        	return `
 	        	    <div class="content-photo content_default">
-	        	      <img src="${avatar}" alt="Профиль" class="content-photo__img modalPhoto">
+	        	      <img src="${this.avatar}" alt="Профиль" class="content-photo__img modalPhoto">
 	        	      <div class="photo-edit">
 	        	        <img class="photo-edit__icon" src="img/icons/system/pen.png" alt="Редактировать" title="Редактировать">
 	        	      </div>
 	        	    </div>
 	        	`;
 	        }
-
-	        
 	    }
 	    afterMount() {
 	    	if ( !this.mobile ) {
@@ -43,7 +45,6 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalDrop', 'modal/ModalPh
 
 	    //добавление класса при наведении на фотографию
 	    onShowEditPhoto(event){
-
 	        this.getContainer().querySelector('.photo-edit').classList.add('photo-edit__active');
 	    }
 
@@ -55,18 +56,27 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalDrop', 'modal/ModalPh
 
 	    createModalPhoto(event){
 	        let element = event.target;
-	        if ( element.classList.contains("photo-edit") || element.parentElement.classList.contains("photo-edit")  || element.classList.contains("photo-edit_mobile") || element.parentElement.classList.contains("photo-edit_mobile")) {
-	            new ActionModal({
-	                children : ModalDrop,
-	                theme : 'white',
-	            });
+	        if (element.closest(".photo-edit") || element.closest(".photo-edit_mobile")  ) {
+	        	require(['modal/ModalAddPhoto'], function(ModalAddPhoto){
+	        		if (  typeof(modalAddPhoto) !== 'undefined' ) {
+	        		    modalAddPhoto.unmount();
+	        		}
+	        		modalAddPhoto = factory.create(ModalAddPhoto, {
+	        			component : 'avatar', 
+	        			urlDownload : '/user/upload_photo', 
+	        		});
+	        		modalAddPhoto.mount(document.body);
+	        	});
+
 	        } else if ( element.classList.contains("modalPhoto") ) {
-	            new ActionModal({
-	                children : ModalPhoto,
-	                src : element.getAttribute('src'),
-	                title : element.getAttribute('title'),
-	                alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
-	            }); 
+	        	require(['modal/ActionModal', 'modal/ModalPhoto'], function(ActionModal, ModalPhoto){ 
+	        		new ActionModal({
+		                children : ModalPhoto,
+		                src : element.getAttribute('src'),
+		                title : element.getAttribute('title'),
+		                alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
+		            });
+	        	});
 	        } 
 
 	    }
