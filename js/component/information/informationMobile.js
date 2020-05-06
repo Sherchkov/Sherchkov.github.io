@@ -14,7 +14,7 @@ define(['base/component', 'component/avatar/avatar', 'server/json', "base/helper
 	              
 				  
 				  <div class="content-data-head">
-		            ${this.childrens.create(Avatar, {mobile:true})}
+		            ${this.childrens.create(Avatar, options)}
 		            <h1 class="content-data__name">${ data.family + ' ' + data.name }</h1>
 		          </div>
 	              <div class="content_data__aboutMe" ondragenter="return false" ondragleave="return false" ondragover="return false" ondrop="return false" title="${data.about}">${data.about}</div>
