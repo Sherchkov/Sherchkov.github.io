@@ -130,7 +130,11 @@ define(['base/component'], function (Component) {
 	    		    modalAddPhoto.unmount();
 	    		}
 
-	    		modalAddPhoto = factory.create(ModalAddPhoto, {});
+	    		modalAddPhoto = factory.create(ModalAddPhoto, {
+	    			component : 'gallery', 
+	    			urlDownload : '/photo/upload', 
+	    			urlDelete : '/photo/delete'
+	    		});
 	    		modalAddPhoto.mount(document.body);
 	    	});
 	    }
