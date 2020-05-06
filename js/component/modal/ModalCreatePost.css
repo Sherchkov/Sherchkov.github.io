@@ -45,3 +45,15 @@
     margin-top: 1em;
     display: none;
 }
+
+.gallary {
+    display:grid;
+    grid-template-columns: repeat(4, 20%);
+    grid-row: 100px;
+}
+.gallery img {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    vertical-align: middle;
+    object-fit: contain;
+}
