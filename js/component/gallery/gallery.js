@@ -135,7 +135,11 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    		if (  typeof(modalAddPhoto) !== 'undefined' ) {
 	    		    modalAddPhoto.unmount();
 	    		}
-	    		modalAddPhoto = factory.create(ModalAddPhoto, {});
+	    		modalAddPhoto = factory.create(ModalAddPhoto, {
+	    			component : 'gallery', 
+	    			urlDownload : '/photo/upload', 
+	    			urlDelete : '/photo/delete'
+	    		});
 	    		modalAddPhoto.mount(document.body);
 	    	});
 	    }
