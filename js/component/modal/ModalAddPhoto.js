@@ -4,6 +4,7 @@ define(['base/component'], function (Component) {
 	class ModalAddPhoto extends Component {
 	    
 	    render(options) {
+	    	this.options = options;
 	        return `
 				<div class="modalAddPhoto">
 				    <button class="modal__close">
@@ -19,8 +20,8 @@ define(['base/component'], function (Component) {
 			    				</div>
 			    			</div>
 			    	      	<div class="drop__title">
-			    	      		<input class="drop__input drop__input_none" id="fileDrop" type="file" accept=".jpg, .jpeg, .png" multiple>
-			    	      		<span>Перетащите cюда фотографии или нажмите</span>
+			    	      		<input class="drop__input drop__input_none" id="fileDrop" type="file" accept=".jpg, .jpeg, .png" ${this.options.component === 'avatar' ? '' : 'multiple'}>
+			    	      		<span>Перетащите cюда фотографи${this.options.component === 'avatar' ? 'ю' : 'и'} или нажмите</span>
 			    	      		<label class="drop__label" id="fileDropLabel" for="fileDrop" name="file">Сюда</label>
 			    	      	</div>
 			    	      	<div class="drop__message"></div>
@@ -37,7 +38,6 @@ define(['base/component'], function (Component) {
 			if ( document.querySelector('.modal') ) {
 				document.querySelector('.modal').style.opacity = 0;
 			}
-
 		}
 
 	    afterMount() {
@@ -53,6 +53,7 @@ define(['base/component'], function (Component) {
 	    	this.imgList = [];
 			this.area = document.querySelector('.drop');
 			this.fileInput = document.querySelector('.drop__input');
+			this.amountFiles = 0;
 			this.sendButton = document.querySelector('.drop__sendButton');
 			//Добавляет обработчики для перетаскивания элемента
 			this.subscribeTo(this.area, 'dragenter', this.defaultListener.bind(this));
@@ -102,14 +103,20 @@ define(['base/component'], function (Component) {
 	    		return;
 	    	}
 	    	//Если файлов больше 5, то выдает ошибку
-	    	if (fileList.length > 5) {
+	    	if (this.options.component === 'avatar' && (fileList.length > 1 || this.amountFiles >= 1)) {
+	    		dropMessage.innerText = 'Нельзя загрузить больше 1 фотографии';
+	    		return;
+	    	}else if (fileList.length > 5 || (this.amountFiles + fileList.length) > 5) {
 	    		dropMessage.innerText = 'Нельзя загрузить больше 5 фотографии одновременно';
 	    		return;
 	    	}
+	    	
 	    	//Проходит по каждому файлу и загружаем его на сервер
 	   		for (let i = 0; i < fileList.length; i++){
+	   			this.amountFiles++;
 	        	this.uploadFile(fileList[i]);
 	    	}
+	    	this.checkingAmountFile(this.amountFiles);
 	    }
 
 	    //file - переданный файл
@@ -139,15 +146,19 @@ define(['base/component'], function (Component) {
 	    	if ( !/^(jpg|jpeg|png)$/i.test( file.name.split('.').pop() ) ) {
 	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
 	    		document.querySelector(`.${classIMG} .drop-container__error_sp`).innerText = 'Неверный тип файла';
+	    		this.amountFiles--;
+	    		this.checkingAmountFile(this.amountFiles);
 	    		return;
 	    	}
 	    	if ( file.size > 5242880 ) {
 	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
 	    		document.querySelector(`.${classIMG} .drop-container__error_sp`).innerText = 'Допустимый размер фото 5мб';
+	    		this.amountFiles--;
+	    		this.checkingAmountFile(this.amountFiles);
 	    		return;
 	    	}
 	    	//Загружаем фотографию на сервер. После загрузки отображаем ее в DOM
-	    	fetch(globalUrlServer + '/photo/upload', {
+	    	fetch(globalUrlServer + this.options.urlDownload, {
 	    	  method : 'POST',
 	    	  headers: {"Content-Type": "image/png"},
 	    	  body: file,
@@ -157,17 +168,25 @@ define(['base/component'], function (Component) {
 	    	  if ( response.ok ) {
 	    	  	return response.json();
 	    	  }else{
+	    	  	this.amountFiles--;
+	    		this.checkingAmountFile(this.amountFiles);
 	    	  	document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
 	    	  	return response.error();
 	    	  }
 	    	  
 	    	})
 	    	.then(result => {
-	    	  this.imgList.push(result);
-	    	  document.querySelector(`.${classIMG} img`).setAttribute('src', globalUrlServer+result.path);
-	    	  document.querySelector(`.${classIMG} img`).setAttribute('data-id', result.id);
-	    	  document.querySelector(`.${classIMG} .drop-container__itemDelete`).classList.remove('drop-container__itemDelete_none');
-	    	  this.sendButton.classList.add('drop__sendButton_active'); 
+	    		if (this.options.component === 'avatar') {
+	    			document.querySelector('.content-photo .content-photo__img').setAttribute('src', globalUrlServer + result.computed_data.photo_ref + '?v=' + classIMG);
+	    			document.querySelector('.header .header__img').setAttribute('src', globalUrlServer + result.computed_data.photo_ref + '?v=' + classIMG);
+	    			this.onClose();
+	    			return;
+	    		}
+	    		this.imgList.push(result);
+	    		document.querySelector(`.${classIMG} img`).setAttribute('src', globalUrlServer + result.path) ;
+	    		document.querySelector(`.${classIMG} img`).setAttribute('data-id', result.id);
+	    		document.querySelector(`.${classIMG} .drop-container__itemDelete`).classList.remove('drop-container__itemDelete_none');
+	    		this.sendButton.classList.add('drop__sendButton_active'); 
 	    	})
 	    	.catch(error => {
 	    		document.querySelector(`.${classIMG} .drop-container__error`).classList.remove('drop-container__error_none');
@@ -176,6 +195,13 @@ define(['base/component'], function (Component) {
 	      
 	    }
 
+	    checkingAmountFile(amount){
+	    	if ( (this.options.component === 'avatar' && amount >= 1) || (this.options.component === 'gallery' && amount >= 5) ) {
+	    		this.getContainer().querySelector('.drop__title').style.display = 'none';
+	    	}else{
+	    		this.getContainer().querySelector('.drop__title').style.display = 'block';
+	    	}
+	    }
 	    //Контроллер кликов по фотографии
 	    onClick(){
 	    	if ( event.target.closest('.drop-container__itemDelete') ) {
@@ -189,14 +215,16 @@ define(['base/component'], function (Component) {
 
 	    //Если нажата кнопка опубликовать, то заносит фотографии в глобальную переменную globalSliderPhotos и отрисвывает их в большой или малой галерее
 	    sendPhoto(){
+	    	
 	    	this.addPhotoInModal(this.imgList);
 	    	for (let i = 0; i < this.imgList.length; i++){
 	    		globalSliderPhotos.push(this.imgList[i]);
 	    	}
-	    	document.querySelector('.drop-container__list').innerHTML = '';
-	    	document.querySelector('.modalAddPhoto .drop-container__empty').classList.remove('drop-container__empty_none');
+
+	    	this.getContainer().querySelector('.drop-container__list').innerHTML = '';
+	    	this.getContainer().querySelector('.modalAddPhoto .drop-container__empty').classList.remove('drop-container__empty_none');
 	    	this.sendButton.classList.remove('drop__sendButton_active');
-	    	
+
 	    	if ( document.querySelector('.content-gallery .slider-container__empty') ) {
 	    		document.querySelector('.content-gallery .slider-container__empty').remove();
 	    		document.querySelector('.content-gallery .content-gallery__title').classList.add('content-gallery__title_js');
@@ -231,7 +259,7 @@ define(['base/component'], function (Component) {
 
 	    	if ( this.elementContainer.querySelectorAll('.slider-container__item').length > this.qt ) {
 	    		document.querySelector('.content-gallery .slider-arrowRight').style.display = 'block';
-	    	}
+	    	}	    	
 
 	    	this.imgList = [];
 	    	this.onClose();
@@ -265,14 +293,13 @@ define(['base/component'], function (Component) {
 	    	}
 	    	let photo_id = image.getAttribute('data-id');
 	    	this.deleteImg(photo_id);
-
+	    	
 	    	for (let i = 0; i < this.imgList.length; i++){
-	    		if (this.imgList[i].photo_id  === Number(photo_id) ) {
+	    		if (this.imgList[i].id  === Number(photo_id) ) {
 	    			this.imgList.splice(i, 1);
 	    			break;
 	    		}
 	    	}
-
 	    	if (!this.imgList.length) {
 	    		this.sendButton.classList.remove('drop__sendButton_active');
 	    	}
@@ -280,6 +307,8 @@ define(['base/component'], function (Component) {
 	    	if ( !document.querySelector('.modalAddPhoto .drop-container__list div') ) {
 	    		document.querySelector('.modalAddPhoto .drop-container__empty').classList.remove('drop-container__empty_none');
 	    	}
+	    	this.amountFiles--;
+	        this.checkingAmountFile(this.amountFiles);
 	    }
 
 	    //Удаляет фотографию с сервера
@@ -307,6 +336,7 @@ define(['base/component'], function (Component) {
 	    		console.log('error', error);
 	    	});
 	    }
+
 
 	    //Если мы вышли с окна, то все что загрузили на сервер удаляет
 	    onClose(event) {
