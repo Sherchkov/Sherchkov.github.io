@@ -6,6 +6,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
     class ModalCreatePost extends Component{
         constructor(options){
             super();
+            this.current_id = options.id;
             this.user_id = options.id;
             this.idPhotosBeforeUpdate = {};
             this.idPhotosAfterUpdate = {};
@@ -62,6 +63,22 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             } 
         }
 
+        //добавление подписи загрузки
+        createLabelUpload(){
+            let path = document.querySelector('.createrPost__fieldForImg');
+            let elem = document.createElement('p');
+            
+            elem.innerText = 'Производится загрузка, пожалуйста подождите';
+            elem.classList = 'createrPost__text createrPost__text_label';
+            path.after(elem);
+        }
+
+        //удаление подписи загрузки
+        deleteLabelUpload(){
+            let elem = document.querySelector('.createrPost__text_label');
+            elem.remove();
+        }
+
         //положить в нужный массив список фотографий
         async putCurrentListPhotos(arrayForPut){
             let ids = await this.getListPhoto();
@@ -90,14 +107,35 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         async handleDrop(){
             let dt = event.dataTransfer;
             let files = await dt.files;
-            this.handleFiles(await files);
+            this.checkCounOfPhoto(await files, this.idPhotosWasUpdate);
         }
 
         //передача файлов в обработку с доп кнопки
         async fromAddButtton(){
             let dt = event.srcElement;
             let files = await dt.files;
-            this.handleFiles(await files);
+            this.checkCounOfPhoto(await files, this.idPhotosWasUpdate);
+        }
+
+        //проверка общего числа фотографий
+        checkCounOfPhoto(files, buffer){
+            this.createLabelUpload();
+            let countPhotoinBuffer = this.lenPamamsOfObject(buffer);
+            if ((countPhotoinBuffer + files.length) > 10){
+                alert('Количество фото не должно превышать 10');
+                let newFiles = [];
+                let counter = 0;
+                for (let file of files) {
+                    counter++;
+                    if (counter <= 10 - countPhotoinBuffer){
+                        newFiles.push(file);
+                    }
+                }
+                this.handleFiles(newFiles);
+            }
+            else {
+                this.handleFiles(files);
+            }
         }
 
         //выполнение для каждого файла загрузки
@@ -111,21 +149,25 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 console.log(this.idPhotosWasUpdate);})
             .then(() => {this.setParamsOfFirstMassiveToSecond(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate); this.outputUploadFiles();});
         }
+        
+        //количество параметров в объекте
+        lenPamamsOfObject(object){
+            let count = 0;
+            // eslint-disable-next-line no-unused-vars
+            for (let key in object)
+            {
+                count = count + 1;
+            }
+            return count;
+        }
 
+        //вывод загруженных фото
         outputUploadFiles(){
             let classForImg = 'uploadingPhoto_img';
             let imagesOnForm = document.querySelectorAll(`.${classForImg}`);
-            let lenOfMassive = () => {
-                let count = 0;
-                // eslint-disable-next-line no-unused-vars
-                for (let key in this.idPhotosWasUpdate)
-                {
-                    count = count + 1;
-                }
-                return count;
-            };
-            console.log(lenOfMassive());
-            if (imagesOnForm.length != lenOfMassive()){
+            let lenOfMassive = this.lenPamamsOfObject(this.idPhotosWasUpdate);
+            
+            if (imagesOnForm.length != lenOfMassive){
                 document.querySelector('.uploadingPhoto').innerHTML='';
                 for (let photo in this.idPhotosWasUpdate){
                     let srcPhoto = new URL (this.idPhotosWasUpdate[photo], tensor);
@@ -135,6 +177,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                     document.querySelector('.uploadingPhoto').appendChild(img);
                 }
             }
+            this.deleteLabelUpload();
         }
 
         //приравнивание значений 2-х объектов
@@ -143,6 +186,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 secondMassive[key] = firstMassive[key];
             }
         }
+
         //загрузка
         async uploadFile(file){
             let loadPhoto = new URL ('/photo/upload', tensor);
@@ -246,12 +290,45 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             document.querySelector('.unvisibleField').style.display = 'block';
         }
 
+        //Преобразование ссылок на фото в строку
+        getStrOfLinksPhotos(object){
+            let str = '';
+            for (let key in object){
+                str = str + object[key] + ',';
+            }
+            return str;
+        }
+
         //Сохрание данных по нажатию (в разработке)
         createPost(){
             event.stopPropagation();
+            this.isSave = true;
             let text = document.querySelector('.createrPost__fieldForText').value;
-            console.log(text);
-            this.Close();
+
+            if(text.length != 0 || this.lenPamamsOfObject(this.idPhotosWasUpdate)!= 0)
+            {
+                let linksForPhotos = this.getStrOfLinksPhotos(this.idPhotosWasUpdate);
+                let urlencoded = new URLSearchParams();
+                urlencoded.append('author', this.user_id);
+                urlencoded.append('addressee', this.current_id);
+                urlencoded.append('message', text);
+                urlencoded.append('image', linksForPhotos);
+                let createPost = new URL ('/message/create', tensor);
+
+            fetch(createPost, {
+                method : 'POST',                
+				mode: 'cors',
+                headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
+				body: urlencoded,
+                credentials: 'include'
+            }).then(response => console.log(response))
+            .then(this.Close())
+            .catch(error => console.log('error', error));
+            }
+            else {
+                this.Close();
+            }
+            
         }
 
         //Вызов события закрытия кнопки окна
@@ -259,17 +336,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             let event = new Event('click');
             document.querySelector('.modal').dispatchEvent(event);
         }
-        
-        //функция на стадии разработки!!!
-        previewFile(file) {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function(){
-                let img = document.createElement('img');
-                img.src = reader.result;
-                document.querySelector('.uploadingPhoto').appendChild(img);
-            };
-        }
+
     }
 	return ModalCreatePost;
 });  
