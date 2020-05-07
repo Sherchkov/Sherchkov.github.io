@@ -8,6 +8,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         idPhotosBeforeUpdate = {};
         idPhotosAfterUpdate = {};
         idPhotosWasUpdate = {};
+        isSave = false;
 
         render() {
             return `<div class='createrPost'>
@@ -29,10 +30,11 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         }
         
         afterMount() {
+            this.isSave = false;
             //навешивание на форму выбора действия
             document.querySelector('.modal-content').classList.add('modal-content_big');
             this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
-            
+           // console.log(options);
             this.putCurrentListPhotos(this.idPhotosBeforeUpdate);
             
             //установка всех событий на элемент для drop
@@ -50,13 +52,27 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         beforeUnmount(){
             let arrayOfEvents = ['dragenter', 'dragover', 'dragleave', 'drop', 'click'];
             arrayOfEvents.forEach(eventName => this.unsubscribeByEvent(eventName));
+
+            if(!this.isSave){
+                for (let photo in this.idPhotosWasUpdate){
+                    this.deletePhoto(photo);
+                }
+            } 
         }
 
         //положить в нужный массив список фотографий
         async putCurrentListPhotos(arrayForPut){
             let ids = await this.getListPhoto();
             this.getId(await ids, arrayForPut);
-            console.log(arrayForPut);
+        }
+
+        //сравнение 2-х массивов и вынесение разницы в дополнительный массив
+        compareMassiveAndCreateNew(bigMassive, littleMassive, newMassive){
+            for (let elem in bigMassive){
+                if(!(elem in littleMassive)) {
+                    newMassive[elem] = bigMassive[elem];
+                }
+            }  
         }
 
         //функция выбора навешиваемой функции
@@ -88,7 +104,9 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             
             Promise.all(requests)
             .then(() => this.getListPhoto())
-            .then(() => this.putCurrentListPhotos(this.idPhotosAfterUpdate));
+            .then(() => this.putCurrentListPhotos(this.idPhotosAfterUpdate))
+            .then(() => {this.compareMassiveAndCreateNew(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate, this.idPhotosWasUpdate);
+                console.log(this.idPhotosWasUpdate);});
         }
 
         //загрузка
@@ -144,14 +162,14 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             }).then(response => response.json())
             .then(result => result.photos) 
             .then(photos => {for (let photo of photos){
-                this.deletePhoto(photo);
+                this.deletePhoto(photo.id);
             }});
         }
 
         //удаление фото
         deletePhoto(photo){
             let urlencoded = new URLSearchParams();
-            urlencoded.append('photo_id', photo.id);
+            urlencoded.append('photo_id', photo);
             let deletePhoto = new URL ('/photo/delete', tensor);
 
             fetch(deletePhoto, {

@@ -12,7 +12,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	                     	<!-- Галлерея -->
 	                     	${this.childrens.create(Gallery, {})}
 	                     	<!-- Стена -->
-	                      	${this.childrens.create(Wall, {})}
+	                      	${this.childrens.create(Wall, options)}
 	                    </div>
 	                    <div class="Content__side-bar side-bar">
 	                     	<!-- Профиль -->

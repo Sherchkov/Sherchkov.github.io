@@ -3,8 +3,9 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 	'use strict';
 
 	class Wall extends Component {
-		constructor() {
+		constructor(options) {
 			super();
+			this.options = options;
 			this.wall = json.wall;
 			this.useCSS = {
 				postHeader : 'post-data_header',
@@ -27,7 +28,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 		afterMount() {	
 			this.subscribeTo(this.getContainer(), 'click', this.createPost.bind(this));
-
+			
 			for (let post of this.wall) {
 				// eslint-disable-next-line no-undef
 				let postForMount = factory.create(Post, post);

@@ -15,7 +15,7 @@ define(['base/component', 'component/header/header', 'component/information/info
                 	<!-- Сообщения -->
 			${this.childrens.create(Messages, {mobile:true})}
                 	<!-- Стена -->
-                 	${this.childrens.create(Wall, {})}
+                 	${this.childrens.create(Wall, options)}
 	            </div>
 	        `;
 	    }
