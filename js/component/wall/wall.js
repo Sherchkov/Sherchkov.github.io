@@ -39,11 +39,13 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 		createPost(){
 			event.stopPropagation();
+			let opt = this.options;
 			// eslint-disable-next-line no-undef
 			require(['modal/ActionModal', 'modal/ModalCreatePost'], function(ActionModal, ModalCreatePost){
 				new ActionModal({
 					children : ModalCreatePost,
-					theme: 'white'
+					theme: 'white',
+					id: opt.id
 				});  
 			});
 		}
