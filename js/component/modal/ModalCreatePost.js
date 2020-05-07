@@ -4,11 +4,14 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
     var tensor = new URL ('https://tensor-school.herokuapp.com/');
 
     class ModalCreatePost extends Component{
-        
-        idPhotosBeforeUpdate = {};
-        idPhotosAfterUpdate = {};
-        idPhotosWasUpdate = {};
-        isSave = false;
+        constructor(options){
+            super();
+            this.user_id = options.id;
+            this.idPhotosBeforeUpdate = {};
+            this.idPhotosAfterUpdate = {};
+            this.idPhotosWasUpdate = {};
+            this.isSave = false;
+        }
 
         render() {
             return `<div class='createrPost'>
@@ -30,11 +33,9 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         }
         
         afterMount() {
-            this.isSave = false;
             //навешивание на форму выбора действия
             document.querySelector('.modal-content').classList.add('modal-content_big');
             this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
-           // console.log(options);
             this.putCurrentListPhotos(this.idPhotosBeforeUpdate);
             
             //установка всех событий на элемент для drop
@@ -56,6 +57,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             if(!this.isSave){
                 for (let photo in this.idPhotosWasUpdate){
                     this.deletePhoto(photo);
+                    this.isSave = true;
                 }
             } 
         }
@@ -106,9 +108,41 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             .then(() => this.getListPhoto())
             .then(() => this.putCurrentListPhotos(this.idPhotosAfterUpdate))
             .then(() => {this.compareMassiveAndCreateNew(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate, this.idPhotosWasUpdate);
-                console.log(this.idPhotosWasUpdate);});
+                console.log(this.idPhotosWasUpdate);})
+            .then(() => {this.setParamsOfFirstMassiveToSecond(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate); this.outputUploadFiles();});
         }
 
+        outputUploadFiles(){
+            let classForImg = 'uploadingPhoto_img';
+            let imagesOnForm = document.querySelectorAll(`.${classForImg}`);
+            let lenOfMassive = () => {
+                let count = 0;
+                // eslint-disable-next-line no-unused-vars
+                for (let key in this.idPhotosWasUpdate)
+                {
+                    count = count + 1;
+                }
+                return count;
+            };
+            console.log(lenOfMassive());
+            if (imagesOnForm.length != lenOfMassive()){
+                document.querySelector('.uploadingPhoto').innerHTML='';
+                for (let photo in this.idPhotosWasUpdate){
+                    let srcPhoto = new URL (this.idPhotosWasUpdate[photo], tensor);
+                    let img = document.createElement('img');
+                    img.src = srcPhoto;
+                    img.className = classForImg;
+                    document.querySelector('.uploadingPhoto').appendChild(img);
+                }
+            }
+        }
+
+        //приравнивание значений 2-х объектов
+        setParamsOfFirstMassiveToSecond(firstMassive, secondMassive){
+            for (let key in firstMassive){
+                secondMassive[key] = firstMassive[key];
+            }
+        }
         //загрузка
         async uploadFile(file){
             let loadPhoto = new URL ('/photo/upload', tensor);
@@ -129,7 +163,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         //получение всех Id фотографий для работы с ними
         async getListPhoto(){
             // eslint-disable-next-line no-undef
-            let getPhotos = new URL (`/photo/list/${user_id}`, tensor);
+            let getPhotos = new URL (`/photo/list/${this.user_id}`, tensor);
             let response = await fetch(getPhotos, {
                 method : 'GET',
 				mode: 'cors',
