@@ -145,8 +145,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             Promise.all(requests)
             .then(() => this.getListPhoto())
             .then(() => this.putCurrentListPhotos(this.idPhotosAfterUpdate))
-            .then(() => {this.compareMassiveAndCreateNew(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate, this.idPhotosWasUpdate);
-                console.log(this.idPhotosWasUpdate);})
+            .then(() => {this.compareMassiveAndCreateNew(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate, this.idPhotosWasUpdate);})
             .then(() => {this.setParamsOfFirstMassiveToSecond(this.idPhotosAfterUpdate, this.idPhotosBeforeUpdate); this.outputUploadFiles();});
         }
         
@@ -256,7 +255,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
 				body: urlencoded,
                 credentials: 'include'
-            }).then(response => console.log(response))
+            }).then(response => response)
             .catch(error => console.log('error', error));
         }
 
@@ -292,18 +291,44 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
 
         //Преобразование ссылок на фото в строку
         getStrOfLinksPhotos(object){
-            let str = '';
+            let str = this.createDate();
             for (let key in object){
-                str = str + object[key] + ',';
+                str = str + ','+ object[key] ;
             }
             return str;
         }
+
+        // создание даты для сообщения
+        createDate(){
+            let now = new Date();
+            let month = now.getMonth() + 1 < 10? '0' + (now.getMonth() + 1).toString() : (now.getMonth() + 1 ).toString();
+            let day = now.getDate() < 10? '0' + now.getDate().toString():now.getDate().toString();
+            let hours = now.getHours() < 10? '0' + now.getHours().toString():now.getHours().toString();
+            let minutes = now.getMinutes() < 10? '0' + now.getMinutes().toString():now.getMinutes().toString();
+            let seconds = now.getSeconds() < 10? '0' + now.getSeconds().toString():now.getSeconds().toString();
+
+            return `${now.getFullYear()}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+        }
+
+        replace(str, elemForPeplace, newElem){
+			let newStr = '';
+			for (let char = 0; char < str.length; char++){
+				if (str[char] !== elemForPeplace){
+					newStr += str[char];
+				}
+				else {
+					newStr += newElem;
+				}
+			}
+			return newStr;
+		}
 
         //Сохрание данных по нажатию (в разработке)
         createPost(){
             event.stopPropagation();
             this.isSave = true;
             let text = document.querySelector('.createrPost__fieldForText').value;
+            let encodeText = this.replace(text, '\n', '</br>');
 
             if(text.length != 0 || this.lenPamamsOfObject(this.idPhotosWasUpdate)!= 0)
             {
@@ -311,7 +336,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 let urlencoded = new URLSearchParams();
                 urlencoded.append('author', this.user_id);
                 urlencoded.append('addressee', this.current_id);
-                urlencoded.append('message', text);
+                urlencoded.append('message', encodeText);
                 urlencoded.append('image', linksForPhotos);
                 let createPost = new URL ('/message/create', tensor);
 
@@ -321,8 +346,8 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
 				body: urlencoded,
                 credentials: 'include'
-            }).then(response => console.log(response))
-            .then(this.Close())
+            }).then(response => response)
+            .then(() => {this.Close(); console.log(this);})
             .catch(error => console.log('error', error));
             }
             else {

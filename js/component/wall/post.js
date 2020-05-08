@@ -1,11 +1,13 @@
 // eslint-disable-next-line no-undef
 define(['base/component', 'css!component/wall/wall'], function (Component) {
 	'use strict';
+	var tensor = new URL ('https://tensor-school.herokuapp.com/');
 
 	class Post extends Component{
         constructor(post) {
             super();
-            this.post = post;
+			this.post = post;
+			this.post_id = post.id;
             this.useCSS = {
 				postImage : 'post-img__picture',
 				buttonDelete : 'post-data__delete',
@@ -179,7 +181,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 
             if (this.post.img.length !== 0){
                 for (let image of this.post.img) {
-                    images += `<img src="${image}" alt="Картинка записи" class="${this.useCSS.postImage}">`;
+                    images += `<img src="${new URL (image, tensor)}" alt="Картинка записи" class="${this.useCSS.postImage}">`;
                 }
             }
 
@@ -190,12 +192,12 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             date = this._defineDate(this.post.date);
 
             fullPost = ` 
-                <div class="${this.useCSS.post}">
+                <div class="${this.useCSS.post}" data-id="${this.post_id}">
                     <div class="${this.useCSS.postData}">
                         <a href="${this.post.href}" class="${this.useCSS.postLink}" target="_blank">
-                            <img src="${this.post.avatar}" alt="${this.post.name}" class="${this.useCSS.postAva}">
+                            <img src="${new URL (this.post.avatar, tensor)}" alt="${this.post.name}" class="${this.useCSS.postAva}">
                         </a>
-                        <a href="#" target="_blank" class="${this.useCSS.postMaker}">${this.post.family} ${this.post.name}</a>
+                        <a href="#" target="_blank" class="${this.useCSS.postMaker}">${this.post.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>
                         ${rubbish}
                     </div>
@@ -211,9 +213,11 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		afterMount() {
 			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
 		}
-
+		
 		chooseAction(event){
 			if (event.target.classList.contains('post-img__picture')) {
+				this.openPost();
+			} else if (event.target.classList.contains('post-text')) {
 				this.openPost();
 			} else if (event.target.alt === 'Удалить') {
 				this.deletePost();
@@ -241,8 +245,22 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			while (postForDelete.className !== 'post') {
 				postForDelete = postForDelete.parentElement;
 			}
-			postForDelete.remove();
-			postForDelete = null;
+
+			let id_post = parseInt(postForDelete.dataset.id, 10);
+			let urlencodedPost = new URLSearchParams();
+            urlencodedPost.append('message_id', id_post);
+			let deletePost = new URL ('/message/delete', tensor);
+
+            fetch(deletePost, {
+                method : 'POST',                
+				mode : 'cors',
+                headers : {'Content-Type' : 'application/x-www-form-urlencoded'},
+				body : urlencodedPost,
+                credentials : 'include'
+			}).then(request => console.log(request))
+			/*.then(() => postForDelete.remove())
+			.then(() => postForDelete = null)*/
+            .catch(error => console.log('error', error));
 		}
 
 	}
