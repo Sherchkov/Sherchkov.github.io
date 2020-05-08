@@ -26,6 +26,9 @@ define(['base/component'], function (Component) {
                 img.classList.remove('post-img__picture');
                 img.classList.add('post-img__picturePopup');
             }
+
+            document.querySelector('.modal-content .post-img__picturePopup').style['cursor'] = 'default';
+            document.querySelector(' .modal-content .post-text').style['cursor'] = 'default';
         }
     }
 

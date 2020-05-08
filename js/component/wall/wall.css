@@ -74,12 +74,16 @@
 	grid-row-start: span 2;
 	grid-row-end: auto;
 }
+
+.post-img, .post-text{
+	cursor: pointer;
+}
+
 .post-data__img{
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
 	object-fit: cover;
-	cursor: pointer;
 }
 .post-data__name,.post-data__date{
 	margin-right: 25px;
