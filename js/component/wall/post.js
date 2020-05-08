@@ -240,27 +240,68 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		deletePost(){
 			event.stopPropagation();
 
-			let postForDelete = event.target;
+			
+			let getData = new Promise((resolve) =>{
+				let postForDelete = event.target;
 
-			while (postForDelete.className !== 'post') {
-				postForDelete = postForDelete.parentElement;
-			}
+				while (postForDelete.className !== 'post') {
+					postForDelete = postForDelete.parentElement;
+				}
+				let id_post = parseInt(postForDelete.dataset.id, 10);
+				let urlencodedPost = new URLSearchParams();
+				urlencodedPost.append('message_id', id_post);
+				let deletePost = new URL ('/message/delete', tensor);
+				resolve(
+					{
+						'id_post' : id_post,
+						'urlencodedPost' : urlencodedPost,
+						'deletePost' : deletePost,
+						'postForDelete' : postForDelete
+					}
+				);
+			});
 
-			let id_post = parseInt(postForDelete.dataset.id, 10);
-			let urlencodedPost = new URLSearchParams();
-            urlencodedPost.append('message_id', id_post);
-			let deletePost = new URL ('/message/delete', tensor);
+			getData.then(result => {
+				let images = result.postForDelete.querySelectorAll((`.${this.useCSS.postImage}`));
+				let srcOfImages = [];
+				for (let image = 0; image < images.length; image++) {
+					let src = images[image].src;
+					let position = src.lastIndexOf('/');
+					let id = src.substring(position + 1);
+					srcOfImages.unshift(parseInt(id, 10));
+				}
+				for(let image = 0; image < srcOfImages.length; image++){
+					let urlencoded = new URLSearchParams();
+					urlencoded.append('photo_id', srcOfImages[image]);
+					let deletePhoto = new URL ('/photo/delete', tensor);
+					
+					fetch(deletePhoto, {
+						method : 'POST',                
+						mode: 'cors',
+						headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
+						body: urlencoded,
+						credentials: 'include'
+					})
+					.catch(error => console.log('error', error));
+										
+				}
+			});
 
-            fetch(deletePost, {
-                method : 'POST',                
-				mode : 'cors',
-                headers : {'Content-Type' : 'application/x-www-form-urlencoded'},
-				body : urlencodedPost,
-                credentials : 'include'
-			}).then(request => console.log(request))
-			/*.then(() => postForDelete.remove())
-			.then(() => postForDelete = null)*/
-            .catch(error => console.log('error', error));
+            
+
+			getData.then(result => {
+				fetch(result.deletePost, {
+					method : 'POST',                
+					mode : 'cors',
+					headers : {'Content-Type' : 'application/x-www-form-urlencoded'},
+					body : result.urlencodedPost,
+					credentials : 'include'
+				})
+				.then(() => result.postForDelete.remove())
+				.catch(error => console.log('error', error));
+
+			});
+           
 		}
 
 	}

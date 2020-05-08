@@ -18,6 +18,8 @@ define(['base/component'], function (Component) {
         afterMount() {
             
             document.querySelector('.modal-content').classList.add('modal-content_big');
+
+            document.querySelector('.modal-content_big .post').style['padding-top'] = '5px';
            
             let imgs = document.querySelectorAll('.modal .post-img__picture');
             for(let img of imgs) {

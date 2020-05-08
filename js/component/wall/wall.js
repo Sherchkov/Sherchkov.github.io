@@ -96,7 +96,6 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 					elem.author = JSON.parse(preAuthor);
 					let someData = this.getDateAndPhoto(elem.image);
 					let isDelete = elem.author.id === this.user_id || elem.author.id === this.current_id? true : false;
-					console.log(elem);
 					this.wall.unshift(
 						this.makeObjectPost(
 							elem.id,
