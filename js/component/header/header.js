@@ -3,6 +3,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	class Header extends Component {
 	    render(options) {
+	    	this.data = options.data;
     		if (options.computed_data.photo_ref) {
     			this.avatar = globalUrlServer + options.computed_data.photo_ref;
     		}else{
@@ -129,8 +130,39 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        }
 	        aboutMe.setAttribute("title", updateText);
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
-	        //отображаем изменения
+	        //отправляем на сервер
+
+	        this.upload(dateValue);
 	        this.renderSaveData(element,newDate,symbol);
+	    }
+
+
+	    upload(date){
+	    	let params = document.querySelectorAll('.content-data-params__input');
+	    	let data = {
+	    		birth_date : date,
+	    		city : params[0].value,
+	    		education : params[2].value,
+	    		family_state : params[1].value,
+	    		job : params[3].value,
+	    		name : this.data.name,
+	    	}
+	    	fetch(globalUrlServer + '/user/update', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body : JSON.stringify(data),
+                credentials: 'include'
+            })
+            .then(response => {
+            	console.log("response", response);
+            	if ( !response.ok ) {
+                    alert('Не получилось загрузить данные');
+                }
+            })
+            .catch(error => {
+            	alert('Не получилось загрузить данные');
+                console.log('error', error);
+            }); 
 	    }
 
 	    /**
@@ -155,6 +187,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        horoscope.setAttribute('alt', symbol[1]);
 	        horoscope.setAttribute('title', symbol[1]);
 
+	        
 	        let date = document.querySelector('.content-data-params_birthday');
 	        date.classList.remove('content-data-params_birthdayEdit');
 	        // поля input
@@ -171,6 +204,8 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   		this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
 	   	} 
 
+	   	//
+
 		logout() {
 			fetch('https://tensor-school.herokuapp.com/user/logout', {
 				'method' : 'GET',
@@ -178,6 +213,8 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			}).then(response => {
 				if (response.status == '200') {
 					page.unmount();
+					globalSliderPhotos = [];
+					
 					require(["page/Authorization"], function(authorization){
 						page = factory.create(authorization, {});
 						page.mount(document.body);
