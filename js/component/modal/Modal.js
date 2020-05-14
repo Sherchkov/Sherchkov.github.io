@@ -4,10 +4,15 @@ define(['base/component'], function (Component) {
 	class Modal extends Component {
 	    
 	    render() {
-	        if ( !this.options.list.theme ) {
+	        if (!this.options.list.theme) {
 	            this.options.list.theme = 'modal-content_dark';
 	        }else{
 	            this.options.list.theme = 'modal-content_' + this.options.list.theme;
+	        }
+
+	        let style = '';
+	        if (this.options.list.style) {
+	        	style = this.options.list.style;
 	        }
 
 	        return `
@@ -15,7 +20,7 @@ define(['base/component'], function (Component) {
 	                <button class="modal__close">
 	                  <svg class="modal__close_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
 	                </button>
-	                <div class="modal-content ${this.options.list.theme}">
+	                <div class="modal-content ${this.options.list.theme}" style="${style}">
 	                    ${this.childrens.create(this.options.list.children, this.options.list)}
 	                </div>
 	            </div>
