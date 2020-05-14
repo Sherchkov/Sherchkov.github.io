@@ -4,7 +4,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	        return `
 	            <div class="MainPage">
 	                <!-- header -->
-	                ${this.childrens.create(Header, {})}
+	                ${this.childrens.create(Header, options)}
 	                <div class="MainPage__Content Content">
 	                    <div class="Content__body con-body">
 	                     	<!-- Блок с данными о пользователе -->
