@@ -92,6 +92,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 		handleData(data){
 			[...data].forEach(
 				elem => {
+					console.log(elem);
 					let preAuthor = this.replace(elem.author, '\'', '"');
 					elem.author = JSON.parse(preAuthor);
 					let someData = this.getDateAndPhoto(elem.image);
@@ -100,7 +101,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 						this.makeObjectPost(
 							elem.id,
 							'#',
-							elem.author.data.data.name,
+							elem.author.data.name,
 							elem.author.computed_data.photo_ref,
 							someData.date,
 							elem.message,
