@@ -4,8 +4,8 @@ define(['base/component', 'component/header/header', 'component/information/info
 	    	options.mobile = true;
 	        return `
 	            <div class="MainPage MainPageMobile">
-	                <!-- header -->
-	                ${this.childrens.create(Header, {})}
+	               <!-- header -->
+	               ${this.childrens.create(Header, options)}
                 	<!-- Блок с данными о пользователе -->
                 	${this.childrens.create(InformationMobile, options)}
                 	<!-- Навигация -->
