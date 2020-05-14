@@ -2,11 +2,11 @@
 	position: relative;
 	display: flex;
 }
-
 .content-photo__img{
 	display: block;
 	width: 100%;
 	max-height: 400px;
+	min-height: 100px;
 	object-fit: cover;
 	border-radius: 5px;
 	cursor: pointer;
@@ -67,7 +67,6 @@
 	padding-left: 0px;
 }
 .photo-edit_mobile{
-
 	display: flex;
 	position: absolute;
 	bottom: 0px;
@@ -82,6 +81,7 @@
 .content-photo__img_mobile{
 	width: 75px;
 	height: 75px;
+	min-height: 75px;
 	border-radius: 50%;
 }
 /*Удаление фотографии*/
