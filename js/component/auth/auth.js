@@ -3,7 +3,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
     document.title = "Авторизация";
 
     class Auth extends Component {
-        
+
         render() {
             return `
                 <div class="join">
@@ -109,9 +109,8 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
 
             fetch("https://tensor-school.herokuapp.com/user/login", requestOptions)
                 .then(response => {
-                    console.log("response", response);
                     if ( response.ok ) {
-                        return response.json();  
+                        return response.json();
                     }else{
                       if (response.status === 401) {
                           errorEnter.innerText = 'Ошибка: Логин или пароль неправильно введен';
@@ -122,7 +121,6 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                     }
                 })
                 .then(result => {
-                    console.log("result", result);
                     user_id = result.id;
                     page.unmount();
                     if (window.innerWidth > 800) {
@@ -143,7 +141,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
         Registration(){
             let login = document.querySelector('.join-form__input_logReg').value,
                 password = document.querySelector('.join-form__input_passReg').value,
-                repeat_password = document.querySelector('.join-form__input_passRepReg').value,  
+                repeat_password = document.querySelector('.join-form__input_passRepReg').value,
                 errorEnter = document.querySelector('.join-formReg__error');
 
             errorEnter.innerText = '';
@@ -152,7 +150,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 window.scrollTo(pageXOffset, 0);
                 return;
             }
-        
+
             if (password !== repeat_password) {
                 errorEnter.innerText = 'Ошибка: Пароли не совпадают';
                 window.scrollTo(pageXOffset, 0);
@@ -187,7 +185,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 if ( response.ok ) {
                     return response.json();
                 }else{
-                    console.log("response", response);  
+                    console.log("response", response);
                     if (response.status === 400) {
                         window.scrollTo(pageXOffset, 0);
                         errorEnter.innerText = 'Ошибка: Логин или пароль введены не правильно или такой login уже зарегистрирован';
@@ -195,7 +193,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                         errorEnter.innerText = 'Ошибка сервера';
                     }
                     return response.error();
-                }      
+                }
             })
             .then(result => {
                 console.log("result", result);
@@ -205,7 +203,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                /* setTimeout(this.updateUser(data),3000);*/
             })
             .catch(error => console.log('error', error));
-        }   
+        }
 
 
         updateUser(data){
@@ -220,27 +218,27 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
             })
             .catch(error => {
                 console.log('error', error);
-            });  
+            });
         }
 
         check(input, parametr,errorEnter){
             if ( parametr === 'login') {
                 if ( input.length < 3 || input.length > 15 ) {
-                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите логин, содержащий не меньше 3 и не больше 20 символов.'; 
+                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите логин, содержащий не меньше 3 и не больше 20 символов.';
                     return false;
                 }
                 if ( !/^[A-z0-9]{3,15}$/i.test(input) ) {
-                    errorEnter.innerText = 'Ошибка: Логин должен содержать только латинские буквы и цифры.'; 
+                    errorEnter.innerText = 'Ошибка: Логин должен содержать только латинские буквы и цифры.';
                     return false;
                 }
             }else if ( parametr === 'password') {
                 if ( input.length < 3 || input.length > 20 ) {
-                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите пароль, содержащий не меньше 3 и не больше 20 символов.'; 
+                    errorEnter.innerText = 'Ошибка: Пожалуйста, введите пароль, содержащий не меньше 3 и не больше 20 символов.';
                     return false;
                 }
                 if ( !/^[A-z0-9.-_]{3,20}$/i.test(input) ) {
                     console.log("input", input);
-                    errorEnter.innerText = 'Ошибка: Пароль должен содержать латинские буквы и цифры, а также символы .-_'; 
+                    errorEnter.innerText = 'Ошибка: Пароль должен содержать латинские буквы и цифры, а также символы .-_';
                     return false;
                 }
             }else{
@@ -255,7 +253,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
             date = `${date.substring(6,10)}-${date.substring(3,5)}-${date.substring(0,2)}T${date.substring(12)}`;*/
             let result = {
                 computed_data : {
-                    'last_activity' : last_activity, 
+                    'last_activity' : last_activity,
                     'photo_ref' : null
                 },
                 data : data,
