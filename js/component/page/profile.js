@@ -8,7 +8,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	                <div class="MainPage__Content Content">
 	                    <div class="Content__body con-body">
 	                     	<!-- Блок с данными о пользователе -->
-	                     	${this.childrens.create(Information, {})}
+	                     	${this.childrens.create(Information, options)}
 	                     	<!-- Галлерея -->
 	                     	${this.childrens.create(Gallery, {})}
 	                     	<!-- Стена -->
