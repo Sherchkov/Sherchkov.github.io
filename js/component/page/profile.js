@@ -1,6 +1,7 @@
 define(['base/component', 'component/header/header', 'component/information/information', 'component/gallery/gallery', 'component/wall/wall', 'component/avatar/avatar', 'component/navigation/navigation', 'component/messages/messages'], function(Component, Header, Information, Gallery, Wall, Avatar, Navigation, Messages){
 	class Profile extends Component {
 	    render(options) {
+	    	document.title = options.data.name;
 	        return `
 	            <div class="MainPage">
 	                <!-- header -->
