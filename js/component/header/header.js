@@ -1,30 +1,34 @@
-define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json', "base/helpers", 'css!component/header/header'], function (Component, ActionModal, ModalPhoto, json) {
+define(['base/component', "base/helpers", 'css!component/header/header'], function (Component) {
 	'use strict';
 
-	let photo = json.header.photo,
-		altAndTitle = json.information.family + ' ' + json.information.name;
-
 	class Header extends Component {
-	    render() {
+	    render(options) {
+	    	this.data = options.data;
+    		if (options.computed_data.photo_ref) {
+    			this.avatar = globalUrlServer + options.computed_data.photo_ref;
+    		}else{
+    			this.avatar = 'img/avatar/avatar_default.png';
+    		}
+
 	        return `
-	        <header class="MainPage__header header">
-	            <div class="header__left">
-	              <span class="header__status">В сети</span>
-	            </div>
-	            <div class="header__right">
-	              <div class="header__edit" data-name="edit">Редактировать</div>
-	              <div class="header__photo">
-	                <img class="header__img modalPhoto" src="${photo}" alt="${altAndTitle}" title="${altAndTitle}">
-	              </div>
-	              <div class="header-menu">
-	              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
-					<div class="header-menu__list">
-					  <div class="header-menu__item header-menu_logout">Выход</div>
-					</div>	
-	              </div>
-	              
-	            </div>
-	        </header>`;
+		        <header class="MainPage__header header">
+		            <div class="header__left">
+		              <span class="header__status">В сети</span>
+		            </div>
+		            <div class="header__right">
+		              <div class="header__edit" data-name="edit">Редактировать</div>
+		              <div class="header__photo">
+		                <img class="header__img modalPhoto" src="${this.avatar}" alt="${options.data.name}" title="${options.data.name}">
+		              </div>
+		              <div class="header-menu">
+		              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
+						<div class="header-menu__list">
+						  <div class="header-menu__item header-menu_logout">Выход</div>
+						</div>	
+		              </div> 
+		            </div>
+		        </header>
+		      `;
 	    }
 
 	    afterMount() {
@@ -38,19 +42,21 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	        let element = event.target;
 	        if (element.classList.contains('header__edit')) {
 	            let name = element.getAttribute("data-name");
-
 	            if (name === 'edit') {
 	                this.onEditData(element);
 	            }else if(name === 'save'){
 	                this.onSaveData(element);
 	            }
 	        }else if ( element.classList.contains('modalPhoto') ) {
-	            new ActionModal({
-	                children : ModalPhoto,
-	                src : element.getAttribute('src'),
-	                title : element.getAttribute('title'),
-	                alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
-	            });
+		    	require(['modal/ActionModal', 'modal/ModalPhoto'], function(ActionModal, ModalPhoto){ 
+	        		new ActionModal({
+	        		    children : ModalPhoto,
+	        		    src : element.getAttribute('src'),
+	        		    title : element.getAttribute('title'),
+	        		    alt : element.getAttribute('title') || element.parentElement.getAttribute('title') || ""
+	        		});
+	        	});
+	            
 	        }else if ( element.classList.contains('header-menu_icon') ) {
 	        	this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
 	        }
@@ -124,8 +130,39 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	        }
 	        aboutMe.setAttribute("title", updateText);
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
-	        //отображаем изменения
+	        //отправляем на сервер
+
+	        this.upload(dateValue);
 	        this.renderSaveData(element,newDate,symbol);
+	    }
+
+
+	    upload(date){
+	    	let params = document.querySelectorAll('.content-data-params__input');
+	    	let data = {
+	    		birth_date : date,
+	    		city : params[0].value,
+	    		education : params[2].value,
+	    		family_state : params[1].value,
+	    		job : params[3].value,
+	    		name : this.data.name,
+	    	}
+	    	fetch(globalUrlServer + '/user/update', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body : JSON.stringify(data),
+                credentials: 'include'
+            })
+            .then(response => {
+            	console.log("response", response);
+            	if ( !response.ok ) {
+                    alert('Не получилось загрузить данные');
+                }
+            })
+            .catch(error => {
+            	alert('Не получилось загрузить данные');
+                console.log('error', error);
+            }); 
 	    }
 
 	    /**
@@ -150,6 +187,7 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	        horoscope.setAttribute('alt', symbol[1]);
 	        horoscope.setAttribute('title', symbol[1]);
 
+	        
 	        let date = document.querySelector('.content-data-params_birthday');
 	        date.classList.remove('content-data-params_birthdayEdit');
 	        // поля input
@@ -166,6 +204,8 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 	   		this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
 	   	} 
 
+	   	//
+
 		logout() {
 			fetch('https://tensor-school.herokuapp.com/user/logout', {
 				'method' : 'GET',
@@ -173,6 +213,8 @@ define(['base/component', 'modal/ActionModal', 'modal/ModalPhoto', 'server/json'
 			}).then(response => {
 				if (response.status == '200') {
 					page.unmount();
+					globalSliderPhotos = [];
+					
 					require(["page/Authorization"], function(authorization){
 						page = factory.create(authorization, {});
 						page.mount(document.body);

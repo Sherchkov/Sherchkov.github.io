@@ -123,7 +123,6 @@ define(function(){
 				}
 			}
 			else{
-				console.log('элемент не найден, что очень странно!)');
 				reload();
 			}
 		}
@@ -148,7 +147,6 @@ define(function(){
 				}
 			}
 			else{
-				console.log('элемент не найден, что очень странно!)');
 				reload();
 			}
 		}
@@ -206,10 +204,7 @@ define(function(){
 		*/
 		function getCountVisible(){
 			widthContainer = parseFloat(getComputedStyle(elementContainer).width);
-			console.log("widthContainer", widthContainer);
 			widthItem = parseFloat(getComputedStyle(elementItems[0]).width);
-			console.log("widthItem", widthItem);
-			console.log("elementItems[0]", elementItems[0]);
 			return Math.round(widthContainer / widthItem);
 		}
 		

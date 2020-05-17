@@ -1,14 +1,15 @@
 define(['base/component', 'component/header/header', 'component/information/information', 'component/gallery/gallery', 'component/wall/wall', 'component/avatar/avatar', 'component/navigation/navigation', 'component/messages/messages'], function(Component, Header, Information, Gallery, Wall, Avatar, Navigation, Messages){
 	class Profile extends Component {
 	    render(options) {
+	    	document.title = options.data.name;
 	        return `
 	            <div class="MainPage">
 	                <!-- header -->
-	                ${this.childrens.create(Header, {})}
+	                ${this.childrens.create(Header, options)}
 	                <div class="MainPage__Content Content">
 	                    <div class="Content__body con-body">
 	                     	<!-- Блок с данными о пользователе -->
-	                     	${this.childrens.create(Information, {})}
+	                     	${this.childrens.create(Information, options)}
 	                     	<!-- Галлерея -->
 	                     	${this.childrens.create(Gallery, {})}
 	                     	<!-- Стена -->

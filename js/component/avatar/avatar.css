@@ -2,11 +2,11 @@
 	position: relative;
 	display: flex;
 }
-
 .content-photo__img{
 	display: block;
 	width: 100%;
 	max-height: 400px;
+	min-height: 100px;
 	object-fit: cover;
 	border-radius: 5px;
 	cursor: pointer;
@@ -27,16 +27,39 @@
 	background: #000000;
 	opacity: 0.5;
 	cursor: pointer;
+	overflow:hidden;
 }
 .photo-edit__active{
 	max-height: 40px;
-    transition: max-height 0.3s ease-out;
 }
 .photo-edit__icon{
 	width: 20px;
 	height: 20px;
 	object-fit: cover;
 }
+.photo__delete{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 25px;
+	height: 25px;
+	transition: opacity 0.3s ease-out;
+	background: #000;
+	opacity: 0;
+	cursor: pointer;
+	overflow:hidden;
+	border-radius: 0px 5px 0px 0px;
+}
+.photo__deleteIcon{
+	stroke: #ffffff;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2px;
+}
+.photo__delete_active{
+	opacity: 0.5;
+}
+
 
 /*Мобил*/
 .content-photo_mobile{
@@ -44,7 +67,6 @@
 	padding-left: 0px;
 }
 .photo-edit_mobile{
-
 	display: flex;
 	position: absolute;
 	bottom: 0px;
@@ -59,5 +81,18 @@
 .content-photo__img_mobile{
 	width: 75px;
 	height: 75px;
+	min-height: 75px;
 	border-radius: 50%;
+}
+/*Удаление фотографии*/
+.photo__delete_mobile{
+	top: 0;
+	right: 0;
+	background: transparent;
+	opacity: 1;
+	width: 20px;
+	height: 20px;
+}
+.photo__delete_mobile .photo__deleteIcon{
+	stroke: #000000;
 }

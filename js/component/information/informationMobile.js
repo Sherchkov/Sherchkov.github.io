@@ -1,52 +1,45 @@
-define(['base/component', 'component/avatar/avatar', 'server/json', "base/helpers", 'css!component/information/information'], function (Component, Avatar, json) {
+define(['base/component', 'component/avatar/avatar', "base/helpers", 'css!component/information/information'], function (Component, Avatar) {
 	'use strict';
 
-	let data = json.information;
-
 	class Information extends Component {
-
-	    render(options) {
-	        let data = json.information;
-
+		 render(options) {
+			this.data = options.data;
 		    return `
 	            <div class="content-data content_default">
-	            	
-	              
-				  
-				  <div class="content-data-head">
+	             <div class="content-data-head">
 		            ${this.childrens.create(Avatar, options)}
-		            <h1 class="content-data__name">${ data.family + ' ' + data.name }</h1>
+		            <h1 class="content-data__name">${ this.data.name }</h1>
 		          </div>
-	              <div class="content_data__aboutMe" ondragenter="return false" ondragleave="return false" ondragover="return false" ondrop="return false" title="${data.about}">${data.about}</div>
+	              <div class="content_data__aboutMe" ondragenter="return false" ondragleave="return false" ondragover="return false" ondrop="return false" title="${this.data.about}">${this.data.about}</div>
 	              <div class="content-data-params">
 	                <div class="content-data-params__key">День рождения</div>
 	                <div class="content-data-params__value content-data-params_birthday">  
-	                  <input type="date" value="${data.birthday}" class="content-data-params__date">
-	                  <span class="content-data-params__birthday">${ renderBirthday(data.birthday) }</span>
+	                  <input type="date" value="${this.data.birth_date}" class="content-data-params__date">
+	                  <span class="content-data-params__birthday">${ renderBirthday(this.data.birth_date) }</span>
 	                  <img class="content-data-params__horoscope" src="img/icons/horoscope/aries.png" alt="Овен" title="Овен">
 	                </div>
 	                <div class="content-data-params__key" title="Город">Город</div>
-	                <div class="content-data-params__value" title="${data.city}">
-	                  <input class="content-data-params__input" type="text" value="${data.city}"  maxlength="50" disabled>
+	                <div class="content-data-params__value" title="${this.data.city}">
+	                  <input class="content-data-params__input" type="text" value="${this.data.city}"  maxlength="50" disabled>
 	                </div>
 	                <div class="content-data-params__key" title="Семейное положение">Семейное положение</div>
-	                <div class="content-data-params__value" title="${data.family_status}">
-	                  <input class="content-data-params__input" type="text" value="${data.family_status}" maxlength="100" disabled>
+	                <div class="content-data-params__value" title="${this.data.family_state}">
+	                  <input class="content-data-params__input" type="text" value="${this.data.family_state}" maxlength="100" disabled>
 	                </div>
 	              </div>
 	              <div class="content-data-details" data-switch="off">Подробнее обо мне</div>
 	              <div class="content-data-params content-data-params_more">
 	                <div class="content-data-params__key" title="Образование">Образование</div>
-	                <div class="content-data-params__value" title="${data.education}">
-	                  <input class="content-data-params__input" type="text" value="${data.education}" maxlength="100" disabled>
+	                <div class="content-data-params__value" title="${this.data.education}">
+	                  <input class="content-data-params__input" type="text" value="${this.data.education}" maxlength="100" disabled>
 	                </div>
 	                <div class="content-data-params__key" title="Место работы">Место работы</div>
-	                <div class="content-data-params__value" title="${data.job}">
-	                  <input class="content-data-params__input" type="text" maxlength="100" value="${data.job}" disabled>
+	                <div class="content-data-params__value" title="${this.data.job}">
+	                  <input class="content-data-params__input" type="text" maxlength="100" value="${this.data.job}" disabled>
 	                </div>
 	              </div>
 	            </div>
-	        `;   
+	        `;
 	    }
 
 
@@ -92,7 +85,7 @@ define(['base/component', 'component/avatar/avatar', 'server/json', "base/helper
 	    }
 
 	}
-	
+
 
 
 	return Information;

@@ -145,3 +145,8 @@
 		width: 33.3333%;
 	}
 }
+@media (max-width: 440px) {
+	.slider-container__img_min{
+		height: 100px;
+	}
+}

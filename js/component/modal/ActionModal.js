@@ -4,7 +4,7 @@ define(['modal/Modal', 'css!component/modal/Modal'], function (Modal) {
 	class ActionModal{
 	    constructor(list){
 
-	        if (  typeof(modal) !== "undefined" ) {
+	        if (  typeof(modal) !== 'undefined' ) {
 	            modal.unmount();
 	        }
 

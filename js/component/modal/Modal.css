@@ -25,6 +25,10 @@
  	border-radius: 10px;
  	padding: 10px;
 }
+.modal-content_sizeAuto{
+	width: auto;
+	height: auto;
+}
 .modal-content_big{
 	position: static;
 	display: block;
@@ -55,7 +59,7 @@
 	cursor: pointer;
 }
 .modal__close_icon{
-	stroke:#ffffff;
+	stroke:#fff;
 	stroke-linecap:round;
 	stroke-linejoin:round;
 	stroke-width:2px;
@@ -72,7 +76,7 @@
 	height: calc(100% - 100px);
 	width: calc(100% - 100px);
 	flex-direction: column;
-	border: 4px dashed #000000;
+	border: 4px dashed #000;
 	min-height: 400px;
 }
 .drop_border{
@@ -135,7 +139,7 @@
 }
 
 .drop-container__itemDelete_icon{
-  stroke: #000000;
+  	stroke: #000;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 2px;
@@ -150,7 +154,7 @@
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  background: #ffffff;
+  background: #fff;
   color: #000;
   font-weight: bold;
   border: 1px solid #000;
@@ -190,7 +194,7 @@
 	display: none;
 	width: 100%;
 	height: 34px;
-	color: #ffffff;
+	color: #fff;
 	background: #729ee6;
 	border: none;
 	border-radius: 10px;
@@ -307,6 +311,59 @@
 	border: none;
 	background: transparent;
 	cursor:pointer;
-	color: #ffffff;
+	color: #fff;
 	outline: none;
+}
+
+
+/*Окно предупреждения*/
+.warning{
+	width: 100%;
+	background: transparent;
+	font-size: 16px;
+}
+.warning__title{
+	background: #5c6c8a;
+	color: #fff;
+	border-radius: 5px 5px 0px 0px;
+	border-bottom: 1px solid #ddd;
+	font-weight: bold;
+	padding: 20px;
+}
+.warning-content{
+	padding: 30px 20px;
+	background: #fff;	
+}
+.warning-footer{
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 20px;
+	background: #e8e8e8;
+	border-top: 1px solid #ddd;
+	border-radius: 0px 0px 5px 5px;
+}
+.warning__cansel,.warning__act{
+	margin: 0px 10px;
+	padding: 7px 15px;
+	background: transparent;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+}
+.warning__cansel{
+	color: #5c6c8a;
+}
+.warning__cansel:hover{
+	color: #fff;
+	background: #5c6c8a
+}
+.warning__act{
+	margin-right: 0px;
+	background: #5c6c8a;
+	color: #fff;
+}
+.warning__act:hover{
+	opacity: 0.9;
 }
