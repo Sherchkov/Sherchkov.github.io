@@ -169,6 +169,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 family_state : document.querySelector('.join-form__input_stateReg').value || 'Скрыто',
                 education : document.querySelector('.join-form__input_educationReg').value || 'Скрыто',
                 job : document.querySelector('.join-form__input_jobReg').value || 'Скрыто',
+                about_self : ''
             }
 
             let urlencoded = new URLSearchParams();
@@ -200,7 +201,6 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                 user_id = result.id;
                 this.updateUser(data);
                 this.loadpage(data,result.id,result.computed_data.last_activity);
-               /* setTimeout(this.updateUser(data),3000);*/
             })
             .catch(error => console.log('error', error));
         }
@@ -249,8 +249,6 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
         }
 
         loadpage(data, id, last_activity){
-            /*let date = new Date().toLocaleString();
-            date = `${date.substring(6,10)}-${date.substring(3,5)}-${date.substring(0,2)}T${date.substring(12)}`;*/
             let result = {
                 computed_data : {
                     'last_activity' : last_activity,
