@@ -35,6 +35,7 @@
 	line-height: 20px;
 	max-height: 76px;
 	overflow-y: hidden;
+	white-space: pre;
 	display: -webkit-box;
 	  -webkit-line-clamp: 4;
 	  -webkit-box-orient: vertical;  
