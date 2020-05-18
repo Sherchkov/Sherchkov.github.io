@@ -121,6 +121,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        // about
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        let updateText = '';
+	        
 	        if (aboutMe.innerHTML === '') {
 	            aboutMe.style.maxHeight = '0px';
 	            aboutMe.style.padding = 0;
@@ -131,13 +132,12 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        aboutMe.setAttribute("title", updateText);
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
 	        //отправляем на сервер
-
-	        this.upload(dateValue);
+	        this.upload(dateValue, updateText);
 	        this.renderSaveData(element,newDate,symbol);
 	    }
 
 
-	    upload(date){
+	    upload(date, updateText){
 	    	let params = document.querySelectorAll('.content-data-params__input');
 	    	let data = {
 	    		birth_date : date,
@@ -146,6 +146,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    		family_state : params[1].value,
 	    		job : params[3].value,
 	    		name : this.data.name,
+	    		about_self : updateText
 	    	}
 	    	fetch(globalUrlServer + '/user/update', {
                 method: 'POST',
