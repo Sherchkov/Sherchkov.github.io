@@ -139,6 +139,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	    upload(date){
 	    	let params = document.querySelectorAll('.content-data-params__input');
+	    	let about_self = document.querySelector('.content_data__aboutMe').innerHTML;
 	    	let data = {
 	    		birth_date : date,
 	    		city : params[0].value,
@@ -146,6 +147,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    		family_state : params[1].value,
 	    		job : params[3].value,
 	    		name : this.data.name,
+	    		about_self : about_self
 	    	}
 	    	fetch(globalUrlServer + '/user/update', {
                 method: 'POST',
