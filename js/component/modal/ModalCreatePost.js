@@ -6,12 +6,13 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
     class ModalCreatePost extends Component{
         constructor(options){
             super();
-            this.current_id = options.id;
+            this.current_id = options.curr_id;
             this.user_id = options.id;
             this.idPhotosBeforeUpdate = {};
             this.idPhotosAfterUpdate = {};
             this.idPhotosWasUpdate = {};
             this.isSave = false;
+            this.isUpdate = false;
         }
 
         render() {
@@ -68,7 +69,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             let path = document.querySelector('.createrPost__fieldForImg');
             let elem = document.createElement('p');
             
-            elem.innerText = 'Производится загрузка, пожалуйста подождите';
+            elem.innerText = 'Производится загрузка, пожалуйста подождите...';
             elem.classList = 'createrPost__text createrPost__text_label';
             path.after(elem);
         }
@@ -340,15 +341,14 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 urlencoded.append('image', linksForPhotos);
                 let createPost = new URL ('/message/create', tensor);
 
-            fetch(createPost, {
-                method : 'POST',                
-				mode: 'cors',
-                headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
-				body: urlencoded,
-                credentials: 'include'
-            }).then(response => response)
-            .then(() => {this.Close(); this.updating();})
-            .catch(error => console.log('error', error));
+                fetch(createPost, {
+                    method : 'POST',                
+                    mode: 'cors',
+                    headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
+                    body: urlencoded,
+                    credentials: 'include'
+                }).then(() => this.Close())
+                .catch(error => console.log('error', error));
             }
             else {
                 this.Close();
@@ -360,12 +360,16 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         Close() {
             let clickEvent = new Event('click');
             document.querySelector('.modal').dispatchEvent(clickEvent);
+            this.updating();
         }
 
          //Вызов обновления стены 
         updating() {
-            let updatingEvent = new Event('update');
-            document.querySelector('.content-wall').dispatchEvent(updatingEvent);
+            if (!this.isUpdate){
+                let updatingEvent = new Event('update');
+                document.querySelector('.content-wall').dispatchEvent(updatingEvent);
+                this.isUpdate = true;
+            }
         }
 
     }

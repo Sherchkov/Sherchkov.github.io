@@ -39,18 +39,20 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			this.subscribeTo(buttonCreate, 'click', this.createPost.bind(this));
 			this.subscribeTo(this.getContainer(), 'update', this.update.bind(this));
 			this.createAllPost();
-		//	this.autoUpdating(60);
+			//this.autoUpdating(60);
 		}
 
 		createPost(){
 			event.stopPropagation();
 			let opt = this.options;
+			let curr = this.current_id;
 			// eslint-disable-next-line no-undef
 			require(['modal/ActionModal', 'modal/ModalCreatePost'], function(ActionModal, ModalCreatePost){
 				new ActionModal({
 					children : ModalCreatePost,
 					theme: 'white',
-					id: opt.id
+					id: curr,
+					curr_id : opt.id
 				});  
 			});
 		}
@@ -62,8 +64,10 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 		}
 
 		update(){
-			this.updateData();
-			this.updating = true;
+			if (!this.updating) {
+				this.updateData();
+				this.updating = true;
+			}
 		}
 
 		updateData(){
@@ -109,7 +113,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 			for (let post of this.wall) {
 				// eslint-disable-next-line no-undef
-				let postForMount = factory.create(Post, post);
+				let postForMount = factory.create(Post, {opt : this.options, post : post});
 				let path = document.getElementById(this.id);
 				postForMount.mount(path);
 			}
@@ -122,11 +126,16 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				let replaceNone = this.replaceStr(preAuthor, 'None', 'undefined');
 				elem.author = JSON.parse(replaceNone);
 				let someData = this.getDateAndPhoto(elem.image);
-				let isDelete = elem.author.id === this.current_id? true : false;
+				let isDelete;
+				if (this.current_id === this.user_id || elem.author.id === this.current_id){
+					isDelete = true;
+				} else {
+					isDelete = false;
+				} 
 				this.wall.unshift(
 					this.makeObjectPost(
 						elem.id,
-						'#',
+						elem.author.id,
 						elem.author.data.name,
 						elem.author.computed_data.photo_ref,
 						someData.date,

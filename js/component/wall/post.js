@@ -4,10 +4,11 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 	var tensor = new URL ('https://tensor-school.herokuapp.com/');
 
 	class Post extends Component{
-        constructor(post) {
+        constructor(data) {
             super();
-			this.post = post;
-			this.post_id = post.id;
+			this.post = data.post;
+			this.post_id = data.post.id;
+			this.options = data.opt;
             this.useCSS = {
 				postImage : 'post-img__picture',
 				buttonDelete : 'post-data__delete',
@@ -207,10 +208,10 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             fullPost = ` 
                 <div class="${this.useCSS.post}" data-id="${this.post_id}">
                     <div class="${this.useCSS.postData}">
-                        <a href="${this.post.href}" class="${this.useCSS.postLink}" target="_blank">
+                        <a id="${this.post.href}" class="${this.useCSS.postLink}">
                             ${avatar}
                         </a>
-                        <a href="#" target="_blank" class="${this.useCSS.postMaker}">${this.post.name}</a>
+                        <a id="${this.post.href}" class="${this.useCSS.postMaker}">${this.post.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>
                         ${rubbish}
                     </div>
@@ -225,6 +226,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		
 		afterMount() {
 			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+
 		}
 		
 		chooseAction(event){
@@ -232,10 +234,43 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				this.openPost();
 			} else if (event.target.classList.contains('post-text')) {
 				this.openPost();
+			} else if (event.target.classList.contains('post-data__img')) {
+				this.uploadFriend();
+			} else if (event.target.classList.contains('post-data__name')) {
+				this.uploadFriend();
 			} else if (event.target.alt === 'Удалить') {
 				this.deletePost();
 			}
 		}
+
+		uploadFriend(){
+            let getUser = new URL (`/user/read/${this.post.href}`, tensor);	
+            
+				fetch(getUser, {
+					method : 'GET',
+					mode: 'cors',
+					credentials: 'include'
+				}).then(response => response.json())
+                .then(result => {    
+                    this.options.parent.unmount();
+                    if ( window.innerWidth > 800 ) {
+                        // eslint-disable-next-line no-undef
+                        require(['page/profile'], function (Profile) {
+                            // eslint-disable-next-line no-undef
+                            let page = factory.create(Profile, result);
+                            page.mount(document.body);
+                        });
+                    } else {
+                        // eslint-disable-next-line no-undef
+                        require(['page/ProfileMobile'], function(profileMobile){
+                            // eslint-disable-next-line no-undef
+                            let page = factory.create(profileMobile, result);
+                            page.mount(document.body);
+                        });
+                    }
+                })
+				.catch(() => this.uploadFriend());
+        }
 
 		openPost(){
 			event.stopPropagation();
