@@ -32,8 +32,16 @@ define (['jquery'], function(){
             $('.playlist li:eq(' + currentSong + ')').addClass('playlist__current-song');
             $('.audioPlayer')[0].src = $('.playlist li a')[currentSong].href;
             $('.audioPlayer')[0].play();
-            musicHeader.setPosition(currentSong);
-            musicHeader.setStartTitle();
+            if (!musicHeader) {
+                require(['Component/action/player', 'server/json', 'Component/player/player'], function(AudioPlayer, json){ 
+                    musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
+                    musicHeader.setPosition(currentSong);
+                    musicHeader.setStartTitle();
+                });
+            }else{
+                musicHeader.setPosition(currentSong);
+                musicHeader.setStartTitle();
+            }
         });
     }
     
