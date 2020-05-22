@@ -9,13 +9,18 @@
 .header_white{
 	color: #ffffff;
 }
-.header__right{
+.header__centre{
 	flex:1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.header__right{
 	display: flex;
 	align-items: center;
 	padding-right: 5px;
 	justify-content: flex-end;
-}	
+}		
 .header__status{
 	font-size: 1.4rem;
 	font-weight: 600;
