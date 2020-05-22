@@ -15,6 +15,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 		            <div class="header__left">
 		              <span class="header__status">В сети</span>
 		            </div>
+			    <div class="header__centre"></div>
 		            <div class="header__right">
 		              <div class="header__edit" data-name="edit">Редактировать</div>
 		              <div class="header__photo">
