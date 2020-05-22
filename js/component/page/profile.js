@@ -21,7 +21,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	                     	<!-- Навигация -->
 	                     	${this.childrens.create(Navigation, options)}
 	                     	<!-- Сообщения -->
-	                      	${this.childrens.create(Messages, {})}
+							 <!--${this.childrens.create(Messages, {})}-->
 	                    </div>
 	                </div>
 	            </div>
