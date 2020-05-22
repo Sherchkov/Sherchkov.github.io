@@ -24,16 +24,14 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				};
         }
         _getRoundSeconds(dateNow, dateCreate) {
-			return Math.floor((dateNow - dateCreate)/1000 + dateNow.getTimezoneOffset()*60);
+			return Math.floor((dateNow - dateCreate)/1000);
 		}
 
 		_getMinutes(dateNow, dateCreate) {
 			let countOfMinutes = dateNow.getMinutes() - dateCreate.getMinutes();
 			let oneHour = 60;
-			let UTCMinutes = new Date().getTimezoneOffset() % 60;
-			countOfMinutes = countOfMinutes - UTCMinutes;
-			
-			if (dateNow.getMinutes() >= dateCreate.getMinutes() + UTCMinutes) {
+						
+			if (dateNow.getMinutes() >= dateCreate.getMinutes()) {
 				return countOfMinutes;
 			} else {
 				return countOfMinutes + oneHour;
@@ -44,9 +42,8 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		_getHours(dateNow, dateCreate) {
 			let countOfHours = dateNow.getHours() - dateCreate.getHours();
 			let oneDay = 24; 
-			let UTCHours = dateNow.getTimezoneOffset() / 60 - dateNow.getTimezoneOffset() % 60;
-			countOfHours = countOfHours - UTCHours;
-			if (dateNow.getHours() >= dateCreate.getHours() + UTCHours){
+			
+			if (dateNow.getHours() >= dateCreate.getHours()){
 				return countOfHours;
 			} else {
 				return countOfHours + oneDay;
@@ -123,9 +120,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				day = 'Вчера';
 			}
 			minutes = this._addNullForShortNum(minutes);
-			let UTCHours = dateNow.getTimezoneOffset()/60 - dateNow.getTimezoneOffset()%60;
-			let UTCMinutes = dateNow.getTimezoneOffset()%60;
-			return `${day} в ${dateCreate.getHours() - UTCHours}:${minutes - UTCMinutes}`;
+			return `${day} в ${dateCreate.getHours()}:${minutes}`;
 		}
 
 		_addNullForShortNum(number) {
@@ -154,19 +149,28 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			let minutes = dateCreate.getMinutes();
 			
 			minutes = this._addNullForShortNum(minutes);
-			let now = new Date();
-			let UTCHours = now.getTimezoneOffset()/60 - now.getTimezoneOffset()%60;
-			let UTCMinutes =  now.getTimezoneOffset()%60;
-			return `${dateCreate.getDate()} ${month[dateCreate.getMonth()]} ${dateCreate.getFullYear()} в ${dateCreate.getHours() - UTCHours}:${minutes - UTCMinutes}`;
+			return `${dateCreate.getDate()} ${month[dateCreate.getMonth()]} ${dateCreate.getFullYear()} в ${dateCreate.getHours()}:${minutes}`;
 		}
 
 		_defineDate(date) {
 			let dateCreate = new Date (date);
 			let dateNow = new Date ();
+			let UTC = dateNow.getTimezoneOffset();
+			let minutesUTC = UTC % 60;
+			let hoursUTC = UTC / 60 - minutesUTC;
 			let seconds = {
 				oneMinute : 60,
 				oneHour : 3600
 			};
+			
+			let hoursOfCreate = dateCreate.getHours();
+			let minutesOfCreate = dateCreate.getMinutes();
+			hoursOfCreate -= hoursUTC;
+			minutesOfCreate -= minutesUTC;
+			dateCreate.setHours(hoursOfCreate);
+			dateCreate.setMinutes(minutesOfCreate);
+		
+			console.log(dateCreate);
 
 			let timeFromCreatingInSeconds = this._getRoundSeconds(dateNow, dateCreate);
 
@@ -316,8 +320,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		}
 		
 		afterMount() {
-			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
-
+			//console.log(document.getElementById(`${this.id}`));
 		}
 		
 		chooseAction(event){

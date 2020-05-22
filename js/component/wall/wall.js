@@ -46,7 +46,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			else {
 				document.querySelector(`.${this.useCSS.postTitle}`).innerHTML = 'Записи Пользователя';
 			}
-			//this.autoUpdating(60);
+			this.autoUpdating(60);
 		}
 
 		createPost(){
