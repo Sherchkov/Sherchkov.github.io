@@ -169,8 +169,6 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			minutesOfCreate -= minutesUTC;
 			dateCreate.setHours(hoursOfCreate);
 			dateCreate.setMinutes(minutesOfCreate);
-		
-			console.log(dateCreate);
 
 			let timeFromCreatingInSeconds = this._getRoundSeconds(dateNow, dateCreate);
 
