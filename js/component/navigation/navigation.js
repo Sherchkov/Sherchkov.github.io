@@ -13,6 +13,10 @@ define(['base/component',
 	'use strict';
 
 	class Navigation extends Component {
+		constructor(options) {
+			super();
+			this.options = options;
+		}
 		render() {
 			this.items = json.gallery.images;
 			this.items.push(json.header.photo);
@@ -76,7 +80,8 @@ define(['base/component',
 				case '2':{
 					new ActionModal({
 						children : ModalFriends,
-						theme: 'white'
+						theme : 'white',
+						options : this.options
 					}); 
 					break;
 				}
