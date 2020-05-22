@@ -20,11 +20,13 @@ define(['base/component'], function (Component) {
             document.querySelector('.modal-content').classList.add('modal-content_big');
 
             document.querySelector('.modal-content_big .post').style['padding-top'] = '5px';
+
+            let blockImgs = document.querySelector('.modal-content_big .post-img_grid');
+            blockImgs.className = 'post-img_flex';
            
             let imgs = document.querySelectorAll('.modal .post-img__picture');
             for(let img of imgs) {
-                img.classList.remove('post-img__picture');
-                img.classList.add('post-img__picturePopup');
+                img.className = 'post-img__picturePopup';
             }
 
             document.querySelector('.modal-content .post-img__picturePopup').style['cursor'] = 'default';

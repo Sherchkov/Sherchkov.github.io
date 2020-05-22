@@ -20,7 +20,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				postMaker : 'post-data__name',
 				postDate : 'post-data__date',
 				postText : 'post-text',
-				postImgs : 'post-img'
+				postImgs : 'post-img_grid'
 				};
         }
         _getRoundSeconds(dateNow, dateCreate) {
@@ -193,6 +193,79 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			
 		}
 
+		_getClassCSSForImgs(count){
+			let number = parseInt(count, 10);
+			switch (this.post.img.length) {
+				case 1:
+					return 'post-img__onePicture';
+
+				case 2:
+					return 'post-img__twoPicture';
+
+				case 3:
+					if (number === 0){
+						return 'post-img__threePictureBig';
+					}
+					else{
+						return 'post-img__threePictureSmall';
+					}
+
+				case 4:
+					return 'post-img__fourPicture';
+
+				case 5:
+					if (number < 2){
+						return 'post-img__fivePictureBig';
+					}
+					else{
+						return 'post-img__fivePictureSmall';
+					}
+
+				case 6:
+					if (number === 0){
+						return 'post-img__sixPictureBig';
+					}
+					else if(number < 3){
+						return 'post-img__sixPictureMedium';
+					}
+					else{
+						return 'post-img__sixPictureSmall';
+					}
+
+				case 7:
+					if (number === 0){
+						return 'post-img__sevenPictureBig';
+					}
+					else{
+						return 'post-img__sevenPictureSmall';
+					}
+
+				case 8:
+					return 'post-img__eihgtPicture';
+				
+				case 9:
+					if (number < 3){
+						return 'post-img__ninePictureBig';
+					}
+					else{
+						return 'post-img__ninePictureSmall';
+					}
+
+				case 10:
+					if (/*number < 5 && number % 2 === 0 || number >= 5 && number % 2 === 1*/number < 3 || number> 6){
+						return 'post-img__tenPictureSmall';
+					}
+					else if (number < 4 || number > 5) {
+						return 'post-img__tenPictureBig';
+					}
+					else {
+						return 'post-img__tenPictureMedium';
+					}
+				default:
+					return this.useCSS.postImage;
+			}
+		}
+
         render() {
             let images = '';
             let date = '';
@@ -201,8 +274,8 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			let remade = '';
 
             if (this.post.img.length !== 0){
-                for (let image of this.post.img) {
-                    images += `<img src="${new URL (image, tensor)}" alt="Картинка записи" class="${this.useCSS.postImage}">`;
+                for (let image in this.post.img) {
+                    images += `<img src="${new URL (this.post.img[image], tensor)}" alt="Картинка записи" class="${this._getClassCSSForImgs(image)}  ${this.useCSS.postImage}">`;
                 }
             }
 
