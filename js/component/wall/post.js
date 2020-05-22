@@ -24,14 +24,16 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				};
         }
         _getRoundSeconds(dateNow, dateCreate) {
-			return Math.floor((dateNow - dateCreate)/1000);
+			return Math.floor((dateNow - dateCreate)/1000 + dateNow.getTimezoneOffset()*60);
 		}
 
 		_getMinutes(dateNow, dateCreate) {
 			let countOfMinutes = dateNow.getMinutes() - dateCreate.getMinutes();
 			let oneHour = 60;
-
-			if (dateNow.getMinutes() >= dateCreate.getMinutes()) {
+			let UTCMinutes = new Date().getTimezoneOffset() % 60;
+			countOfMinutes = countOfMinutes - UTCMinutes;
+			
+			if (dateNow.getMinutes() >= dateCreate.getMinutes() + UTCMinutes) {
 				return countOfMinutes;
 			} else {
 				return countOfMinutes + oneHour;
@@ -42,8 +44,9 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		_getHours(dateNow, dateCreate) {
 			let countOfHours = dateNow.getHours() - dateCreate.getHours();
 			let oneDay = 24; 
-
-			if (dateNow.getHours() >= dateCreate.getHours()){
+			let UTCHours = dateNow.getTimezoneOffset() / 60 - dateNow.getTimezoneOffset() % 60;
+			countOfHours = countOfHours - UTCHours;
+			if (dateNow.getHours() >= dateCreate.getHours() + UTCHours){
 				return countOfHours;
 			} else {
 				return countOfHours + oneDay;
@@ -102,8 +105,10 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 
 			if (countOfHours === 1) {
 				litera = '';
-			} else {
+			} else if (countOfHours < 5){
 				litera = 'а';
+			} else {
+				litera = 'ов';
 			}
 
 			return `${countOfHours} час${litera} назад`;
@@ -118,8 +123,9 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				day = 'Вчера';
 			}
 			minutes = this._addNullForShortNum(minutes);
-
-			return `${day} в ${dateCreate.getHours()}:${minutes}`;
+			let UTCHours = dateNow.getTimezoneOffset()/60 - dateNow.getTimezoneOffset()%60;
+			let UTCMinutes = dateNow.getTimezoneOffset()%60;
+			return `${day} в ${dateCreate.getHours() - UTCHours}:${minutes - UTCMinutes}`;
 		}
 
 		_addNullForShortNum(number) {
@@ -148,8 +154,10 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			let minutes = dateCreate.getMinutes();
 			
 			minutes = this._addNullForShortNum(minutes);
-
-			return `${dateCreate.getDate()} ${month[dateCreate.getMonth()]} ${dateCreate.getFullYear()} в ${dateCreate.getHours()}:${minutes}`;
+			let now = new Date();
+			let UTCHours = now.getTimezoneOffset()/60 - now.getTimezoneOffset()%60;
+			let UTCMinutes =  now.getTimezoneOffset()%60;
+			return `${dateCreate.getDate()} ${month[dateCreate.getMonth()]} ${dateCreate.getFullYear()} в ${dateCreate.getHours() - UTCHours}:${minutes - UTCMinutes}`;
 		}
 
 		_defineDate(date) {
@@ -205,7 +213,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			if (this.post.change){
 				remade = '<p class="post__button">Изменить</p>';
 			}
-			
+
 			let comments = '<p class="post__button">Комментировать</p>';
 			let avatar = this._getAvatar();
 

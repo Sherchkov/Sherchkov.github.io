@@ -304,8 +304,8 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             let now = new Date();
             let month = now.getMonth() + 1 < 10? '0' + (now.getMonth() + 1).toString() : (now.getMonth() + 1 ).toString();
             let day = now.getDate() < 10? '0' + now.getDate().toString():now.getDate().toString();
-            let hours = now.getHours() < 10? '0' + now.getHours().toString():now.getHours().toString();
-            let minutes = now.getMinutes() < 10? '0' + now.getMinutes().toString():now.getMinutes().toString();
+            let hours = now.getUTCHours() < 10? '0' + now.getUTCHours().toString():now.getUTCHours().toString();
+            let minutes = now.getUTCMinutes() < 10? '0' + now.getUTCMinutes().toString():now.getUTCMinutes().toString();
             let seconds = now.getSeconds() < 10? '0' + now.getSeconds().toString():now.getSeconds().toString();
 
             return `${now.getFullYear()}-${month}-${day}T${hours}:${minutes}:${seconds}`;
