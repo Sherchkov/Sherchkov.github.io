@@ -39,6 +39,13 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			this.subscribeTo(buttonCreate, 'click', this.createPost.bind(this));
 			this.subscribeTo(this.getContainer(), 'update', this.update.bind(this));
 			this.createAllPost();
+
+			if (this.options.id === this.current_id){
+				document.querySelector(`.${this.useCSS.postTitle}`).innerHTML = 'Мои записи';
+			}
+			else {
+				document.querySelector(`.${this.useCSS.postTitle}`).innerHTML = 'Записи Пользователя';
+			}
 			//this.autoUpdating(60);
 		}
 
