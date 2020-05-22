@@ -10,8 +10,8 @@ define(['base/component'], function (Component) {
             newPost.id = this.generateId();
             this.id = newPost.id;
 
-            let button = newPost.querySelector('.post-data__delete');
-            button.remove();
+            //let button = newPost.querySelector('.post-data__delete');
+            //button.remove();
 
             return `${newPost.outerHTML}`;
         }
@@ -28,7 +28,7 @@ define(['base/component'], function (Component) {
             }
 
             document.querySelector('.modal-content .post-img__picturePopup').style['cursor'] = 'default';
-            document.querySelector(' .modal-content .post-text').style['cursor'] = 'default';
+            document.querySelector('.modal-content .post-text').style['cursor'] = 'default';
         }
     }
 

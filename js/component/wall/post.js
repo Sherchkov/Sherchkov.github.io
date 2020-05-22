@@ -189,7 +189,8 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             let images = '';
             let date = '';
             let rubbish = '';
-            let fullPost ='';
+			let fullPost ='';
+			let remade = '';
 
             if (this.post.img.length !== 0){
                 for (let image of this.post.img) {
@@ -198,9 +199,14 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             }
 
             if (this.post.delete) {
-                rubbish = `<div class="${this.useCSS.buttonDelete}" title="Удалить запись"><img src="img/icons/svg/rubbish.svg" alt="Удалить"></div>`;
+                rubbish = '<p class="post__button" title="Удалить">Удалить</p>';
 			}
 
+			if (this.post.change){
+				remade = '<p class="post__button">Изменить</p>';
+			}
+			
+			let comments = '<p class="post__button">Комментировать</p>';
 			let avatar = this._getAvatar();
 
             date = this._defineDate(this.post.date);
@@ -213,12 +219,16 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
                         </a>
                         <a id="${this.post.href}" class="${this.useCSS.postMaker}">${this.post.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>
-                        ${rubbish}
                     </div>
                     <div class="${this.useCSS.postText}">${this.post.text}</div>
                     <div class="${this.useCSS.postImgs}">
                         ${images}
-                    </div>
+					</div>
+					<div class="post__block-buttons">
+						${comments}
+						${remade}
+						${rubbish}
+					</div>
                 </div>
             `;
         return fullPost;
@@ -238,7 +248,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				this.uploadFriend();
 			} else if (event.target.classList.contains('post-data__name')) {
 				this.uploadFriend();
-			} else if (event.target.alt === 'Удалить') {
+			} else if (event.target.title === 'Удалить') {
 				this.deletePost();
 			}
 		}

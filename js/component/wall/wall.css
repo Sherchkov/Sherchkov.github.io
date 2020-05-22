@@ -138,3 +138,21 @@
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+.post__block-buttons{
+	display: flex;
+	justify-content: space-around;
+	padding: 0.5rem;
+}
+
+.post__button{
+	line-height: 1.4rem;
+	font-size: 1.2rem;
+	color: #a5a5a5;
+	cursor: pointer;
+}
+
+.post__button:hover{
+	text-decoration: underline;
+	color: #6c77b3;
+}

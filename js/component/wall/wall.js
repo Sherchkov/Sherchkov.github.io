@@ -127,10 +127,17 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				elem.author = JSON.parse(replaceNone);
 				let someData = this.getDateAndPhoto(elem.image);
 				let isDelete;
+				let isChange;
 				if (this.current_id === this.user_id || elem.author.id === this.current_id){
 					isDelete = true;
 				} else {
 					isDelete = false;
+				} 
+
+				if (elem.author.id === this.current_id){
+					isChange = true;
+				} else {
+					isChange = false;
 				} 
 				this.wall.unshift(
 					this.makeObjectPost(
@@ -141,7 +148,8 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 						someData.date,
 						elem.message,
 						someData.img,
-						isDelete
+						isDelete,
+						isChange
 					)
 				);
 			}
@@ -177,7 +185,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			return newStr;
 		}
 
-		makeObjectPost(idOfPost, src, name, avatar, date, text, img, isDelete){
+		makeObjectPost(idOfPost, src, name, avatar, date, text, img, isDelete, isChange){
 			return{
 				'id' : idOfPost,
 				'href' : src,
@@ -186,7 +194,8 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				'date' : date,
 				'text' : text,
 				'img' : img,
-				'delete' : isDelete
+				'delete' : isDelete,
+				'change' : isChange
 			};
 		}
 
