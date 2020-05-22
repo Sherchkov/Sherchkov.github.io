@@ -19,7 +19,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	                     	<!-- Профиль -->
 	                     	${this.childrens.create(Avatar, options)}
 	                     	<!-- Навигация -->
-	                     	${this.childrens.create(Navigation, {})}
+	                     	${this.childrens.create(Navigation, options)}
 	                     	<!-- Сообщения -->
 	                      	${this.childrens.create(Messages, {})}
 	                    </div>
