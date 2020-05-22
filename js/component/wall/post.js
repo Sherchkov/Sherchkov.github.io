@@ -15,6 +15,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				postData : 'post-data',
 				postLink : 'post-data__link',
 				postAva : 'post-data__img',
+				postCap : 'post-data__cap',
 				postMaker : 'post-data__name',
 				postDate : 'post-data__date',
 				postText : 'post-text',
@@ -173,6 +174,16 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			}
 		}
 
+		_getAvatar(){
+			if (this.post.avatar !== 'undefined'){
+				return `<img src="${new URL (this.post.avatar, tensor)}" alt="${this.post.name}" class="${this.useCSS.postAva}">`;
+			}
+			else {
+				return `<p class="${this.useCSS.postCap}" title="Неизвестный пользователь"></p>`;
+			}
+			
+		}
+
         render() {
             let images = '';
             let date = '';
@@ -187,7 +198,9 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 
             if (this.post.delete) {
                 rubbish = `<div class="${this.useCSS.buttonDelete}" title="Удалить запись"><img src="img/icons/svg/rubbish.svg" alt="Удалить"></div>`;
-            }
+			}
+
+			let avatar = this._getAvatar();
 
             date = this._defineDate(this.post.date);
 
@@ -195,7 +208,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
                 <div class="${this.useCSS.post}" data-id="${this.post_id}">
                     <div class="${this.useCSS.postData}">
                         <a href="${this.post.href}" class="${this.useCSS.postLink}" target="_blank">
-                            <img src="${new URL (this.post.avatar, tensor)}" alt="${this.post.name}" class="${this.useCSS.postAva}">
+                            ${avatar}
                         </a>
                         <a href="#" target="_blank" class="${this.useCSS.postMaker}">${this.post.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>

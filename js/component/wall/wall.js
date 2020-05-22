@@ -8,7 +8,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			super();
 			this.options = options;
 			this.user_id = options.id;
-			this.current_id = options.id;
+			this.current_id;
 			this.wall = [];
 			this.useCSS = {
 				postHeader : 'post-data_header',
@@ -17,6 +17,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				contentWall :'content-wall', 
 				contentDefault :'content_default'
 				};
+			this.updating = false;
 			}
 
 		render() {
@@ -30,30 +31,15 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 		}
 
 		beforeMount(){
-			let updateData = new Promise ((resolve,reject) => {
-				let getPost = new URL (`/message/list/${this.current_id}`, tensor);
-				fetch(getPost, {
-					method : 'GET',
-					mode: 'cors',
-					credentials: 'include'
-				}).then(response => response.json())
-				.then(result => this.handleData(result.messages))
-				.then(()=> resolve())
-				.catch(error => reject(console.log(error)));
-			}); 
-			
-			updateData.then(() => {
-				if (this.isMount){
-					this._afterMount();
-				}
-			});
+			this.updateData();
 		}
 
 		afterMount() {	
 			let buttonCreate = document.querySelector('.post-data_header__button');
 			this.subscribeTo(buttonCreate, 'click', this.createPost.bind(this));
-
+			this.subscribeTo(this.getContainer(), 'update', this.update.bind(this));
 			this.createAllPost();
+		//	this.autoUpdating(60);
 		}
 
 		createPost(){
@@ -69,7 +55,58 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			});
 		}
 
+		autoUpdating(timeInSeconds){
+			setInterval(() => {
+				this.update();
+			}, 1000 * timeInSeconds);
+		}
+
+		update(){
+			this.updateData();
+			this.updating = true;
+		}
+
+		updateData(){
+
+			let updateCurrentUser = new Promise ((resolve,reject) => {
+				let getUser = new URL ('/user/current', tensor);
+				fetch(getUser, {
+					method : 'GET',
+					mode: 'cors',
+					credentials: 'include'
+				}).then(response => response.json())
+				.then(result => {this.current_id = result.id;return true;})
+				.then(()=> resolve())
+				.catch(error => reject(console.log(error)));
+			}); 
+
+			let updateData = new Promise ((resolve,reject) => {
+				let getPost = new URL (`/message/list/${this.user_id}`, tensor);
+				fetch(getPost, {
+					method : 'GET',
+					mode: 'cors',
+					credentials: 'include'
+				}).then(response => response.json())
+				.then(result => this.handleData(result.messages))
+				.then(()=> resolve())
+				.catch(error => reject(console.log(error)));
+			}); 
+
+			Promise.all([updateData, updateCurrentUser])
+			.then(() => {
+				if (this.isMount){
+					this._afterMount();
+				}
+			});
+		}
+
 		createAllPost(){
+			if (this.updating){
+				let oldPosts = document.querySelectorAll('.post');
+				[...oldPosts].forEach(oldPost => {oldPost.remove();});
+				this.updating = false;
+			}
+
 			for (let post of this.wall) {
 				// eslint-disable-next-line no-undef
 				let postForMount = factory.create(Post, post);
@@ -78,46 +115,50 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			}
 		}
 
-		uploadAllPosts(){
-			let getPost = new URL (`/message/list/${this.current_id}`, tensor);
-            fetch(getPost, {
-                method : 'GET',
-				mode: 'cors',
-                credentials: 'include'
-			}).then(response => response.json())
-			.then(result => this.handleData(result.messages))
-			.catch(error => console.log(error));	
-		}
-
 		handleData(data){
-			[...data].forEach(
-				elem => {
-					console.log(elem);
-					let preAuthor = this.replace(elem.author, '\'', '"');
-					elem.author = JSON.parse(preAuthor);
-					let someData = this.getDateAndPhoto(elem.image);
-					let isDelete = elem.author.id === this.user_id || elem.author.id === this.current_id? true : false;
-					this.wall.unshift(
-						this.makeObjectPost(
-							elem.id,
-							'#',
-							elem.author.data.name,
-							elem.author.computed_data.photo_ref,
-							someData.date,
-							elem.message,
-							someData.img,
-							isDelete
-						)
-					);
-				}
-			);
+			this.wall = [];
+			for (let elem of data){
+				let preAuthor = this.replace(elem.author, '\'', '"');
+				let replaceNone = this.replaceStr(preAuthor, 'None', 'undefined');
+				elem.author = JSON.parse(replaceNone);
+				let someData = this.getDateAndPhoto(elem.image);
+				let isDelete = elem.author.id === this.current_id? true : false;
+				this.wall.unshift(
+					this.makeObjectPost(
+						elem.id,
+						'#',
+						elem.author.data.name,
+						elem.author.computed_data.photo_ref,
+						someData.date,
+						elem.message,
+						someData.img,
+						isDelete
+					)
+				);
+			}
+			
 			return true ;
 		}
+
+		replaceStr(inputStr, strForReplace, newStr){
+			let str = '';
+	
+			if (inputStr.includes(strForReplace)){
+				let start = inputStr.indexOf(strForReplace);
+				let end = start + strForReplace.length;
+				str = inputStr.slice(0, start) + `"${newStr}"` + inputStr.substring(end);			
+			}
+			else{
+				str = inputStr;
+			}
+
+			return str;
+		}
 		
-		replace(str, elemForPeplace, newElem){
+		replace(str, elemForReplace, newElem){
 			let newStr = '';
 			for (let char = 0; char < str.length; char++){
-				if (str[char] !== elemForPeplace){
+				if (str[char] !== elemForReplace){
 					newStr += str[char];
 				}
 				else {

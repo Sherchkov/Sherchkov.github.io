@@ -79,12 +79,17 @@
 	cursor: pointer;
 }
 
-.post-data__img{
+.post-data__img, .post-data__cap{
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
 	object-fit: cover;
 }
+
+.post-data__cap{
+	background-color: lightsteelblue;
+}
+
 .post-data__name,.post-data__date{
 	margin-right: 25px;
 	display: block;

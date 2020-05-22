@@ -347,7 +347,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
 				body: urlencoded,
                 credentials: 'include'
             }).then(response => response)
-            .then(() => {this.Close(); console.log(this);})
+            .then(() => {this.Close(); this.updating();})
             .catch(error => console.log('error', error));
             }
             else {
@@ -358,8 +358,14 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
 
         //Вызов события закрытия кнопки окна
         Close() {
-            let event = new Event('click');
-            document.querySelector('.modal').dispatchEvent(event);
+            let clickEvent = new Event('click');
+            document.querySelector('.modal').dispatchEvent(clickEvent);
+        }
+
+         //Вызов обновления стены 
+        updating() {
+            let updatingEvent = new Event('update');
+            document.querySelector('.content-wall').dispatchEvent(updatingEvent);
         }
 
     }
