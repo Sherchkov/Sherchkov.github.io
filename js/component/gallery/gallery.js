@@ -8,7 +8,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	            <div class="content-gallery content_default">
 	            	<div class="content-gallery__head">
 						<span class="content-gallery__title">Мои фотографии</span>
-						<button class="content-gallery__add">добавить</button>
+						<button class="content-gallery__add">Добавить</button>
 	            	</div>
 	                <div class="slider slider-mini">
 	                  <div class="slider-arrowLeft sliderLeft" title="Назад">
