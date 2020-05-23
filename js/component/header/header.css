@@ -56,7 +56,7 @@
 }
 
 .header-menu__list{
-	display: none;
+    display: none;
     position: absolute;
     right: 0;
     top: 30px;
@@ -90,13 +90,14 @@
 }
 
 .header-menu__item{
-	display: block;
+    display: block;
     text-align: right;
     color: #fff;
     font-size: 1.3rem;
     padding: 2px 6px;
     margin: 3px 0;
     cursor: pointer;
+    white-space: nowrap;
 } 
 
 .header-menu__item:hover{
