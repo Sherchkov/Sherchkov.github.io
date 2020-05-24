@@ -98,12 +98,15 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    }
 
 	    createBigGallery(){
-	    	let optionsId = this.options.id;
+	    	let options = {
+	    		id :  this.options.id,
+	    		mobile : this.options.mobile || false
+	    	}
 	    	require(['modal/ModalGallery'], function(ModalGallery){ 
 	    		if (  typeof(modalGallery) !== 'undefined' ) {
 	    		    modalGallery.unmount();
 	    		}
-	    		modalGallery = factory.create(ModalGallery, {id : optionsId});
+	    		modalGallery = factory.create(ModalGallery, options);
 	    		modalGallery.mount(document.body);
 	    	});
 	    }
