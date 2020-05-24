@@ -41,7 +41,9 @@
 	  -webkit-line-clamp: 3;
 	  -webkit-box-orient: vertical;  
 }
-
+.content-data__name_nowrap{
+	white-space: normal;
+}
 .content_data__aboutMe{
 	width: 100%;
 	margin: 10px -3px;
