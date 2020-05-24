@@ -2,13 +2,13 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	'use strict';
 
 	class Gallery extends Component {
-
-	    render() {
+	    render(options) {
+	    	this.options = options;
 	        return `
 	            <div class="content-gallery content_default">
 	            	<div class="content-gallery__head">
 						<span class="content-gallery__title">Мои фотографии</span>
-						<button class="content-gallery__add">Добавить</button>
+						${this.options.id === user_id ? '<button class="content-gallery__add">Добавить</button>' : ''}
 	            	</div>
 	                <div class="slider slider-mini">
 	                  <div class="slider-arrowLeft sliderLeft" title="Назад">
@@ -24,18 +24,18 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	                  </div>
 	                  <div class="slider__bufer"></div>               
 	                </div>
-	                
 	            </div>
 	        `;
 	    }
 
 	    afterMount(){
+	    	globalSliderPhotos = [];
 	    	this.getImage();
 	        this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this)); 
 	    }
 
 	    getImage(){
-			fetch(globalUrlServer + '/photo/list/' + user_id, {
+			fetch(globalUrlServer + '/photo/list/' + this.options.id, {
 				method : 'GET',
             	credentials: 'include'
             })
@@ -98,11 +98,15 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	    }
 
 	    createBigGallery(){
+	    	let options = {
+	    		id :  this.options.id,
+	    		mobile : this.options.mobile || false
+	    	}
 	    	require(['modal/ModalGallery'], function(ModalGallery){ 
 	    		if (  typeof(modalGallery) !== 'undefined' ) {
 	    		    modalGallery.unmount();
 	    		}
-	    		modalGallery = factory.create(ModalGallery, {});
+	    		modalGallery = factory.create(ModalGallery, options);
 	    		modalGallery.mount(document.body);
 	    	});
 	    }

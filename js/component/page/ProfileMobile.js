@@ -3,6 +3,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	    render(options) {
 			document.title = options.data.name;
 	    	options.mobile = true;
+	    	this.options = options;
 	        return `
 	            <div class="MainPage MainPageMobile">
 	               <!-- header -->
@@ -18,6 +19,20 @@ define(['base/component', 'component/header/header', 'component/information/info
                  	${this.childrens.create(Wall, options)}
 	            </div>
 	        `;
+	    }
+
+	    afterMount(){
+	    	if (this.options.data.theme_night === 'true') {
+	    		document.querySelector('body').style.background = '#35363a';
+	    		document.querySelectorAll('.content_default').forEach(block => {
+	    			block.style.background = '#595a5c';
+	    			block.style.color = '#bfbfbf';
+	    		});   
+	    		document.querySelector('.content_data__aboutMe').style.color = '#bfbfbf';
+	    		document.querySelector('.content-data-params__date').classList.add('content-data-params__date_night');
+	    		document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '#bfbfbf');   
+	    		document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '#bfbfbf'); 
+	    	}
 	    }
 	}
 	return Profile;
