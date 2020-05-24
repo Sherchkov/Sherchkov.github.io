@@ -3,6 +3,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	class Header extends Component {
 	    render(options) {	    	
+	    	this.options = options;
 	    	this.data = options.data;
 	    	this.theme_night = this.data.theme_night || 'false';
 	    	this.mirror =  this.data.mirror || 'false';
@@ -16,43 +17,118 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        return `
 		        <header class="MainPage__header header">
 		            <div class="header__left">
-		              <span class="header__status">В сети</span>
+		              ${this.options.id !== user_id ? `
+			           	  <div class="header__home" title="Вернуться на свою страницу">
+			           	  	<svg class="header__home_svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;"><polygon points="204,471.75 204,318.75 306,318.75 306,471.75 433.5,471.75 433.5,267.75 510,267.75 255,38.25 0,267.75 76.5,267.75 76.5,471.75 "/></svg>
+			           	  </div>
+			           	  ` : ''}
+		              <span class="header__status"></span>
 		            </div>
 			    <div class="header__centre"></div>
 		            <div class="header__right">
-		              <div class="header__edit" data-name="edit">Редактировать</div>
+		            ${this.options.id === user_id ? '<div class="header__edit" data-name="edit">Редактировать</div>' : ''}
 		              <div class="header__photo">
 		                <img class="header__img modalPhoto" src="${this.avatar}" alt="${options.data.name}" title="${options.data.name}">
 		              </div>
-		              <div class="header-menu">
-		              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
-						<div class="header-menu__list">
-						  <div class="header-menu__item header-menu_logout">Выход</div>
-						  <div class="header-menu__item header-menu_theme" night="${this.theme_night}">${this.theme_night === 'false' ? 'Ночной режим' : 'Обычный режим'}</div>
-						  ${this.options.mobile === true ? '' : `<div class="header-menu__item header-menu_changePosition" position="${this.mirror}">Поменять расположение</div>`}
-						</div>	
-		              </div> 
+		              ${this.options.id === user_id ? `
+			              <div class="header-menu">
+			              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
+							<div class="header-menu__list">
+							  <div class="header-menu__item header-menu_logout">Выход</div>
+							  <div class="header-menu__item header-menu_theme" night="${this.theme_night}">${this.theme_night === 'false' ? 'Ночной режим' : 'Обычный режим'}</div>
+							  ${this.options.mobile === true ? '' : `<div class="header-menu__item header-menu_changePosition" position="${this.mirror}">Поменять расположение</div>`}
+							</div>	
+			              </div>` : ''} 
 		            </div>
 		        </header>
 		      `;
 	    }
 
 	    afterMount() {
-			this._logout = this.getContainer().querySelector('.header-menu_logout');
-			this._theme = this.getContainer().querySelector('.header-menu_theme');
-			this._changePositon = this.getContainer().querySelector('.header-menu_changePosition');
-			this.subscribeTo(this._logout, 'click', this.logout.bind(this));
-			this.subscribeTo(this._theme, 'click', this.theme.bind(this));
-	        this.subscribeTo(this.getContainer(), 'click', this.onSwitchData.bind(this));
-	        this.clickHandler = this.clickOverMenu.bind(this);
-
-	        if (this.options.mobile !== true) {
-	        	this.subscribeTo(this._changePositon, 'click', this.changePositon.bind(this));
-	        }
+	    	this.getContainer().querySelector('.header__status').innerText = this.renderStatus(this.options.computed_data.last_activity);
+	    	if (this.options.id === user_id) {
+				this._logout = this.getContainer().querySelector('.header-menu_logout');
+				this._theme = this.getContainer().querySelector('.header-menu_theme');
+				this._changePositon = this.getContainer().querySelector('.header-menu_changePosition');
+				this.subscribeTo(this._logout, 'click', this.logout.bind(this));
+				this.subscribeTo(this._theme, 'click', this.theme.bind(this));
+		        this.clickHandler = this.clickOverMenu.bind(this);
+		        if (this.options.mobile !== true) {
+		        	this.subscribeTo(this._changePositon, 'click', this.changePositon.bind(this));
+		        }
+	    	}
+			this.subscribeTo(this.getContainer(), 'click', this.clickController.bind(this));
 	    }
 
+	    renderStatus(last_activity){
+	      	//перевод даты в формат в unix
+	      	last_activity = Date.parse(last_activity);
+	      	last_activity = last_activity.toString().slice(0, -3);
+
+	      	//дата UNIX сейчас
+	      	let time = Date.now();
+	      	let currentTimeZone = new Date().getTimezoneOffset();
+	      	time = time.toString().slice(0, -3);
+	      	
+
+	      	//Разница в секунадах
+	      	let dtime = time - last_activity + currentTimeZone*60 + 1;
+
+	      	if (dtime < 300) {
+	      		return 'В сети';
+	      	}
+
+	      	dtime -= 300;
+
+	      	if (dtime < 60) {
+	      	  return 'Был(а) '+dtime+' секунд назад';
+	      	}
+
+	      	if (dtime >= 60 && dtime < 3600) {
+	      	  dtime = Math.trunc(dtime/60);
+	      	  return 'Был(а) '+dtime+' минут назад';
+	      	}
+
+	      	if (dtime >= 3600 && dtime < 86400){
+	      	  dtime = Math.trunc(dtime/60/60);
+
+	      	  if (dtime == 1 || dtime == 21) {
+	      	    return 'Был(а) '+dtime+' час назад';
+	      	  }
+	      	  if (dtime == 2 || dtime == 3 || dtime == 4 || dtime == 22 || dtime == 24)  {
+	      	    return 'Был(а) '+dtime+' часа назад';
+	      	  }
+	      	  return 'Был(а) '+dtime+' часов назад';
+	      	}
+
+	      	// если больше 24 часов назад, то выводим время последняго визита
+	      	let date = new Date(last_activity*1000);
+
+	      	let minute = date.getMinutes();
+	      	minute = minute.toString();
+	      	if (minute.length == 1) {
+	      	  minute = '0' + minute;
+	      	}
+
+	      	let day = date.getDate();
+	      	day = day.toString();
+	      	if (day.length == 1) {
+	      	  day = '0'+day;
+	      	}
+
+	      	let month = date.getMonth() + 1; 
+	      	month = month.toString();
+	      	if (month.length == 1) {
+	      	  month = '0'+month;
+	      	}
+
+	      	date = day + '.' + month + '.' + date.getFullYear() + ' '+date.getHours()+':'+minute;
+	      	return 'Был(а) в сети: '+date;
+	    }
+
+
 	    //переключение Редактировать/Сохранить
-	    onSwitchData(event){
+	    clickController(event){
 	        let element = event.target;
 	        if (element.classList.contains('header__edit')) {
 	            let name = element.getAttribute("data-name");
@@ -71,8 +147,10 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        		});
 	        	});
 	            
-	        }else if ( element.classList.contains('header-menu_icon') ) {
+	        }else if (element.classList.contains('header-menu_icon')) {
 	        	this.showMenu();
+	        }else if (element.closest('.header__home')) {
+	        	this.goHome();
 	        }
 	    }
 
@@ -97,12 +175,15 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	            aboutMe.style.padding = '5px 3px';
 	            aboutMe.innerHTML = '<br>';
 	        }
+
+	        //Приводим поля Contenteditable в состоянии textaera
+	       	this.addEventContenteditable(name);
+	       	this.addEventContenteditable(aboutMe);
+
 	        aboutMe.style.overflow = 'auto';
 	        aboutMe.setAttribute('contenteditable', 'true');
 	        aboutMe.classList.add('content-data-params__active');
-	        // устраняем баг пропадания курсора
-	        aboutMe.addEventListener('click', this.setCursorPosition);
-	        //date
+
 	        let date = document.querySelector('.content-data-params_birthday');
 	        date.classList.add('content-data-params_birthdayEdit');
 	        // поля input
@@ -111,6 +192,50 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	           el.classList.add('content-data-params__active');
 	           el.removeAttribute('disabled');
 	        });
+	    }
+
+	    //Приводит поля Contenteditable в состоянии textaera
+	    addEventContenteditable(element){
+	    	element.addEventListener('click', this.setCursorPosition);
+	    	['dragenter', 'dragover', 'dragleave', 'drop', 'paste'].forEach(eventName => {
+
+  				element.addEventListener(eventName, this.preventDefaults, false);
+			})
+	    	element.addEventListener('paste', this.pasteInContenteditable.bind(this));
+	    }
+
+	    removeEventContenteditable(element){
+	    	element.removeEventListener('click', this.setCursorPosition);
+	    	['dragenter', 'dragover', 'dragleave', 'drop', 'paste'].forEach(eventName => {
+
+  				element.removeEventListener(eventName, this.preventDefaults, false);
+			})
+	    	element.removeEventListener('paste', this.pasteInContenteditable.bind(this));
+	    }
+
+	    preventDefaults(event){
+	      event.preventDefault();
+	      event.stopPropagation();
+	    }
+
+	    //Приводит в нормальный вид при вставке изображения
+	    pasteInContenteditable(event){
+	    	let pastedData = event.clipboardData.getData('text/plain');
+	    	this.insertTextAtCursor(pastedData);
+	    }
+
+	    //Вставляет текст где курсор
+	    insertTextAtCursor(text) {
+	        if (window.getSelection) {
+	            let sel = window.getSelection();
+	            if (sel.getRangeAt && sel.rangeCount) {
+	                let range = sel.getRangeAt(0);
+	                range.deleteContents();
+	                range.insertNode( document.createTextNode(text) );
+	            }
+	        } else if (document.selection && document.selection.createRange) {
+	            document.selection.createRange().text = text;
+	        }
 	    }
 
 	    /**
@@ -157,7 +282,10 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	            aboutMe.innerText = updateText;
 	        }
 	        aboutMe.title = updateText;
-	        aboutMe.removeEventListener('click', this.setCursorPosition);
+
+	        this.removeEventContenteditable(name);
+	       	this.removeEventContenteditable(aboutMe);
+
 	        //отправляем на сервер
 			let params = document.querySelectorAll('.content-data-params__input');	
 	        this.data = {
@@ -261,17 +389,20 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   			document.querySelectorAll('.content_default').forEach(block => {
 	   				block.style.background = '#595a5c';
 	   				block.style.color = '#bfbfbf';
-	   			});   
+	   			});  
+	   			document.querySelector('.content-data__name').style.color = '#bfbfbf'; 
 	   			document.querySelector('.content_data__aboutMe').style.color = '#bfbfbf';
 	   			document.querySelector('.content-data-params__date').classList.add('content-data-params__date_night');
 	   			document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '#bfbfbf');   
 	   			document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '#bfbfbf'); 
+	   			userParams.theme_night = 'true';
 	   			this._theme.innerText = 'Обычный режим';
 	   			this._theme.setAttribute('night', 'true'); 
 	   			this.data.theme_night = 'true';
 	   			this.upload();
 	   		}else{
 	   			this.exitNightTheme();
+	   			userParams.theme_night = 'false';
 	   			this.data.theme_night = 'false';
 	   			this.upload();
 	   		}
@@ -284,12 +415,14 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   			block.style.background = '';
 	   			block.style.color = '';
 	   		});   
+	   		document.querySelector('.content-data__name').style.color = ''; 
 	   		document.querySelector('.content_data__aboutMe').style.color = '';
 	   		document.querySelector('.content-data-params__date').classList.remove('content-data-params__date_night');
 	   		document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '');   
 	   		document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '');
 	   		this._theme.innerText = 'Ночной режим';
 	   		this._theme.setAttribute('night', 'false'); 
+
 	   	}
 
 	   	changePositon(){
@@ -297,11 +430,13 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   			if (this._changePositon.getAttribute('position') === 'false') {
 	   				document.querySelector('.Content').classList.add('content_left');
 	   				this._changePositon.setAttribute('position', 'true');
+	   				userParams.mirror = 'true';
 	   				this.data.mirror = 'true';
 	   				this.upload();
 	   			}else{
 	   				this.positionDefault();
 	   				this.data.mirror = 'false';
+	   				userParams.mirror = 'false';
 	   				this.upload();
 	   			}
 	   			this.hideMenu();
@@ -313,6 +448,40 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   		this._changePositon.setAttribute('position', 'false');
 	   	}
 
+	   	//Вернуться на домашнюю страницу
+	   	goHome(){
+	   		fetch("https://tensor-school.herokuapp.com/user/current", {
+	   			credentials: 'include'
+	   		})
+	   		.then(response => {
+	   			if ( response.ok ) {
+	   			    return response.json();  
+	   			}else{
+	   				page.unmount();
+	   				require(["page/Authorization"], function(Authorization){
+	   					page = factory.create(Authorization, {});
+	   					page.mount(document.body);
+	   				});
+	   			  	return response.error();
+	   			}
+	   		})
+	   		.then(result => {
+	   			page.unmount();
+	   			if ( window.innerWidth > 800 ) {
+	   				require(["page/profile"], function (Profile) {
+	   					page = factory.create(Profile, result);
+	   					page.mount(document.body);
+	   				});
+	   			} else {
+	   				require(["page/ProfileMobile"], function(profileMobile){
+	   					page = factory.create(profileMobile, result);
+	   					page.mount(document.body);
+	   				});
+	   			}
+	   		})
+	   		.catch(error => console.log('error', error));
+	   	}
+
 	   	//выход
 		logout() {
 			fetch('https://tensor-school.herokuapp.com/user/logout', {
@@ -321,7 +490,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			}).then(response => {
 				if (response.status == '200') {
 					this.hideMenu();
-					this.positionDefault();
+					userParams = {};
 					if (this._theme.getAttribute('night') === 'true') {
 						this.exitNightTheme();
 					}

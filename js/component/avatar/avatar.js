@@ -3,51 +3,47 @@ define(['base/component', 'css!component/avatar/avatar'], function (Component) {
 
 	class Avatar extends Component {
 	    render(options) {
-	    	if ( options.mobile ) {
-	    		this.mobile = true;
-	    	} else {
-	    		this.mobile = false;
-	    	}
-
-	    	if (options.computed_data.photo_ref) {
-	    		this.avatar = globalUrlServer + options.computed_data.photo_ref;
-	    	} else {
-	    		this.avatar = 'img/avatar/avatar_default.png';
-	    	}
+ 			this.options = options;
+ 			this.mobile = (options.mobile === true) ? true : false;
+	    	this.avatar = (!options.computed_data.photo_ref) ? 'img/avatar/avatar_default.png' : globalUrlServer + options.computed_data.photo_ref;
 
 	        if ( options.mobile ) {
 	        	return `
 	        	    <div class="content-photo content-photo_mobile">
 	        	      <img src="${this.avatar}" alt="Профиль" class="content-photo__img modalPhoto content-photo__img_mobile">
-	        	      <div class="photo-edit_mobile">
-	        	      	<img class="photo-edit__icon" src="img/icons/system/editMobil.png" alt="Редактировать" title="Редактировать">
-	        	      </div>
-	        	      ${options.computed_data.photo_ref ? `
-							 <div class="photo__delete photo__delete_mobile" title="Удалить">
-									<svg class="photo__deleteIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
-							 </div>
-	        	      	` : ''}
+	        	      ${this.options.id === user_id ? `  
+		        	      <div class="photo-edit_mobile">
+		        	      	<img class="photo-edit__icon" src="img/icons/system/editMobil.png" alt="Редактировать" title="Редактировать">
+		        	      </div>
+		        	      ${options.computed_data.photo_ref ? `
+								 <div class="photo__delete photo__delete_mobile" title="Удалить">
+										<svg class="photo__deleteIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
+								 </div>
+		        	      	` : ''}
+	        	      ` : ''}
 	        	    </div>
 	        	`;
 	        } else {
 	        	return `
 	        	    <div class="content-photo content_default">
 	        	      <img src="${this.avatar}" alt="Профиль" class="content-photo__img modalPhoto">
-	        	      <div class="photo-edit">
-	        	      	<img class="photo-edit__icon" src="img/icons/system/pen.png" alt="Редактировать" title="Редактировать">
-	        	      </div>
-	        	      ${options.computed_data.photo_ref ? `
-							 <div class="photo__delete" title="Удалить">
-									<svg class="photo__deleteIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
-							 </div>
-	        	      	` : ''}
+					  ${this.options.id === user_id ? ` 
+		        	      <div class="photo-edit">
+		        	      	<img class="photo-edit__icon" src="img/icons/system/pen.png" alt="Редактировать" title="Редактировать">
+		        	      </div>
+		        	      ${options.computed_data.photo_ref ? `
+								 <div class="photo__delete" title="Удалить">
+										<svg class="photo__deleteIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
+								 </div>
+		        	      ` : ''}
+					  ` : ''}
 	        	    </div>
 	        	`;
 	        }
 	    }
 
 	    afterMount() {
-	    	if ( !this.mobile ) {
+	    	if (this.options.id === user_id && !this.mobile) {
 	    		this.subscribeTo(this.getContainer(), 'mouseenter', this.onShowEditPhoto.bind(this));
 	        	this.subscribeTo(this.getContainer(), 'mouseleave', this.onHideEditPhoto.bind(this));
 	    	}

@@ -30,6 +30,6 @@ class AbstractFactory {
 // eslint-disable-next-line no-unused-vars
 const factory = new AbstractFactory();
 
-let page, musicHeader, modal, modalGallery, modalslider, modalAddPhoto, user_id, globalSliderPhotos = [], globalUrlServer = 'https://tensor-school.herokuapp.com';
+let page, musicHeader, modal, modalGallery, modalslider, modalAddPhoto, user_id, userParams = {}, globalSliderPhotos = [], globalUrlServer = 'https://tensor-school.herokuapp.com';
 
 require(['app/main']);

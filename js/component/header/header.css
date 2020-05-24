@@ -9,6 +9,10 @@
 .header_white{
 	color: #ffffff;
 }
+.header__left{
+	display: flex;
+	align-items: center;
+}
 .header__centre{
 	flex:1;
 	display: flex;
@@ -20,7 +24,19 @@
 	align-items: center;
 	padding-right: 5px;
 	justify-content: flex-end;
-}		
+}	
+.header__home{
+	margin-right: 10px;
+	cursor: pointer;
+}
+.header__home_svg{
+	fill: #fff;
+	width: 20px;
+	height: 20px;
+}
+.header__home:hover .header__home_svg{
+	fill: #729ee6;
+}
 .header__status{
 	font-size: 1.4rem;
 	font-weight: 600;

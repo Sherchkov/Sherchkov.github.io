@@ -14,9 +14,9 @@ define(['base/component', 'component/avatar/avatar', "base/helpers", 'css!compon
 	              <div class="content-data-params">
 	                <div class="content-data-params__key">День рождения</div>
 	                <div class="content-data-params__value content-data-params_birthday">  
-	                  <input type="date" value="${this.data.birth_date}" class="content-data-params__date">
-	                  <span class="content-data-params__birthday">${ renderBirthday(this.data.birth_date) }</span>
-	                  <img class="content-data-params__horoscope" src="img/icons/horoscope/aries.png" alt="Овен" title="Овен">
+	                  <input type="date" value="${typeof(this.data.birth_date) !== 'undefined' ? this.data.birth_date : '0000-00-00'}" class="content-data-params__date">
+	                  <span class="content-data-params__birthday">${typeof(this.data.birth_date) !== 'undefined' ? renderBirthday(this.data.birth_date) : 'скрыто'}</span>
+	                  <img class="content-data-params__horoscope" src="img/icons/horoscope/${typeof(this.data.birth_date) !== 'undefined' ? renderHoroscope(this.data.birth_date)[0] : 'empty'}.png" alt="${typeof(this.data.birth_date) !== 'undefined' ? renderHoroscope(this.data.birth_date)[1] : 'Зодиак'}" title="${typeof(this.data.birth_date) !== 'undefined' ? renderHoroscope(this.data.birth_date)[1] : 'Зодиак'}">
 	                </div>
 	                <div class="content-data-params__key" title="Город">Город</div>
 	                <div class="content-data-params__value" title="${this.data.city}">
