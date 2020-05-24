@@ -329,15 +329,21 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             event.stopPropagation();
             this.isSave = true;
             let text = document.querySelector('.createrPost__fieldForText').value;
-            let encodeText = this.replace(text, '\n', '</br>');
+            
 
             if(text.length != 0 || this.lenPamamsOfObject(this.idPhotosWasUpdate)!= 0)
             {
+                let encodeText = this.replace(text, '\n', '</br>');
+                let textObject = {
+                    type : 'post',
+                    text : encodeText
+                };
+                let textForSend = JSON.stringify(textObject);
                 let linksForPhotos = this.getStrOfLinksPhotos(this.idPhotosWasUpdate);
                 let urlencoded = new URLSearchParams();
                 urlencoded.append('author', this.user_id);
                 urlencoded.append('addressee', this.current_id);
-                urlencoded.append('message', encodeText);
+                urlencoded.append('message', textForSend);
                 urlencoded.append('image', linksForPhotos);
                 let createPost = new URL ('/message/create', tensor);
 

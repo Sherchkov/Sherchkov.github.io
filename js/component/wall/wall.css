@@ -1,10 +1,25 @@
 /*Пост*/
-.post{
-	padding-top: 20px;
+.post, .comment{
 	border-bottom: 1px solid #ddd;
 	position: relative;
+}
+
+.post{
+	padding-top: 20px;
 	width: 100%;
 }
+
+.comment{
+	padding-top: 7px;
+	width: 90%;
+}
+
+.post__comments-for-post{
+	width: 100%;
+	display: grid;
+	justify-items: end;
+}
+
 .post:last-child{
 	margin-bottom: 0;
 	padding-bottom: 0px;
@@ -12,7 +27,6 @@
 }
 .post-data{
 	position: relative;
-	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	width: 100%;
@@ -28,14 +42,14 @@
 	margin: 3px 0 10px 0;
 }
 
-.post-data_header__title, .post-data_header__button {
+.post-data_header__title, .post-data_header__button, .post-data__button {
 	font-size: 1.4rem;
 }
 .post-data_header__title{
 	margin-left: 6px;
 }
 
-.post-data_header__button{
+.post-data_header__button, .post-data__button, .comment_button{
 	margin-right: 6px;
 	color: #729ee6;
 	cursor: pointer;
@@ -43,7 +57,12 @@
 	border-bottom: 1px solid #ffffff;
 }
 
-.post-data_header__button:hover{
+.post-data__button{
+	display: inline-flex;
+	margin-bottom: 5px;
+}
+
+.post-data_header__button:hover, .post-data__button:hover, .comment_button:hover{
 	border-bottom: 1px solid  #729ee6;
 }
 
@@ -71,8 +90,10 @@
 }
 .post-data__link{
 	grid-row: span 2 / auto;
-	grid-row-start: span 2;
-	grid-row-end: auto;
+}
+.comment-data__link{
+	grid-row: span 3 / auto;
+	align-self: start;
 }
 
 .post-img, .post-text{
@@ -109,10 +130,22 @@
 	color: #bababa;
 	font-weight: 600;
 }
-.post-text{
+.post-text, .comment-text{
 	line-height: 1.1em;
-	padding: 10px 0;
+	margin: 10px 0;
 	font-size: 1.4rem;
+	word-wrap : break-word;
+	word-break : break-all;
+	width: 100%;
+}
+
+.post-text_short{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	height: 74px;
+	width: 100%;
+	margin-bottom: 4px;;
 }
 
 .post-img__picturePopup{
@@ -132,11 +165,16 @@
 	padding: 0.5rem;
 }
 
-.post__button{
+.post__button, .comment__button{
 	line-height: 1.4rem;
 	font-size: 1.2rem;
 	color: #a5a5a5;
 	cursor: pointer;
+}
+
+.comment__button{
+	grid-column-start: 2;
+	justify-self: end;
 }
 
 .post__button:hover{
@@ -257,4 +295,23 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+.comment_field{
+	width: 98%;
+	height: 4em;
+	font-size: 1.4rem;
+	border-radius: 6px;
+	padding: 1%;
+}
+
+.comment_buttons{
+	display: flex;
+	justify-content: flex-end;
+}
+
+.comment_button{
+	font-size: 1.4rem;
+	margin-left: 4px;
+	display: inline-block;
 }

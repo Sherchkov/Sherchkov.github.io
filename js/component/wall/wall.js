@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-define(['base/component', 'server/json', 'component/wall/post', 'css!component/wall/wall'], function (Component, json, Post) {
+define(['base/component', 'component/wall/post', 'css!component/wall/wall'], function (Component, Post) {
 	'use strict';
 	var tensor = new URL ('https://tensor-school.herokuapp.com/');
 
@@ -18,6 +18,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				contentDefault :'content_default'
 				};
 			this.updating = false;
+			this.comments = {};
 			}
 
 		render() {
@@ -46,7 +47,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			else {
 				document.querySelector(`.${this.useCSS.postTitle}`).innerHTML = 'Записи Пользователя';
 			}
-			this.autoUpdating(60);
+			//this.autoUpdating(60);
 		}
 
 		createPost(){
@@ -120,7 +121,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 			for (let post of this.wall) {
 				// eslint-disable-next-line no-undef
-				let postForMount = factory.create(Post, {opt : this.options, post : post});
+				let postForMount = factory.create(Post, {opt : this.options, post : post, myid : this.current_id, comments : this.comments});
 				let path = document.getElementById(this.id);
 				postForMount.mount(path);
 			}
@@ -128,6 +129,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 
 		handleData(data){
 			this.wall = [];
+			this.comments = {};
 			for (let elem of data){
 				let preAuthor = this.replace(elem.author, '\'', '"');
 				let replaceNone = this.replaceStr(preAuthor, 'None', 'undefined');
@@ -135,30 +137,77 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				let someData = this.getDateAndPhoto(elem.image);
 				let isDelete;
 				let isChange;
+				let isComment;
+
 				if (this.current_id === this.user_id || elem.author.id === this.current_id){
 					isDelete = true;
 				} else {
 					isDelete = false;
 				} 
 
-				if (elem.author.id === this.current_id){
-					isChange = true;
-				} else {
+				try {
+					isComment = true;
+					if (elem.author.id === this.current_id){
+						isChange = true;
+					} else {
+						isChange = false;
+					} 
+					let textObject = JSON.parse(elem.message);
+
+					if (textObject.type === 'post'){
+						this.wall.unshift(
+							this.makeObjectPost(
+								elem.id,
+								elem.author.id,
+								elem.author.data.name,
+								elem.author.computed_data.photo_ref,
+								someData.date,
+								textObject.text,
+								someData.img,
+								isDelete,
+								isChange,
+								isComment
+							)
+						);	
+					} else if (textObject.type === 'comment') {
+						let comm = this.makeObjectPost(
+							elem.id,
+							elem.author.id,
+							elem.author.data.name,
+							elem.author.computed_data.photo_ref,
+							someData.date,
+							textObject.text,
+							someData.img,
+							isDelete,
+							isChange,
+							isComment
+						);
+						if (!(textObject.idPost in this.comments)){
+							this.comments[textObject.idPost] = [];
+						} 
+						this.comments[textObject.idPost].unshift(comm);
+						
+					}
+					
+				} catch (error) {
+					isComment = false;
 					isChange = false;
-				} 
-				this.wall.unshift(
-					this.makeObjectPost(
-						elem.id,
-						elem.author.id,
-						elem.author.data.name,
-						elem.author.computed_data.photo_ref,
-						someData.date,
-						elem.message,
-						someData.img,
-						isDelete,
-						isChange
-					)
-				);
+					this.wall.unshift(
+						this.makeObjectPost(
+							elem.id,
+							elem.author.id,
+							elem.author.data.name,
+							elem.author.computed_data.photo_ref,
+							someData.date,
+							elem.message,
+							someData.img,
+							isDelete,
+							isChange,
+							isComment
+						)
+					);
+					
+				}
 			}
 			
 			return true ;
@@ -192,7 +241,7 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 			return newStr;
 		}
 
-		makeObjectPost(idOfPost, src, name, avatar, date, text, img, isDelete, isChange){
+		makeObjectPost(idOfPost, src, name, avatar, date, text, img, isDelete, isChange, isComment){
 			return{
 				'id' : idOfPost,
 				'href' : src,
@@ -202,7 +251,8 @@ define(['base/component', 'server/json', 'component/wall/post', 'css!component/w
 				'text' : text,
 				'img' : img,
 				'delete' : isDelete,
-				'change' : isChange
+				'change' : isChange,
+				'comment' :isComment
 			};
 		}
 

@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-define(['base/component', 'css!component/wall/wall'], function (Component) {
+define(['base/component','component/wall/comment', 'css!component/wall/wall'], function (Component, Comment) {
 	'use strict';
 	var tensor = new URL ('https://tensor-school.herokuapp.com/');
 
@@ -9,6 +9,10 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			this.post = data.post;
 			this.post_id = data.post.id;
 			this.options = data.opt;
+			this.thisUserid = this.options.id;
+			this.myid = data.myid;
+			this.isComment = false;
+			this.comments = data.comments;
             this.useCSS = {
 				postImage : 'post-img__picture',
 				buttonDelete : 'post-data__delete',
@@ -274,6 +278,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             let rubbish = '';
 			let fullPost ='';
 			let remade = '';
+			let comments = '';
 
             if (this.post.img.length !== 0){
                 for (let image in this.post.img) {
@@ -286,10 +291,12 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			}
 
 			if (this.post.change){
-				remade = '<p class="post__button">Изменить</p>';
+				remade = '<p class="post__button" title="Изменить">Изменить</p>';
 			}
-
-			let comments = '<p class="post__button">Комментировать</p>';
+			if (this.post.comment){
+				comments = '<p class="post__button" title="Комментировать">Комментировать</p>';
+			}
+			
 			let avatar = this._getAvatar();
 
             date = this._defineDate(this.post.date);
@@ -303,9 +310,13 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
                         <a id="${this.post.href}" class="${this.useCSS.postMaker}">${this.post.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>
                     </div>
-                    <div class="${this.useCSS.postText}">${this.post.text}</div>
+                    <p class="${this.useCSS.postText}">${this.post.text}</p>
                     <div class="${this.useCSS.postImgs}">
                         ${images}
+					</div>
+					<div class="post__comments-for-post">
+					</div>
+					<div class="post__block-create-comment">
 					</div>
 					<div class="post__block-buttons">
 						${comments}
@@ -318,7 +329,21 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		}
 		
 		afterMount() {
-			//console.log(document.getElementById(`${this.id}`));
+			if (this.post.text !== ''){
+				let elem = document.getElementById(`${this.id}`);
+				let needElem = elem.querySelector(	`.${this.useCSS.postText}`);
+				if (needElem.offsetHeight > 70){
+					needElem.classList.add('post-text_short');
+					let fullTextButton = document.createElement('p');
+					fullTextButton.innerText = 'Показать полностью';
+					fullTextButton.title = 'Показать полностью';
+					fullTextButton.className = 'post-data__button';
+					needElem.after(fullTextButton);
+				}
+			}
+
+			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+			this.renderComments();
 		}
 		
 		chooseAction(event){
@@ -332,7 +357,161 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				this.uploadFriend();
 			} else if (event.target.title === 'Удалить') {
 				this.deletePost();
+			} else if (event.target.title === 'Показать полностью') {
+				this.showAll();
+			} else if (event.target.title === 'Скрыть') {
+				this.hideAll();
+			} else if (event.target.title === 'Комментировать') {
+				this.showCommentBlock();
+			} else if (event.target.title === 'Отмена') {
+				this.hideCommentBlock();
+			} else if (event.target.title === 'Сохранить') {
+				this.createComment();
 			}
+		}
+
+		renderComments() {
+			if (this.post_id in this.comments){
+				for (let comment in this.comments[this.post_id]){
+					console.log(this.comments[this.post_id][comment]);
+					let elem = document.getElementById(`${this.id}`);
+					let pathForComment = elem.querySelector('.post__comments-for-post');
+					// eslint-disable-next-line no-undef
+					let commentForMount = factory.create(Comment, {comment : this.comments[this.post_id][comment]});
+
+					commentForMount.mount(pathForComment);
+				}
+			}
+		}
+
+		createComment(){
+			let elem = document.getElementById(`${this.id}`);
+			let textOfField = elem.querySelector('.comment_field').value;
+			if (textOfField.length !== 0){
+				let handleText = this.replace(textOfField, '\n', '</br>');
+				let textObject = {
+					type : 'comment',
+					idPost : this.post_id,
+					text : handleText
+				};
+
+				let textForSend = JSON.stringify(textObject);
+
+				let date = this.createDate();
+				
+				let urlencoded = new URLSearchParams();
+                urlencoded.append('author', this.myid);
+                urlencoded.append('addressee', this.thisUserid);
+                urlencoded.append('message', textForSend);
+                urlencoded.append('image', date);
+				let createComment = new URL ('/message/create', tensor);
+
+				fetch(createComment, {
+                    method : 'POST',                
+                    mode: 'cors',
+                    headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
+                    body: urlencoded,
+                    credentials: 'include'
+				}).then(() => this.hideCommentBlock())
+				.then(() => this.updating())
+                .catch(error => console.log('error', error));
+			} else {
+				this.hideCommentBlock();
+			}
+		}
+
+		createDate(){
+            let now = new Date();
+            let month = now.getMonth() + 1 < 10? '0' + (now.getMonth() + 1).toString() : (now.getMonth() + 1 ).toString();
+            let day = now.getDate() < 10? '0' + now.getDate().toString():now.getDate().toString();
+            let hours = now.getUTCHours() < 10? '0' + now.getUTCHours().toString():now.getUTCHours().toString();
+            let minutes = now.getUTCMinutes() < 10? '0' + now.getUTCMinutes().toString():now.getUTCMinutes().toString();
+            let seconds = now.getSeconds() < 10? '0' + now.getSeconds().toString():now.getSeconds().toString();
+
+            return `${now.getFullYear()}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+        }
+
+		replace(str, elemForPeplace, newElem){
+			let newStr = '';
+			for (let char = 0; char < str.length; char++){
+				if (str[char] !== elemForPeplace){
+					newStr += str[char];
+				}
+				else {
+					newStr += newElem;
+				}
+			}
+			return newStr;
+		}
+
+		hideCommentBlock(){
+			let elem = document.getElementById(`${this.id}`);
+			let block = elem.querySelector('.post__block-create-comment');
+			block.innerHTML = '';
+			this.isComment = false;
+		}
+
+		showCommentBlock(){
+			if (!this.isComment){
+				this.isComment = true;
+				let elem = document.getElementById(`${this.id}`);
+				let block = elem.querySelector('.post__block-create-comment');
+			
+				let textarea = document.createElement('textarea');
+				textarea.placeholder = 'Введите комментарий';
+				textarea.className = 'comment_field';
+				block.append(textarea);
+
+				let buttonSave = document.createElement('p');
+				buttonSave.innerText = 'Сохранить';
+				buttonSave.title = 'Сохранить';
+				buttonSave.className = 'comment_button';
+				
+				let buttonCancel = document.createElement('p');
+				buttonCancel.innerText = 'Отмена';
+				buttonCancel.title = 'Отмена';
+				buttonCancel.className = 'comment_button';
+				
+				let blockButtons = document.createElement('div');
+				blockButtons.className = 'comment_buttons';
+				blockButtons.appendChild(buttonSave);
+				blockButtons.appendChild(buttonCancel);
+				block.append(blockButtons);
+			} else {
+				let elem = document.getElementById(`${this.id}`);
+				let block = elem.querySelector('.post__block-create-comment');
+				block.innerHTML = '';
+				this.isComment = false;
+			}
+		}
+
+		showAll(){
+			let elem = document.getElementById(`${this.id}`);
+			let needElem = elem.querySelector('.post-text_short');
+			let button = elem.querySelector('.post-data__button');
+			needElem.style.height = 'auto';
+
+			let shortTextButton = document.createElement('p');
+			shortTextButton.innerText = 'Скрыть';
+			shortTextButton.title = 'Скрыть';
+			shortTextButton.className = 'post-data__button';
+			needElem.after(shortTextButton);
+			button.remove();
+		}
+
+		hideAll(){
+			let elem = document.getElementById(`${this.id}`);
+			let needElem = elem.querySelector('.post-text_short');
+			let button = elem.querySelector('.post-data__button');
+			needElem.style.height = '74px';
+
+			let fullTextButton = document.createElement('p');
+
+			fullTextButton.innerText = 'Показать полностью';
+			fullTextButton.title = 'Показать полностью';
+			fullTextButton.className = 'post-data__button';
+			needElem.after(fullTextButton);
+			button.remove();
 		}
 
 		uploadFriend(){
@@ -444,6 +623,13 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
            
 		}
 
+		updating() {
+            if (!this.isUpdate){
+                let updatingEvent = new Event('update');
+                document.querySelector('.content-wall').dispatchEvent(updatingEvent);
+                this.isUpdate = true;
+            }
+        }
 	}
 	
 	return Post;

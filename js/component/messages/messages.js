@@ -5,7 +5,7 @@ define(['base/component', 'server/json', 'css!component/messages/messages.min'],
 
 	class Messages extends Component {
 	    render(options) {
-	    	console.log(options);
+	    	//console.log(options);
 	        let messages = json.messages;
 	        let messagesHtml = '';
 

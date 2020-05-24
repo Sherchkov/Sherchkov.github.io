@@ -10,8 +10,8 @@ define(['base/component'], function (Component) {
             newPost.id = this.generateId();
             this.id = newPost.id;
 
-            //let button = newPost.querySelector('.post-data__delete');
-            //button.remove();
+            let buttons = newPost.querySelector('.post__block-buttons');
+            buttons.remove();
 
             return `${newPost.outerHTML}`;
         }
@@ -29,8 +29,30 @@ define(['base/component'], function (Component) {
                 img.className = 'post-img__picturePopup';
             }
 
-            document.querySelector('.modal-content .post-img__picturePopup').style['cursor'] = 'default';
-            document.querySelector('.modal-content .post-text').style['cursor'] = 'default';
+            try {
+                let showMore = document.querySelector('.modal-content .post-data__button');
+                showMore.remove(); 
+            } catch (error) {
+                console.log(error);
+            }
+            
+            try {
+                document.querySelector('.modal-content .post-text_short').style['height'] = 'auto';
+            } catch (error) {
+                console.log(error);
+            }
+            
+            try {
+                document.querySelector('.modal-content .post-img__picturePopup').style['cursor'] = 'default';
+            } catch (error) {
+                console.log(error);
+            }
+
+            try {
+                document.querySelector('.modal-content .post-text').style['cursor'] = 'default';
+            } catch (error) {
+                console.log(error);
+            }            
         }
     }
 
