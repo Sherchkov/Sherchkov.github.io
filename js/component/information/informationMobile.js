@@ -8,9 +8,9 @@ define(['base/component', 'component/avatar/avatar', "base/helpers", 'css!compon
 	            <div class="content-data content_default">
 	             <div class="content-data-head">
 		            ${this.childrens.create(Avatar, options)}
-		            <h1 class="content-data__name">${ this.data.name }</h1>
+		            <div class="content-data__name content-data__name_nowrap">${ this.data.name }</div>
 		          </div>
-	              <div class="content_data__aboutMe" ondragenter="return false" ondragleave="return false" ondragover="return false" ondrop="return false" title="${this.data.about_self}">${this.data.about_self}</div>
+	              <div class="content_data__aboutMe" title="${this.data.about_self}">${this.data.about_self}</div>
 	              <div class="content-data-params">
 	                <div class="content-data-params__key">День рождения</div>
 	                <div class="content-data-params__value content-data-params_birthday">  
