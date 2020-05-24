@@ -2,9 +2,11 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	'use strict';
 
 	class Header extends Component {
-	    render(options) {
-	    	console.log("options", options);
+	    render(options) {	    	
 	    	this.data = options.data;
+	    	this.theme_night = this.data.theme_night || 'false';
+	    	this.mirror =  this.data.mirror || 'false';
+	    	
     		if (options.computed_data.photo_ref) {
     			this.avatar = globalUrlServer + options.computed_data.photo_ref;
     		}else{
@@ -26,8 +28,8 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 		              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
 						<div class="header-menu__list">
 						  <div class="header-menu__item header-menu_logout">Выход</div>
-						  <div class="header-menu__item header-menu_theme" night="on">Ночной режим</div>
-						  ${this.options.mobile === true ? '' : '<div class="header-menu__item header-menu_changePosition" position="left">Поменять расположение</div>'}
+						  <div class="header-menu__item header-menu_theme" night="${this.theme_night}">${this.theme_night === 'false' ? 'Ночной режим' : 'Обычный режим'}</div>
+						  ${this.options.mobile === true ? '' : `<div class="header-menu__item header-menu_changePosition" position="${this.mirror}">Поменять расположение</div>`}
 						</div>	
 		              </div> 
 		            </div>
@@ -48,7 +50,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        	this.subscribeTo(this._changePositon, 'click', this.changePositon.bind(this));
 	        }
 	    }
-	   /* */
+
 	    //переключение Редактировать/Сохранить
 	    onSwitchData(event){
 	        let element = event.target;
@@ -81,7 +83,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	      */
 	    onEditData(element){
 	        element.innerText = 'Сохранить';
-	        element.setAttribute("data-name", 'save');
+	        element.setAttribute('data-name', 'save');
 	        //textarea
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        if ( !aboutMe.innerHTML ) {
@@ -90,7 +92,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	            aboutMe.innerHTML = '<br>';
 	        }
 	        aboutMe.style.overflow = 'auto';
-	        aboutMe.setAttribute("contenteditable", "true");
+	        aboutMe.setAttribute('contenteditable', 'true');
 	        aboutMe.classList.add('content-data-params__active');
 	        // устраняем баг пропадания курсора
 	        aboutMe.addEventListener('click', this.setCursorPosition);
@@ -101,7 +103,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        let params = document.querySelectorAll('.content-data-params__input');
 	        params.forEach((el) => {
 	           el.classList.add('content-data-params__active');
-	           el.removeAttribute("disabled");
+	           el.removeAttribute('disabled');
 	        });
 	    }
 
@@ -141,29 +143,31 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	            updateText = renderTextNormal(aboutMe.innerText);
 	            aboutMe.innerText = updateText;
 	        }
-	        aboutMe.setAttribute("title", updateText);
+	        aboutMe.title = updateText;
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
 	        //отправляем на сервер
-	        this.upload(dateValue, updateText);
-	        this.renderSaveData(element,newDate,symbol);
+	        let params = document.querySelectorAll('.content-data-params__input');
+	        this.data = {
+	        	birth_date : dateValue,
+	        	city : params[0].value,
+	        	education : params[2].value,
+	        	family_state : params[1].value,
+	        	job : params[3].value,
+	        	name : this.data.name,
+	        	about_self : updateText,
+	        	theme_night : this.theme_night,
+	        	mirror : this.mirror
+	        }
+	        this.upload();
+	        this.renderSaveData(element,newDate,symbol,params);
 	    }
 
 
-	    upload(date, updateText){
-	    	let params = document.querySelectorAll('.content-data-params__input');
-	    	let data = {
-	    		birth_date : date,
-	    		city : params[0].value,
-	    		education : params[2].value,
-	    		family_state : params[1].value,
-	    		job : params[3].value,
-	    		name : this.data.name,
-	    		about_self : updateText
-	    	}
+	    upload(){
 	    	fetch(globalUrlServer + '/user/update', {
                 method: 'POST',
                 headers: {"Content-Type": "application/json"},
-                body : JSON.stringify(data),
+                body : JSON.stringify(this.data),
                 credentials: 'include'
             })
             .then(response => {
@@ -184,15 +188,15 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	       * @param {newDate} дата рождения
 	       * @param {symbol} знак зодиака
 	      */
-	    renderSaveData(element,newDate,symbol){
+	    renderSaveData(element,newDate,symbol, params){
 	        element.innerText = 'Редактировать';
-	        element.setAttribute("data-name", 'edit');
+	        element.setAttribute('data-name', 'edit');
 	        //textarea
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        aboutMe.scrollTop = 0;
 	        aboutMe.style.overflow = 'hidden';
 	        aboutMe.classList.remove('content-data-params__active');
-	        aboutMe.removeAttribute("contenteditable");
+	        aboutMe.removeAttribute('contenteditable');
 	        //date
 	        document.querySelector('.content-data-params__birthday').innerText = newDate;
 	        let horoscope = document.querySelector('.content-data-params__horoscope');
@@ -200,15 +204,13 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        horoscope.setAttribute('alt', symbol[1]);
 	        horoscope.setAttribute('title', symbol[1]);
 
-	        
 	        let date = document.querySelector('.content-data-params_birthday');
 	        date.classList.remove('content-data-params_birthdayEdit');
 	        // поля input
-	        let params = document.querySelectorAll('.content-data-params__input');
 	        params.forEach((el) => {
-	            el.setAttribute("title", el.value);
+	            el.title = el.value;    
 	            el.classList.remove('content-data-params__active');
-	            el.setAttribute("disabled", "disabled");
+	            el.setAttribute('disabled', 'disabled');
 	        });
 	    }
 
@@ -237,7 +239,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   	}
 
 	   	theme(){
-	   		if (this._theme.getAttribute('night') === 'on') {
+	   		if (this._theme.getAttribute('night') === 'false') {
 	   			document.querySelector('body').style.background = '#35363a';
 	   			document.querySelectorAll('.content_default').forEach(block => {
 	   				block.style.background = '#595a5c';
@@ -248,9 +250,13 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   			document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '#bfbfbf');   
 	   			document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '#bfbfbf'); 
 	   			this._theme.innerText = 'Обычный режим';
-	   			this._theme.setAttribute('night', 'off'); 
+	   			this._theme.setAttribute('night', 'true'); 
+	   			this.data.theme_night = 'true';
+	   			this.upload();
 	   		}else{
 	   			this.exitNightTheme();
+	   			this.data.theme_night = 'false';
+	   			this.upload();
 	   		}
 	   		this.hideMenu();
 	   	}
@@ -266,25 +272,28 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   		document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '');   
 	   		document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '');
 	   		this._theme.innerText = 'Ночной режим';
-	   		this._theme.setAttribute('night', 'on'); 
+	   		this._theme.setAttribute('night', 'false'); 
 	   	}
 
 	   	changePositon(){
 	   		if (!document.querySelector('.MainPageMobile')) {
-	   			if (this._changePositon.getAttribute('position') === 'left') {
+	   			if (this._changePositon.getAttribute('position') === 'false') {
 	   				document.querySelector('.Content').classList.add('content_left');
-	   				this._changePositon.setAttribute('position', 'right');
+	   				this._changePositon.setAttribute('position', 'true');
+	   				this.data.mirror = 'true';
+	   				this.upload();
 	   			}else{
 	   				this.positionDefault();
+	   				this.data.mirror = 'false';
+	   				this.upload();
 	   			}
 	   			this.hideMenu();
 	   		}
-	   		
 	   	}
 
 	   	positionDefault(){
 	   		document.querySelector('.Content').classList.remove('content_left');
-	   		this._changePositon.setAttribute('position', 'left');
+	   		this._changePositon.setAttribute('position', 'false');
 	   	}
 
 	   	//выход
@@ -296,7 +305,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 				if (response.status == '200') {
 					this.hideMenu();
 					this.positionDefault();
-					if (this._theme.getAttribute('night') === 'off') {
+					if (this._theme.getAttribute('night') === 'true') {
 						this.exitNightTheme();
 					}
 					page.unmount();
