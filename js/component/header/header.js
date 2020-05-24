@@ -266,9 +266,15 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			//name
 			let name = document.querySelector('.content-data__name');
 			let updateName = '';
-				updateName = renderTextNormal(name.innerText);
-	            name.innerText = updateName;
-				name.title = updateName;
+			updateName = renderTextNormal(name.innerText);
+			console.log("updateName", updateName);
+			if (!updateName.trim()) {
+				alert('Введите имя и фамилию');
+				return;
+			}
+
+            name.innerText = updateName;
+			name.title = updateName;
 			
 	        // about
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
@@ -288,13 +294,16 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	        //отправляем на сервер
 			let params = document.querySelectorAll('.content-data-params__input');	
+			params.forEach((el) => {
+	        	el.value = el.value.trim();
+			});
 	        this.data = {
 				name : updateName,
 	        	birth_date : dateValue,
-	        	city : params[0].value,
-	        	education : params[2].value,
-	        	family_state : params[1].value,
-	        	job : params[3].value,
+	        	city : params[0].value || 'скрыто',
+	        	education : params[2].value || 'скрыто',
+	        	family_state : params[1].value || 'скрыто',
+	        	job : params[3].value || 'скрыто',
 	        	about_self : updateText,
 	        	theme_night : this.theme_night,
 	        	mirror : this.mirror
@@ -333,6 +342,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        element.innerText = 'Редактировать';
 			element.setAttribute('data-name', 'edit');
 			let name = document.querySelector('.content-data__name');
+				name.scrollTop = 0;
 				name.style.overflow = 'hidden';
 				name.classList.remove('content-data-params__active');
 				name.removeAttribute('contenteditable');
@@ -353,6 +363,9 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        date.classList.remove('content-data-params_birthdayEdit');
 	        // поля input
 	        params.forEach((el) => {
+	        	if (!el.value) {
+	        		el.value = 'Скрыто';
+	        	}
 	            el.title = el.value;    
 	            el.classList.remove('content-data-params__active');
 	            el.setAttribute('disabled', 'disabled');
