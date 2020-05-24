@@ -95,7 +95,7 @@ define(['base/component',
 					if (globalSliderPhotos.length) {
 						let options = {
 							id :  this.options.parent.options.id,
-							mobile : this.options.parent.options.data.mobile || false
+							mobile : this.options.parent.options.mobile || false
 						}
 						require(['modal/ModalGallery'], function(ModalGallery){ 
 							if (  typeof(modalGallery) !== 'undefined' ) {
