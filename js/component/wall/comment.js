@@ -27,7 +27,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
             let rubbish = '';
 
             if (this.comment.delete) {
-                rubbish = '<p class="comment__button" title="Удалить">Удалить</p>';
+                rubbish = '<p class="comment__button" title="Удалить комментарий">Удалить</p>';
             }
             
             let avatar = this._getAvatar();
@@ -55,8 +55,33 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
         }
 
         chooseAction(event){
-            if (event.target.title === 'Удалить') {
+            if (event.target.title === 'Удалить комментарий') {
                 this.deleteComment();
+            }
+		}
+		
+		deleteComment(){
+			let idOfElem = this.comment.id;
+			let urlencodedComment = new URLSearchParams();
+			urlencodedComment.append('message_id', idOfElem );
+			let deleteComment = new URL ('/message/delete', tensor);
+
+			fetch(deleteComment, {
+				method : 'POST',                
+				mode : 'cors',
+				headers : {'Content-Type' : 'application/x-www-form-urlencoded'},
+				body : urlencodedComment,
+				credentials : 'include'
+			})
+			.then(() => this.updating())
+			.catch(() => alert('Не удалось удалить комментарий, попробуйте еще раз'));
+		}
+
+		updating() {
+            if (!this.isUpdate){
+                let updatingEvent = new Event('update');
+                document.querySelector('.content-wall').dispatchEvent(updatingEvent);
+                this.isUpdate = true;
             }
         }
 

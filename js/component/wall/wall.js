@@ -185,7 +185,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 						if (!(textObject.idPost in this.comments)){
 							this.comments[textObject.idPost] = [];
 						} 
-						this.comments[textObject.idPost].unshift(comm);
+						this.comments[textObject.idPost].push(comm);
 						
 					}
 					
