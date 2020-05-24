@@ -139,7 +139,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 				let isChange;
 				let isComment;
 
-				if (this.current_id === this.user_id || elem.author.id === this.current_id){
+				if (elem.author.id === this.current_id){
 					isDelete = true;
 				} else {
 					isDelete = false;
@@ -170,6 +170,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 							)
 						);	
 					} else if (textObject.type === 'comment') {
+
 						let comm = this.makeObjectPost(
 							elem.id,
 							elem.author.id,

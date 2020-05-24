@@ -557,7 +557,6 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 
 		deletePost(){
 			event.stopPropagation();
-
 			
 			let getData = new Promise((resolve) =>{
 				let postForDelete = event.target;
@@ -577,27 +576,6 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 						'postForDelete' : postForDelete
 					}
 				);
-			});
-
-			getData.then(result => {
-				if (result.id_post in this.comments){
-					for (let comment in this.comments[result.id_post]){
-						let idComment = this.comments[result.id_post][comment].id;
-						let urlencodedComment = new URLSearchParams();
-						urlencodedComment.append('message_id', idComment );
-						let deleteComment = new URL ('/message/delete', tensor);
-
-						fetch(deleteComment, {
-							method : 'POST',                
-							mode : 'cors',
-							headers : {'Content-Type' : 'application/x-www-form-urlencoded'},
-							body : urlencodedComment,
-							credentials : 'include'
-						})
-						.then(() => this.updating())
-						.catch(() => console.log('Не удалось удалить комментарий, попробуйте еще раз'));
-					}
-				}
 			});
 
 			getData.then(result => {
@@ -626,8 +604,6 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 				}
 			});
 
-            
-
 			getData.then(result => {
 				fetch(result.deletePost, {
 					method : 'POST',                
@@ -636,9 +612,30 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 					body : result.urlencodedPost,
 					credentials : 'include'
 				})
-				.then(() => result.postForDelete.remove())
+				.then(() => this.updating())
 				.catch(error => console.log('error', error));
 
+			});
+
+			getData.then(result => {
+				if (result.id_post in this.comments){
+					for (let comment in this.comments[result.id_post]){
+						let idComment = this.comments[result.id_post][comment].id;
+						let urlencodedComment = new URLSearchParams();
+						urlencodedComment.append('message_id', idComment );
+						let deleteComment = new URL ('/message/delete', tensor);
+
+						fetch(deleteComment, {
+							method : 'POST',                
+							mode : 'cors',
+							headers : {'Content-Type' : 'application/x-www-form-urlencoded'},
+							body : urlencodedComment,
+							credentials : 'include'
+						})
+						.then(() => this.updating())
+						.catch(() => console.log('Не удалось удалить комментарий, попробуйте еще раз'));
+					}
+				}
 			});
            
 		}

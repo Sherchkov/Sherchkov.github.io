@@ -35,6 +35,16 @@ define(['base/component'], function (Component) {
             } catch (error) {
                 console.log(error);
             }
+
+            try {
+                let commentButtons = document.querySelectorAll('.modal-content .comment__button');
+                for (let commentButton in commentButtons){
+                    commentButtons[commentButton].remove(); 
+                }
+                
+            } catch (error) {
+                console.log(error);
+            }
             
             try {
                 document.querySelector('.modal-content .post-text_short').style['height'] = 'auto';
