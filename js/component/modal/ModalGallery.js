@@ -19,7 +19,7 @@ define(['base/component'], function (Component) {
 					<div class="galleryBig__imgContainer">
 						<img class="galleryBig__img" src="${globalUrlServer + globalSliderPhotos[i].path}" alt="фотография">
 						${options.id === user_id ? ` 
-								<div class="galleryBig__imgDelete" title="Удалить" data-id="${globalSliderPhotos[i].id}">
+								<div class="galleryBig__imgDelete ${options.mobile === true ? 'galleryBig__imgDelete_mobile' : ''}" title="Удалить" data-id="${globalSliderPhotos[i].id}">
 									<svg class="galleryBig__imgDelete_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
 								</div>
 							` : ''}	
