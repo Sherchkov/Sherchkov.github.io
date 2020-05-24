@@ -5,6 +5,9 @@ define(['base/component'], function (Component) {
 	    
 	    render(options) {
 	    	this.options = options;
+	    	if (document.querySelector('.MainPageMobile')) {
+	    		this.options.mobile = true;
+	    	}
 	        return `
 				<div class="modalAddPhoto">
 				    <button class="modal__close">
@@ -21,7 +24,7 @@ define(['base/component'], function (Component) {
 			    			</div>
 			    	      	<div class="drop__title">
 			    	      		<input class="drop__input drop__input_none" id="fileDrop" type="file" accept=".jpg, .jpeg, .png" ${this.options.component === 'avatar' ? '' : 'multiple'}>
-			    	      		<span>Перетащите cюда фотографи${this.options.component === 'avatar' ? 'ю' : 'и'} или нажмите</span>
+			    	      		${this.options.mobile === true ? `<span>Для загрузки фотографи${this.options.component === 'avatar' ? 'ю' : 'и'} нажмите</span>` : `<span>Перетащите cюда фотографи${this.options.component === 'avatar' ? 'ю' : 'и'} или нажмите</span>`}
 			    	      		<label class="drop__label" id="fileDropLabel" for="fileDrop" name="file">Сюда</label>
 			    	      	</div>
 			    	      	<div class="drop__message"></div>
