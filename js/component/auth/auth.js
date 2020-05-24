@@ -37,7 +37,7 @@ define(['base/component', 'css!component/auth/auth'], function (Component) {
                                 <input class="join-form__input join-form__input_passRepReg" type="password">
                                 <span class="join-form__title">Имя</span>
                                 <input class="join-form__input join-form__input_nameReg" type="text">
-                                <span class="join-form__title">Фамиллия</span>
+                                <span class="join-form__title">Фамилия</span>
                                 <input class="join-form__input join-form__input_familyReg" type="text">
                                 <span class="join-form__title">Город</span>
                                 <input class="join-form__input join-form__input_cityReg" type="text">

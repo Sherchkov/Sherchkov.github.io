@@ -72,7 +72,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 
 	    createMinSlider(){
 	    	if (!globalSliderPhotos.length) {
-	    		this.getContainer().querySelector('.content-gallery .slider-container').innerHTML = '<div class="slider-container__empty">фотографии не найдено</div>';
+	    		this.getContainer().querySelector('.content-gallery .slider-container').innerHTML = '<div class="slider-container__empty">Нет фотографий</div>';
 	    	}else{
 	    		let sliderContainer = '';
 	    		for (let i = 0; i < globalSliderPhotos.length; i++){
