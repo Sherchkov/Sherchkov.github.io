@@ -16,7 +16,7 @@
 }
 
 .playlist .playlist__current-song a{
-	color:  rgba(45, 170, 243, 0.986);
+	color:  #5c6c8a;
 }
 
 .modal-audio{
@@ -46,10 +46,10 @@
 }
 
 audio::-webkit-media-controls-panel{
-	background: rgba(45, 170, 243, 0.377);
+	background: rgb(92, 108, 138, 0.7);
 }
 
 .playlist li:hover{
-	background-color: rgba(45, 170, 243, 0.205);
+	background-color: rgb(92, 108, 138, 0.4);
 	border-radius: 1.5em;
 }

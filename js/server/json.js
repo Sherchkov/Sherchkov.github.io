@@ -147,6 +147,24 @@ define(function(){
 		{
 			name: 'The XX - Night Time',
 			src: 'mp3/Night Time.mp3'
+		},{
+			name: 'Seafret - Be My Queen',
+			src: 'mp3/Be My Queen.mp3'
+		},{
+			name: 'David Rawlings - Cumberland Gap',
+			src: 'mp3/Cumberland.mp3'
+		},{
+			name: 'Sueco the Child - Fast',
+			src: 'mp3/Fastmp3'
+		},{
+			name: 'Dotan - Home',
+			src: 'mp3/Home.mp3'
+		},{
+			name: 'Palaye Royale - Little Bastards',
+			src: 'mp3/Little Bastards.mp3'
+		},{
+			name: 'Royal Deluxe - No Limits',
+			src: 'mp3/No Limits.mp3'
 		}],
 		friends: [
 			{
