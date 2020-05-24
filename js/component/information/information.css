@@ -33,12 +33,12 @@
 	color: #333333;
 	border-radius: 5px;
 	outline: none;
-	line-height: 20px;
-	max-height: 76px;
+	line-height: 1.1;
+	max-height: 80px;
 	overflow-y: hidden;
 	white-space: pre;
 	display: -webkit-box;
-	  -webkit-line-clamp: 4;
+	  -webkit-line-clamp: 3;
 	  -webkit-box-orient: vertical;  
 }
 
