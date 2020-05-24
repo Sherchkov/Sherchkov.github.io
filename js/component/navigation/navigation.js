@@ -93,11 +93,15 @@ define(['base/component',
 				}
 				case '4':{
 					if (globalSliderPhotos.length) {
+						let options = {
+							id :  this.options.parent.options.id,
+							mobile : this.options.parent.options.data.mobile || false
+						}
 						require(['modal/ModalGallery'], function(ModalGallery){ 
 							if (  typeof(modalGallery) !== 'undefined' ) {
 							    modalGallery.unmount();
 							}
-							modalGallery = factory.create(ModalGallery, {});
+							modalGallery = factory.create(ModalGallery, options);
 							modalGallery.mount(document.body);
 						});
 					}
