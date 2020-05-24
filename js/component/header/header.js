@@ -146,19 +146,19 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        aboutMe.title = updateText;
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
 	        //отправляем на сервер
-	        let params = document.querySelectorAll('.content-data-params__input');
+			let params = document.querySelectorAll('.content-data-params__input');
 	        this.data = {
+				name : params[0].value,
 	        	birth_date : dateValue,
-	        	city : params[0].value,
-	        	education : params[2].value,
-	        	family_state : params[1].value,
-	        	job : params[3].value,
-	        	name : this.data.name,
+	        	city : params[1].value,
+	        	education : params[3].value,
+	        	family_state : params[2].value,
+	        	job : params[4].value,
 	        	about_self : updateText,
 	        	theme_night : this.theme_night,
 	        	mirror : this.mirror
 	        }
-	        this.upload();
+			this.upload();
 	        this.renderSaveData(element,newDate,symbol,params);
 	    }
 

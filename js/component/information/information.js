@@ -5,7 +5,12 @@
 			this.data = options.data;
 	        return `
 	            <div class="content-data content_default">
-	              <h1 class="content-data__name">${ this.data.name }</h1>
+				  <!--div class="content-data__name" title="${ this.data.name }">${ this.data.name }</div-->
+				  
+				<div class="content-data__name" title="${ this.data.name }">
+					<input class="content-data-params__input" type="text" value="${ this.data.name }" disabled>
+				</div>
+
 	                <div class="content_data__aboutMe" ondragenter="return false" ondragleave="return false" ondragover="return false" ondrop="return false" title="${this.data.about_self}">${this.data.about_self}</div>
 	              <div class="content-data-params">
 	                <div class="content-data-params__key">День рождения</div>
