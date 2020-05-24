@@ -1,9 +1,7 @@
 define(['base/component'], function (Component) {
 	'use strict';
-
 	class ModalGallery extends Component{
-		
-	    render() {
+	    render(options) {
 	    	if ( !globalSliderPhotos.length ) {
 	    		return '<div></div>';
 	    	}
@@ -20,9 +18,11 @@ define(['base/component'], function (Component) {
 	    		htmlContainer += ` 
 					<div class="galleryBig__imgContainer">
 						<img class="galleryBig__img" src="${globalUrlServer + globalSliderPhotos[i].path}" alt="фотография">
-						<div class="galleryBig__imgDelete" title="Удалить" data-id="${globalSliderPhotos[i].id}">
-							<svg class="galleryBig__imgDelete_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
-						</div>
+						${options.id === user_id ? ` 
+								<div class="galleryBig__imgDelete" title="Удалить" data-id="${globalSliderPhotos[i].id}">
+									<svg class="galleryBig__imgDelete_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>
+								</div>
+							` : ''}	
 					</div>
 	    		`;
 	    	}
@@ -36,7 +36,7 @@ define(['base/component'], function (Component) {
             	    	<div class="galleryBig">
             	            <div class="galleryBig__head">
             	            	<span class="galleryBig__title">Мои фотографии</span>
-            	            	<button class="galleryBig__add">Добавить</button>
+								${options.id === user_id ? '<button class="galleryBig__add">Добавить</button>' : ''}
             	            </div>
             	            <div class="galleryBig__container">
             	  				${htmlContainer}
