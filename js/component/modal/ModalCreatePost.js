@@ -195,7 +195,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 headers: {'Content-Type': 'image/png'},
                 body: file,
                 credentials: 'include'
-                });
+                }).catch(() => alert('Не удалось загрузить фото, попробуйте еще раз'));
 
             if (response.status == 201) {
                 return await response;
