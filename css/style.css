@@ -65,6 +65,13 @@ input[type="date"]{
 	border: 1px solid #ddd;
 	background: #ffffff;
 }
+.content_left{
+	flex-direction: row-reverse;
+}
+.content_left .con-body{
+	margin-right: 0;
+	margin-left: 10px;
+}
 /*Страница авторизации*/
 .PageStart{
 	display: flex;
@@ -87,7 +94,3 @@ input[type="date"]{
 	min-width: 320px;
 	max-width: 800px;
 }
-
-
-
-

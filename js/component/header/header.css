@@ -9,13 +9,18 @@
 .header_white{
 	color: #ffffff;
 }
-.header__right{
+.header__centre{
 	flex:1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.header__right{
 	display: flex;
 	align-items: center;
 	padding-right: 5px;
 	justify-content: flex-end;
-}	
+}		
 .header__status{
 	font-size: 1.4rem;
 	font-weight: 600;
@@ -51,7 +56,7 @@
 }
 
 .header-menu__list{
-	display: none;
+    display: none;
     position: absolute;
     right: 0;
     top: 30px;
@@ -85,13 +90,14 @@
 }
 
 .header-menu__item{
-	display: block;
+    display: block;
     text-align: right;
     color: #fff;
     font-size: 1.3rem;
     padding: 2px 6px;
     margin: 3px 0;
     cursor: pointer;
+    white-space: nowrap;
 } 
 
 .header-menu__item:hover{

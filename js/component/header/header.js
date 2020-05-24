@@ -3,6 +3,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	class Header extends Component {
 	    render(options) {
+	    	console.log("options", options);
 	    	this.data = options.data;
     		if (options.computed_data.photo_ref) {
     			this.avatar = globalUrlServer + options.computed_data.photo_ref;
@@ -15,6 +16,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 		            <div class="header__left">
 		              <span class="header__status">В сети</span>
 		            </div>
+			    <div class="header__centre"></div>
 		            <div class="header__right">
 		              <div class="header__edit" data-name="edit">Редактировать</div>
 		              <div class="header__photo">
@@ -24,6 +26,8 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 		              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
 						<div class="header-menu__list">
 						  <div class="header-menu__item header-menu_logout">Выход</div>
+						  <div class="header-menu__item header-menu_theme" night="on">Ночной режим</div>
+						  ${this.options.mobile === true ? '' : '<div class="header-menu__item header-menu_changePosition" position="left">Поменять расположение</div>'}
 						</div>	
 		              </div> 
 		            </div>
@@ -33,10 +37,18 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	    afterMount() {
 			this._logout = this.getContainer().querySelector('.header-menu_logout');
+			this._theme = this.getContainer().querySelector('.header-menu_theme');
+			this._changePositon = this.getContainer().querySelector('.header-menu_changePosition');
 			this.subscribeTo(this._logout, 'click', this.logout.bind(this));
+			this.subscribeTo(this._theme, 'click', this.theme.bind(this));
 	        this.subscribeTo(this.getContainer(), 'click', this.onSwitchData.bind(this));
-	    }
+	        this.clickHandler = this.clickOverMenu.bind(this);
 
+	        if (this.options.mobile !== true) {
+	        	this.subscribeTo(this._changePositon, 'click', this.changePositon.bind(this));
+	        }
+	    }
+	   /* */
 	    //переключение Редактировать/Сохранить
 	    onSwitchData(event){
 	        let element = event.target;
@@ -58,7 +70,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        	});
 	            
 	        }else if ( element.classList.contains('header-menu_icon') ) {
-	        	this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
+	        	this.showMenu();
 	        }
 	    }
 
@@ -202,20 +214,93 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 
 	    //Показывает или скрывает кнопку меню(выхода)
 	   	showMenu(){
-	   		this.getContainer().querySelector('.header-menu__list').classList.toggle('header-menu__list_active');
+	   		if (!this.getContainer().querySelector('.header-menu__list').classList.contains('header-menu__list_active')) {
+	   			this.getContainer().querySelector('.header-menu__list').classList.add('header-menu__list_active');
+	   			document.addEventListener('mousedown', this.clickHandler);
+	   		}else{
+	   			this.getContainer().querySelector('.header-menu__list').classList.remove('header-menu__list_active');
+	   		}
+	   		
 	   	} 
 
-	   	//
+	   	//Клик за пределами меню
+	   	clickOverMenu(event){
+	   		if (!event.target.closest('.header-menu__list')) {
+	   			this.hideMenu();
+	   		}
+	   	}
 
+	   	//Выход меню
+	   	hideMenu(){
+	   		this.getContainer().querySelector('.header-menu__list').classList.remove('header-menu__list_active');
+	   		document.removeEventListener('mousedown', this.clickHandler);
+	   	}
+
+	   	theme(){
+	   		if (this._theme.getAttribute('night') === 'on') {
+	   			document.querySelector('body').style.background = '#35363a';
+	   			document.querySelectorAll('.content_default').forEach(block => {
+	   				block.style.background = '#595a5c';
+	   				block.style.color = '#bfbfbf';
+	   			});   
+	   			document.querySelector('.content_data__aboutMe').style.color = '#bfbfbf';
+	   			document.querySelector('.content-data-params__date').classList.add('content-data-params__date_night');
+	   			document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '#bfbfbf');   
+	   			document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '#bfbfbf'); 
+	   			this._theme.innerText = 'Обычный режим';
+	   			this._theme.setAttribute('night', 'off'); 
+	   		}else{
+	   			this.exitNightTheme();
+	   		}
+	   		this.hideMenu();
+	   	}
+
+	   	exitNightTheme(){
+	   		document.querySelector('body').style.background = '';
+	   		document.querySelectorAll('.content_default').forEach(block => {
+	   			block.style.background = '';
+	   			block.style.color = '';
+	   		});   
+	   		document.querySelector('.content_data__aboutMe').style.color = '';
+	   		document.querySelector('.content-data-params__date').classList.remove('content-data-params__date_night');
+	   		document.querySelectorAll('.content-data-params__input').forEach(block => block.style.color = '');   
+	   		document.querySelectorAll('.link-element__title').forEach(block => block.style.color = '');
+	   		this._theme.innerText = 'Ночной режим';
+	   		this._theme.setAttribute('night', 'on'); 
+	   	}
+
+	   	changePositon(){
+	   		if (!document.querySelector('.MainPageMobile')) {
+	   			if (this._changePositon.getAttribute('position') === 'left') {
+	   				document.querySelector('.Content').classList.add('content_left');
+	   				this._changePositon.setAttribute('position', 'right');
+	   			}else{
+	   				this.positionDefault();
+	   			}
+	   			this.hideMenu();
+	   		}
+	   		
+	   	}
+
+	   	positionDefault(){
+	   		document.querySelector('.Content').classList.remove('content_left');
+	   		this._changePositon.setAttribute('position', 'left');
+	   	}
+
+	   	//выход
 		logout() {
 			fetch('https://tensor-school.herokuapp.com/user/logout', {
 				'method' : 'GET',
 				credentials: 'include'
 			}).then(response => {
 				if (response.status == '200') {
+					this.hideMenu();
+					this.positionDefault();
+					if (this._theme.getAttribute('night') === 'off') {
+						this.exitNightTheme();
+					}
 					page.unmount();
 					globalSliderPhotos = [];
-					
 					require(["page/Authorization"], function(authorization){
 						page = factory.create(authorization, {});
 						page.mount(document.body);
@@ -224,7 +309,6 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			})
 			.catch(error => console.log('error', error));
 		}
-
 	}
 
 	return Header;

@@ -22,22 +22,22 @@ define(['base/component',
 			this.items.push(json.header.photo);
 			const links = [{
 				title: 'Поклонники',
-				img: 'img/icons/system/fav.png'
+				img: 'img/icons/system/heart.png'
 			},{
 				title: 'Интересное',
-				img: 'img/icons/system/int.png'
+				img: 'img/icons/system/star.png'
 			},{
 				title: 'Друзья товарищи',
-				img: 'img/icons/system/friends.png'
+				img: 'img/icons/system/friend.png'
 			},{
 				title: 'Видеозаписи',
-				img: 'img/icons/system/video.png'
+				img: 'img/icons/system/cinema.png'
 			},{
 				title: 'Фотографии',
-				img: 'img/icons/system/photo.png'
+				img: 'img/icons/system/photo-camera.png'
 			},{
 				title: 'Музыка',
-				img: 'img/icons/system/music.png'
+				img: 'img/icons/system/speaker.png'
 			}];
 		
 			let str = '<div class="content-link content_default">';
