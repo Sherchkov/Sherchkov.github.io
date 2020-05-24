@@ -136,7 +136,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 				elem.author = JSON.parse(replaceNone);
 				let someData = this.getDateAndPhoto(elem.image);
 				let isDelete;
-				let isChange;
+				const isChange = false;
 				let isComment;
 
 				if (elem.author.id === this.current_id){
@@ -147,11 +147,11 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 
 				try {
 					isComment = true;
-					if (elem.author.id === this.current_id){
+					/*if (elem.author.id === this.current_id){
 						isChange = true;
 					} else {
 						isChange = false;
-					} 
+					} */
 					let textObject = JSON.parse(elem.message);
 
 					if (textObject.type === 'post'){
@@ -192,7 +192,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 					
 				} catch (error) {
 					isComment = false;
-					isChange = false;
+					//isChange = false;
 					this.wall.unshift(
 						this.makeObjectPost(
 							elem.id,

@@ -97,7 +97,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 		checkSize(){
 			let elem = document.getElementById(`${this.id}`);
 			let needElem = elem.querySelector(	`.${this.useCSS.commentText}`);
-			console.log(needElem.offsetHeight);
+		
 			if (needElem.offsetHeight > 15){
 				needElem.classList.add('comment-text_short');
 				let fullTextButton = document.createElement('p');

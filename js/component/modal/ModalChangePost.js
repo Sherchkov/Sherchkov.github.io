@@ -3,22 +3,23 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
     'use strict';
     var tensor = new URL ('https://tensor-school.herokuapp.com/');
 
-    class ModalCreatePost extends Component{
-        constructor(options){
+    class ModalChangePost extends Component{
+        constructor(data){
             super();
-            this.current_id = options.curr_id;
-            this.user_id = options.id;
+            this.post = data.post;
+            this.user_id = data.myid;
+            this.current_id = data.currid;
+            this.isSave = false;
+            this.isUpdate = false;
             this.idPhotosBeforeUpdate = {};
             this.idPhotosAfterUpdate = {};
             this.idPhotosWasUpdate = {};
-            this.isSave = false;
-            this.isUpdate = false;
         }
 
-        render() {
+        render(){
             return `<div class='createrPost'>
-                        <p class='createrPost__text createrPost__header'>Создание записи</p>
-                        <textarea class='createrPost__fieldForText' placeholder="Введите текст записи"></textarea>
+                        <p class='createrPost__text createrPost__header'>Изменение записи</p>
+                        <textarea class='createrPost__fieldForText' placeholder="Введите текст записи">${this.post.text}</textarea>
                         <p class='createrPost__text'>Вы можете перенести сюда фото</p>
                         <div class='createrPost__fieldForImg'>
                             <div class='uploadingPhoto'>
@@ -33,9 +34,9 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                         </div>
                     </div>`;
         }
-        
-        afterMount() {
-            //навешивание на форму выбора действия
+
+        afterMount(){
+            this.putUploadPhoto();
             document.querySelector('.modal-content').classList.add('modal-content_big');
             this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
             this.putCurrentListPhotos(this.idPhotosBeforeUpdate);
@@ -62,6 +63,27 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                     this.isSave = true;
                 }
             } 
+        }
+
+        getKeyFromString(string){
+            let position = string.lastIndexOf('/');
+            let numberInStr = string.substring(position + 1);
+            let number = parseInt(numberInStr, 10);
+            return number;
+        }
+
+        putUploadPhoto(){
+            let classForImg = 'uploadingPhoto_img';
+            for (let photo in this.post.img){
+                let srcPhoto = new URL (this.post.img[photo], tensor);
+                let img = document.createElement('img');
+                img.src = srcPhoto;
+                img.title = 'Нажмите на фото, чтобы удалить его';
+                img.className = classForImg;
+                document.querySelector('.uploadingPhoto').appendChild(img);
+                let key = this.getKeyFromString(this.post.img[photo]);
+                this.idPhotosWasUpdate[key] = this.post.img[photo];
+            }
         }
 
         //добавление подписи загрузки
@@ -98,7 +120,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
         //функция выбора навешиваемой функции
         chooseAction(event){
 			if (event.target.classList.contains('createrPost__buttonCreate')) {
-				this.createPost();
+				this.changePost();
 			} else if (event.target.classList.contains('createrPost__buttonUnvisibleField')) {
 				this.openField();
 			} else if (event.target.classList.contains('uploadingPhoto_img')) {
@@ -336,11 +358,10 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
 		}
 
         //Сохрание данных по нажатию (в разработке)
-        createPost(){
+        changePost(){
             event.stopPropagation();
             this.isSave = true;
             let text = document.querySelector('.createrPost__fieldForText').value;
-            
 
             if(text.length != 0 || this.lenPamamsOfObject(this.idPhotosWasUpdate)!= 0)
             {
@@ -352,13 +373,14 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 let textForSend = JSON.stringify(textObject);
                 let linksForPhotos = this.getStrOfLinksPhotos(this.idPhotosWasUpdate);
                 let urlencoded = new URLSearchParams();
+                urlencoded.append('id', this.post.id);
                 urlencoded.append('author', this.user_id);
                 urlencoded.append('addressee', this.current_id);
                 urlencoded.append('message', textForSend);
                 urlencoded.append('image', linksForPhotos);
-                let createPost = new URL ('/message/create', tensor);
+                let updatePost = new URL ('/message/update', tensor);
 
-                fetch(createPost, {
+                fetch(updatePost, {
                     method : 'POST',                
                     mode: 'cors',
                     headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
@@ -388,7 +410,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 this.isUpdate = true;
             }
         }
-
     }
-	return ModalCreatePost;
-});  
+
+    return ModalChangePost;
+});

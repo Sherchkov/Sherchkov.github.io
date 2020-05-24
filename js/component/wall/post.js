@@ -367,7 +367,25 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 				this.hideCommentBlock();
 			} else if (event.target.title === 'Сохранить') {
 				this.createComment();
+			} else if (event.target.title === 'Изменить') {
+				this.changePost();
 			}
+		}
+
+		changePost(){
+			let dataAboutPost = this.post;
+			let idmy = this.myid;
+			let currentId = this.thisUserid;
+			// eslint-disable-next-line no-undef
+			require(['modal/ActionModal', 'modal/ModalChangePost'], function(ActionModal, ModalChangePost){
+				new ActionModal({
+					children : ModalChangePost,
+					theme: 'white',
+					post : dataAboutPost,
+					myid : idmy,
+					currid : currentId 
+				});  
+			});
 		}
 
 		renderComments() {
