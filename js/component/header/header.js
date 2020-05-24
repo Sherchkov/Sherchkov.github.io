@@ -84,7 +84,13 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    onEditData(element){
 	        element.innerText = 'Сохранить';
 	        element.setAttribute('data-name', 'save');
-	        //textarea
+			//textarea
+
+			let name = document.querySelector('.content-data__name');
+				name.style.overflow = 'auto';
+				name.setAttribute('contenteditable', 'true');
+				name.classList.add('content-data-params__active');
+
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        if ( !aboutMe.innerHTML ) {
 	            aboutMe.style.maxHeight = '76px';
@@ -131,7 +137,14 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        if (newDate === 'error' || symbol === 'error') {
 	            alert('Неверно указана дата рождения');
 	            return false;
-	        }
+			}
+			//name
+			let name = document.querySelector('.content-data__name');
+			let updateName = '';
+				updateName = renderTextNormal(name.innerText);
+	            name.innerText = updateName;
+				name.title = updateName;
+			
 	        // about
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        let updateText = '';
@@ -146,14 +159,14 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        aboutMe.title = updateText;
 	        aboutMe.removeEventListener('click', this.setCursorPosition);
 	        //отправляем на сервер
-			let params = document.querySelectorAll('.content-data-params__input');
+			let params = document.querySelectorAll('.content-data-params__input');	
 	        this.data = {
-				name : params[0].value,
+				name : updateName,
 	        	birth_date : dateValue,
-	        	city : params[1].value,
-	        	education : params[3].value,
-	        	family_state : params[2].value,
-	        	job : params[4].value,
+	        	city : params[0].value,
+	        	education : params[2].value,
+	        	family_state : params[1].value,
+	        	job : params[3].value,
 	        	about_self : updateText,
 	        	theme_night : this.theme_night,
 	        	mirror : this.mirror
@@ -190,7 +203,11 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	      */
 	    renderSaveData(element,newDate,symbol, params){
 	        element.innerText = 'Редактировать';
-	        element.setAttribute('data-name', 'edit');
+			element.setAttribute('data-name', 'edit');
+			let name = document.querySelector('.content-data__name');
+				name.style.overflow = 'hidden';
+				name.classList.remove('content-data-params__active');
+				name.removeAttribute('contenteditable');
 	        //textarea
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        aboutMe.scrollTop = 0;

@@ -17,12 +17,31 @@
 	align-items: center;
 }
 
-.content-data__name{
+/* .content-data__name{
 	display: block;
 	margin: 10px 0 0;
 	font-size: 2.5rem;
 	font-weight: normal;
+} */
+
+.content-data__name {
+	width: 100%;
+	margin: 10px -3px;
+	padding: 5px 3px;
+	border: 1px solid transparent;
+	font-size: 2.5rem;
+	color: #333333;
+	border-radius: 5px;
+	outline: none;
+	line-height: 20px;
+	max-height: 76px;
+	overflow-y: hidden;
+	white-space: pre;
+	display: -webkit-box;
+	  -webkit-line-clamp: 4;
+	  -webkit-box-orient: vertical;  
 }
+
 .content_data__aboutMe{
 	width: 100%;
 	margin: 10px -3px;
