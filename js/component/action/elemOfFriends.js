@@ -55,19 +55,20 @@ define(['base/component', 'css!component/modal/ModalFriend'], function (Componen
 				}).then(response => response.json())
                 .then(result => { 
                     this.close();    
-                    this.options.parent.unmount();
+                    modal.unmount(); 
+                    page.unmount();
                     if ( window.innerWidth > 800 ) {
                         // eslint-disable-next-line no-undef
                         require(['page/profile'], function (Profile) {
                             // eslint-disable-next-line no-undef
-                            let page = factory.create(Profile, result);
+                            page = factory.create(Profile, result);
                             page.mount(document.body);
                         });
                     } else {
                         // eslint-disable-next-line no-undef
                         require(['page/ProfileMobile'], function(profileMobile){
                             // eslint-disable-next-line no-undef
-                            let page = factory.create(profileMobile, result);
+                            page = factory.create(profileMobile, result);
                             page.mount(document.body);
                         });
                     }
