@@ -51,13 +51,61 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
         }
 
         afterMount(){
-            this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+			this.subscribeTo(this.getContainer(), 'click', this.chooseAction.bind(this));
+			this.checkSize();
         }
 
         chooseAction(event){
             if (event.target.title === 'Удалить комментарий') {
                 this.deleteComment();
-            }
+            } else if (event.target.title === 'Показать полностью комментарий') {
+				this.showAll();
+			} else if (event.target.title === 'Скрыть комментарий') {
+				this.hideAll();
+			}
+		}
+
+		showAll(){
+			let elem = document.getElementById(`${this.id}`);
+			let needElem = elem.querySelector('.comment-text_short');
+			let button = elem.querySelector('.comment-data_button');
+			needElem.classList.remove('comment-text_short');
+			
+			let shortTextButton = document.createElement('p');
+			shortTextButton.innerText = 'Скрыть комментарий';
+			shortTextButton.title = 'Скрыть комментарий';
+			shortTextButton.className = 'comment-data_button';
+			needElem.after(shortTextButton);
+			button.remove();
+		}
+
+		hideAll(){
+			let elem = document.getElementById(`${this.id}`);
+			let needElem = elem.querySelector('.comment-text');
+			let button = elem.querySelector('.comment-data_button');
+			needElem.classList.add('comment-text_short');
+
+			let fullTextButton = document.createElement('p');
+			fullTextButton.innerText = 'Показать полностью комментарий';
+			fullTextButton.title = 'Показать полностью комментарий';
+			fullTextButton.className = 'comment-data_button';
+			needElem.after(fullTextButton);
+			button.remove();
+		}
+
+
+		checkSize(){
+			let elem = document.getElementById(`${this.id}`);
+			let needElem = elem.querySelector(	`.${this.useCSS.commentText}`);
+			console.log(needElem.offsetHeight);
+			if (needElem.offsetHeight > 15){
+				needElem.classList.add('comment-text_short');
+				let fullTextButton = document.createElement('p');
+				fullTextButton.innerText = 'Показать полностью комментарий';
+				fullTextButton.title = 'Показать полностью комментарий';
+				fullTextButton.className = 'comment-data_button';
+				needElem.after(fullTextButton);
+			}
 		}
 		
 		deleteComment(){
