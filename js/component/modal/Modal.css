@@ -283,7 +283,9 @@
 	background:rgba(0,0,0,.2);
 	opacity: 0;
 }
-
+.galleryBig__imgDelete_mobile{
+	opacity: 1;
+}
 .galleryBig__imgContainer:hover .galleryBig__imgDelete{
     transition: all 0.5s ease-out;
 	opacity: 1;
