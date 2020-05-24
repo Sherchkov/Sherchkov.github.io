@@ -26,7 +26,7 @@ define(['base/component', 'component/header/header', 'component/information/info
 	    }
 
 	    afterMount(){
-	    	if (userParams.theme_night === 'true' || (user_id === this.options.id && this.options.data.theme_night === 'true') {
+	    	if (userParams.theme_night === 'true' || (user_id === this.options.id && this.options.data.theme_night === 'true')) {
 	    		document.querySelector('body').style.background = '#35363a';
 	    		document.querySelectorAll('.content_default').forEach(block => {
 	    			block.style.background = '#595a5c';
