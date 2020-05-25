@@ -191,6 +191,7 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 
 		_getAvatar(){
 			if (this.post.avatar !== 'undefined'){
+				this.post.avatar += `?${this.generateId()}`;
 				return `<img src="${new URL (this.post.avatar, tensor)}" title="Фото автора поста" alt="${this.post.name}" class="${this.useCSS.postAva}">`;
 			}
 			else {
