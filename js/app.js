@@ -15,7 +15,9 @@ require.config({
 		base: 'component/base',
 		page: 'component/page',
 		server: 'server',
-		jquery: 'libs/jquery-3.5.0.min'
+		jquery: 'libs/jquery-3.5.0.min',
+		emojiIcons : 'libs/emojis',
+		emoji : 'libs/jquery.emojiarea'
 	}
 });
 
