@@ -133,15 +133,24 @@
 	color: #bababa;
 	font-weight: 600;
 }
+
+.post-text{
+	word-wrap : break-word;
+}
+
+.comment-text{
+	word-wrap : break-word;
+}
 .post-text, .comment-text{
 	line-height: 1.1em;
 	margin: 10px 0;
 	font-size: 1.4rem;
-	word-wrap : break-word;
-	word-break : break-all;
 	width: 100%;
 }
 
+.post__block-create-comment{
+	margin-top: 6px;
+}
 .post-text_short, .comment-text_short{
 	overflow: hidden;
 	white-space: nowrap;
