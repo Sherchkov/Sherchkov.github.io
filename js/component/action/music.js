@@ -11,16 +11,6 @@ define (['jquery'], function(){
             $('.playlist li').removeClass('playlist__current-song');
             currentSong = $(this).parent().index();
             $(this).parent().addClass('playlist__current-song');
-            if (!musicHeader) {
-                require(['component/action/player', 'server/json', 'component/player/player'], function(AudioPlayer, json){ 
-                    musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
-                    musicHeader.setPosition(currentSong);
-                    musicHeader.setStartTitle();
-                });
-            }else{
-                musicHeader.setPosition(currentSong);
-                musicHeader.setStartTitle();
-            }
         });
 
         $('.audioPlayer')[0].addEventListener('ended', function () {
@@ -32,6 +22,9 @@ define (['jquery'], function(){
             $('.playlist li:eq(' + currentSong + ')').addClass('playlist__current-song');
             $('.audioPlayer')[0].src = $('.playlist li a')[currentSong].href;
             $('.audioPlayer')[0].play();
+        });
+
+        $('.audioPlayer')[0].addEventListener('loadeddata', () => {
             if (!musicHeader) {
                 require(['component/action/player', 'server/json', 'component/player/player'], function(AudioPlayer, json){ 
                     musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
