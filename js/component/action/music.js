@@ -12,7 +12,7 @@ define (['jquery'], function(){
             currentSong = $(this).parent().index();
             $(this).parent().addClass('playlist__current-song');
             if (!musicHeader) {
-                require(['Component/action/player', 'server/json', 'Component/player/player'], function(AudioPlayer, json){ 
+                require(['component/action/player', 'server/json', 'component/player/player'], function(AudioPlayer, json){ 
                     musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
                     musicHeader.setPosition(currentSong);
                     musicHeader.setStartTitle();
@@ -33,7 +33,7 @@ define (['jquery'], function(){
             $('.audioPlayer')[0].src = $('.playlist li a')[currentSong].href;
             $('.audioPlayer')[0].play();
             if (!musicHeader) {
-                require(['Component/action/player', 'server/json', 'Component/player/player'], function(AudioPlayer, json){ 
+                require(['component/action/player', 'server/json', 'component/player/player'], function(AudioPlayer, json){ 
                     musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
                     musicHeader.setPosition(currentSong);
                     musicHeader.setStartTitle();
