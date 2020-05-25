@@ -105,18 +105,18 @@ define(['base/component'], function (Component) {
 	    	if (!fileList) {
 	    		return;
 	    	}
-	    	//Если файлов больше 5, то выдает ошибку
+	    	//Если файлов больше 10, то выдает ошибку
 	    	if (this.options.component === 'avatar' && (fileList.length > 1 || this.amountFiles >= 1)) {
 	    		dropMessage.innerText = 'Нельзя загрузить больше 1 фотографии';
 	    		return;
-	    	}else if (fileList.length > 5 || (this.amountFiles + fileList.length) > 5) {
+	    	}else if (fileList.length > 10 || (this.amountFiles + fileList.length) > 10) {
 	    		dropMessage.innerText = 'Нельзя загрузить больше 5 фотографии одновременно';
 	    		return;
 	    	}
 	    	
 	    	//Проходит по каждому файлу и загружаем его на сервер
-	   		for (let i = 0; i < fileList.length; i++){
-	   			this.amountFiles++;
+	   	for (let i = 0; i < fileList.length; i++){
+	   		this.amountFiles++;
 	        	this.uploadFile(fileList[i]);
 	    	}
 	    	this.checkingAmountFile(this.amountFiles);
@@ -207,7 +207,7 @@ define(['base/component'], function (Component) {
 	    }
 
 	    checkingAmountFile(amount){
-	    	if ( (this.options.component === 'avatar' && amount >= 1) || (this.options.component === 'gallery' && amount >= 5) ) {
+	    	if ( (this.options.component === 'avatar' && amount >= 1) || (this.options.component === 'gallery' && amount >= 10) ) {
 	    		this.getContainer().querySelector('.drop__title').style.display = 'none';
 	    	}else{
 	    		this.getContainer().querySelector('.drop__title').style.display = 'block';
