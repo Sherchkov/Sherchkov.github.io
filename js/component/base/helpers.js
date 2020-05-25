@@ -161,3 +161,12 @@ function renderHoroscope(date){
 		return 'error';
 	}
 }
+
+function renderEmoji(text){
+    let htmlEmoji = text.replace(/:[a-z0-9-_+]+?:/g, (a) => {
+		let src = a;
+		src = src.slice(1, -1);
+		return `<img src="img/emoji/${src}.png" alt=":${src}:"  onerror="this.replaceWith(':${src}:')" style="height : 20px; width : 20px;">`;
+	});
+	return htmlEmoji;
+}
