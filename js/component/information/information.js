@@ -1,4 +1,4 @@
-	define(['base/component', "base/helpers", 'css!component/information/information'], function (Component) {
+define(['base/component', "base/helpers", 'css!component/information/information'], function (Component) {
 		'use strict';
 	class Information extends Component {
 	    render(options) {
@@ -6,7 +6,11 @@
 	        return `
 				<div class="content-data content_default">
 				  <div class="content-data__name" title="${ this.data.name }">${ this.data.name }</div>
-	                <div class="content_data__aboutMe" title="${this.data.about_self}">${this.data.about_self}</div>
+				  <div class="aboutMe">
+				  	<textarea rows="1" class="aboutMe__textarea emojis-wysiwyg" style="display:none">${this.data.about_self}</textarea>
+				  	<div class="emoji-wysiwyg-editor content_data__aboutMe" title="${this.data.about_self}">${typeof(this.data.about_self) !== 'undefined' ? renderEmoji(this.data.about_self) : ''}</div>
+				  	<button type="button" class="aboutMe__emojiButton"></button>
+				  </div>			  	
 	              <div class="content-data-params">
 	                <div class="content-data-params__key">День рождения</div>
 	                <div class="content-data-params__value content-data-params_birthday">
