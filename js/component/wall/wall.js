@@ -9,7 +9,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 			this.options = options;
 			this.user_id = options.id;
 			this.current_id;
-			this.wall = [];
+			this.wall = {};
 			this.useCSS = {
 				postHeader : 'post-data_header',
 				postButton : 'post-data_header__button',
@@ -112,23 +112,34 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 			});
 		}
 
+		getKeysOfElems(elems){
+			let keys = [];
+			for(let elem in elems){
+				keys.unshift(elem);
+			}
+
+			return keys;
+		}
+
 		createAllPost(){
 			if (this.updating){
 				let oldPosts = document.querySelectorAll('.post');
 				[...oldPosts].forEach(oldPost => {oldPost.remove();});
 				this.updating = false;
 			}
-
-			for (let post of this.wall) {
+			let keys = this.getKeysOfElems(this.wall);
+			for (let post in keys) {
 				// eslint-disable-next-line no-undef
-				let postForMount = factory.create(Post, {opt : this.options, post : post, myid : this.current_id, comments : this.comments});
+				let postForMount = factory.create(Post, {opt : this.options, post : this.wall[keys[post]], myid : this.current_id, comments : this.comments});
 				let path = document.getElementById(this.id);
 				postForMount.mount(path);
 			}
 		}
 
 		handleData(data){
-			this.wall = [];
+			for (let post in this.wall){
+				delete this.wall[post];
+			}
 			this.comments = {};
 			for (let elem of data){
 				let preAuthor = this.replace(elem.author, '\'', '"');
@@ -136,7 +147,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 				elem.author = JSON.parse(replaceNone);
 				let someData = this.getDateAndPhoto(elem.image);
 				let isDelete;
-				const isChange = false;
+				let isChange;
 				let isComment;
 
 				if (elem.author.id === this.current_id){
@@ -145,18 +156,19 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 					isDelete = false;
 				} 
 
+				if (elem.author.id === this.current_id){
+					isChange = true;
+				} else {
+					isChange = false;
+				} 
+
 				try {
 					isComment = true;
-					/*if (elem.author.id === this.current_id){
-						isChange = true;
-					} else {
-						isChange = false;
-					} */
+					
 					let textObject = JSON.parse(elem.message);
 
 					if (textObject.type === 'post'){
-						this.wall.unshift(
-							this.makeObjectPost(
+						this.wall[elem.id] = this.makeObjectPost(
 								elem.id,
 								elem.author.id,
 								elem.author.data.name,
@@ -167,8 +179,7 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 								isDelete,
 								isChange,
 								isComment
-							)
-						);	
+							);	
 					} else if (textObject.type === 'comment') {
 
 						let comm = this.makeObjectPost(
@@ -192,25 +203,21 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 					
 				} catch (error) {
 					isComment = false;
-					//isChange = false;
-					this.wall.unshift(
-						this.makeObjectPost(
-							elem.id,
-							elem.author.id,
-							elem.author.data.name,
-							elem.author.computed_data.photo_ref,
-							someData.date,
-							elem.message,
-							someData.img,
-							isDelete,
-							isChange,
-							isComment
-						)
+				
+					this.wall[elem.id] = this.makeObjectPost(
+						elem.id,
+						elem.author.id,
+						elem.author.data.name,
+						elem.author.computed_data.photo_ref,
+						someData.date,
+						elem.message,
+						someData.img,
+						isDelete,
+						isChange,
+						isComment
 					);
-					
 				}
 			}
-			
 			return true ;
 		}
 

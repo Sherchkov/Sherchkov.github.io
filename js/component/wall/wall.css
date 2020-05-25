@@ -296,7 +296,7 @@
 }
 
 .post-img_grid{
-	display: inline-grid;
+	display: grid;
 	grid-template-columns: repeat(6,16%);
 	justify-content: space-between;
 }

@@ -14,6 +14,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             this.idPhotosBeforeUpdate = {};
             this.idPhotosAfterUpdate = {};
             this.idPhotosWasUpdate = {};
+            this.forDelete = {};
         }
 
         render(){
@@ -58,10 +59,18 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
             arrayOfEvents.forEach(eventName => this.unsubscribeByEvent(eventName));
 
             if(!this.isSave){
+                for (let photo in this.post.img){
+                    let key = this.getKeyFromString(this.post.img[photo]); 
+                
+                    if (key in this.idPhotosWasUpdate){
+                        delete this.idPhotosWasUpdate[key];
+                    }
+                }
+
                 for (let photo in this.idPhotosWasUpdate){
                     this.deletePhoto(photo);
-                    this.isSave = true;
                 }
+                this.isSave = true;
             } 
         }
 
@@ -79,6 +88,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 let img = document.createElement('img');
                 img.src = srcPhoto;
                 img.title = 'Нажмите на фото, чтобы удалить его';
+                img.id = this.getKeyFromString(this.post.img[photo]);
                 img.className = classForImg;
                 document.querySelector('.uploadingPhoto').appendChild(img);
                 let key = this.getKeyFromString(this.post.img[photo]);
@@ -98,8 +108,14 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
 
         //удаление подписи загрузки
         deleteLabelUpload(){
-            let elem = document.querySelector('.createrPost__text_label');
+            try {
+                let elem = document.querySelector('.createrPost__text_label');
             elem.remove();
+            } catch (error) {
+                // eslint-disable-next-line no-unused-vars
+                let count;
+            }
+            
         }
 
         //положить в нужный массив список фотографий
@@ -130,7 +146,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
 
         preDeletePhoto(){
             event.stopPropagation();
-            this.deletePhoto(event.target.id);
+            this.forDelete[event.target.id] = this.idPhotosWasUpdate[event.target.id];
             delete this.idPhotosWasUpdate[event.target.id];
             this.outputUploadFiles();
         }
@@ -375,7 +391,7 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                 let urlencoded = new URLSearchParams();
                 urlencoded.append('id', this.post.id);
                 urlencoded.append('author', this.user_id);
-                urlencoded.append('addressee', this.current_id);
+                //urlencoded.append('addressee', this.current_id);
                 urlencoded.append('message', textForSend);
                 urlencoded.append('image', linksForPhotos);
                 let updatePost = new URL ('/message/update', tensor);
@@ -386,13 +402,20 @@ define(['base/component', 'css!component/modal/ModalCreatePost'], function (Comp
                     headers: {'Content-Type' : 'application/x-www-form-urlencoded'},
                     body: urlencoded,
                     credentials: 'include'
-                }).then(() => this.Close())
+                }).then(() => this.deleteUnneedPhotos())
+                .then(() => this.Close())
                 .catch(error => console.log('error', error));
             }
             else {
                 this.Close();
             }
             
+        }
+
+        deleteUnneedPhotos(){
+            for(let photo in this.forDelete){
+                this.deletePhoto(photo);
+            }
         }
 
         //Вызов события закрытия кнопки окна
