@@ -160,6 +160,10 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	       * @param {element} кнопка Редактировать/Сохранить
 	      */
 	    onEditData(element){
+	    	require(['jquery', 'emoji', 'emojiIcons'], function(){ 
+	    		$('.emojis-wysiwyg').emojiarea({wysiwyg: true, button: '.aboutMe__emojiButton'});
+	    	});
+	    	/*;*/
 	        element.innerText = 'Сохранить';
 	        element.setAttribute('data-name', 'save');
 			//textarea
@@ -170,17 +174,18 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 				name.classList.add('content-data-params__active');
 
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
+	        let emojiButton = document.querySelector('.aboutMe__emojiButton');
+	        aboutMe.classList.add('content_data__aboutMe_active');
 	        if ( !aboutMe.innerHTML ) {
-	            aboutMe.style.maxHeight = '76px';
-	            aboutMe.style.padding = '5px 3px';
 	            aboutMe.innerHTML = '<br>';
 	        }
+	        emojiButton.style.display = 'block';
 
 	        //Приводим поля Contenteditable в состоянии textaera
 	       	this.addEventContenteditable(name);
 	       	this.addEventContenteditable(aboutMe);
 
-	        aboutMe.style.overflow = 'auto';
+	        /*aboutMe.style.overflow = 'auto';*/
 	        aboutMe.setAttribute('contenteditable', 'true');
 	        aboutMe.classList.add('content-data-params__active');
 
@@ -198,7 +203,6 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    addEventContenteditable(element){
 	    	element.addEventListener('click', this.setCursorPosition);
 	    	['dragenter', 'dragover', 'dragleave', 'drop', 'paste'].forEach(eventName => {
-
   				element.addEventListener(eventName, this.preventDefaults, false);
 			})
 	    	element.addEventListener('paste', this.pasteInContenteditable.bind(this));
@@ -267,7 +271,6 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			let name = document.querySelector('.content-data__name');
 			let updateName = '';
 			updateName = renderTextNormal(name.innerText);
-			console.log("updateName", updateName);
 			if (!updateName.trim()) {
 				alert('Введите имя и фамилию');
 				return;
@@ -278,15 +281,13 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			
 	        // about
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
-	        let updateText = '';
-	        
-	        if (aboutMe.innerHTML === '') {
-	            aboutMe.style.maxHeight = '0px';
-	            aboutMe.style.padding = 0;
-	        }else{
-	            updateText = renderTextNormal(aboutMe.innerText);
-	            aboutMe.innerText = updateText;
-	        }
+	        let aboutMeText = document.querySelector('.aboutMe__textarea');
+	        let updateText = renderTextNormal(aboutMeText.value);
+	       	        
+	        let emojiButton = document.querySelector('.aboutMe__emojiButton');
+	        emojiButton.style.display = 'none';
+	        aboutMe.innerHTML = renderEmoji(updateText);
+	        aboutMeText.value = updateText;
 	        aboutMe.title = updateText;
 
 	        this.removeEventContenteditable(name);
@@ -349,8 +350,8 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        //textarea
 	        let aboutMe = document.querySelector('.content_data__aboutMe');
 	        aboutMe.scrollTop = 0;
-	        aboutMe.style.overflow = 'hidden';
 	        aboutMe.classList.remove('content-data-params__active');
+	        aboutMe.classList.remove('content_data__aboutMe_active');
 	        aboutMe.removeAttribute('contenteditable');
 	        //date
 	        document.querySelector('.content-data-params__birthday').innerText = newDate;
