@@ -394,7 +394,7 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 					let elem = document.getElementById(`${this.id}`);
 					let pathForComment = elem.querySelector('.post__comments-for-post');
 					// eslint-disable-next-line no-undef
-					let commentForMount = factory.create(Comment, {comment : this.comments[this.post_id][comment]});
+					let commentForMount = factory.create(Comment, {comment : this.comments[this.post_id][comment], options : this.options});
 
 					commentForMount.mount(pathForComment);
 				}

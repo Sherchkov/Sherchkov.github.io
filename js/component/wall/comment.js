@@ -6,7 +6,8 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
     class Comment extends Component{
         constructor(data){
             super();
-            this.comment = data.comment;
+			this.comment = data.comment;
+			this.options = data.options;
             this.useCSS = {
 				postImage : 'post-img__picture',
 				buttonDelete : 'post-data__delete',
