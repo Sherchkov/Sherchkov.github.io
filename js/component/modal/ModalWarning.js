@@ -43,6 +43,7 @@ define(['base/component'], function (Component) {
 	    	})
 	    	.then(response => {
 	    		if ( response.ok ) {
+	    			this.updating();
 	    			document.querySelector('.content-photo .content-photo__img').setAttribute('src', 'img/avatar/avatar_default.png');
 	    			document.querySelector('.header .header__img').setAttribute('src', 'img/avatar/avatar_default.png');
 	    			document.querySelector('.content-photo .photo__delete').remove();
@@ -63,6 +64,12 @@ define(['base/component'], function (Component) {
 	    	html.classList.remove('html_overflow');
 	    	html.style.marginRight = '0px';
 	        modal.unmount();
+	    }
+
+	    //Вызов обновления стены 
+	    updating() {
+	        let updatingEvent = new Event('update');
+	        document.querySelector('.content-wall').dispatchEvent(updatingEvent);
 	    }
 	}
 
