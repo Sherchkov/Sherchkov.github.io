@@ -291,7 +291,7 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        emojiButton.style.display = 'none';
 	        aboutMe.innerHTML = renderEmoji(updateText);
 	        aboutMeText.value = updateText;
-	        aboutMe.title = updateText;
+	        aboutMe.title = renderTextNormal(deleteEmojiInTitle(updateText));
 
 	        this.removeEventContenteditable(name);
 	       	this.removeEventContenteditable(aboutMe);
