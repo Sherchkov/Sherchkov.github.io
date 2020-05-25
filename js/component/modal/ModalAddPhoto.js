@@ -189,6 +189,7 @@ define(['base/component'], function (Component) {
 	    				deletePhoto.innerHTML = '<svg class="photo__deleteIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g><line class="cls-1" x1="7" x2="25" y1="7" y2="25"></line><line class="cls-1" x1="7" x2="25" y1="25" y2="7"></line></g></svg>';
 	    				document.querySelector('.content-photo').append(deletePhoto);
 	    			}
+				this.updating();
 	    			this.onClose();
 	    			return;
 	    		}
@@ -364,7 +365,12 @@ define(['base/component'], function (Component) {
 	    	}
 	        this.unmount();
 	    }
-
+		
+	    //Вызов обновления стены 
+	    updating() {
+	        let updatingEvent = new Event('update');
+	        document.querySelector('.content-wall').dispatchEvent(updatingEvent);
+	    }
 
 	}
 
