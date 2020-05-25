@@ -12,7 +12,7 @@ define(['base/component', 'component/avatar/avatar', "base/helpers", 'css!compon
 		          </div>
 	              <div class="aboutMe">
 	              	<textarea rows="1" class="aboutMe__textarea emojis-wysiwyg" style="display:none">${this.data.about_self}</textarea>
-	              	<div class="emoji-wysiwyg-editor content_data__aboutMe" title="${this.data.about_self}">${typeof(this.data.about_self) !== 'undefined' ? renderEmoji(this.data.about_self) : ''}</div>
+	              	<div class="emoji-wysiwyg-editor content_data__aboutMe" title="${typeof(this.data.about_self) !== 'undefined' ? renderTextNormal(deleteEmojiInTitle(this.data.about_self)) : ''}">${typeof(this.data.about_self) !== 'undefined' ? renderEmoji(this.data.about_self) : ''}</div>
 	              	<button type="button" class="aboutMe__emojiButton"></button>
 	              </div>
 	              <div class="content-data-params">
