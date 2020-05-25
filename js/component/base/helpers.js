@@ -170,3 +170,9 @@ function renderEmoji(text){
 	});
 	return htmlEmoji;
 }
+
+//Удаление смайликов из title
+function deleteEmojiInTitle(text){
+    let htmlEmoji = text.replace(/:[a-z0-9-_+]+?:/g, '');
+	return htmlEmoji;
+}
