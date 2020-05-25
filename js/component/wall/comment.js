@@ -39,7 +39,7 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
                         <a id="${this.comment.href}" class="${this.useCSS.commentLink}">
                             ${avatar}
                         </a>
-                        <a id="${this.comment.href}" class="${this.useCSS.postMaker}">${this.comment.name}</a>
+                        <a id="${this.comment.href}" class="${this.useCSS.postMaker}" title="Имя автора комментария">${this.comment.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>
                         <p class="${this.useCSS.commentText}">${this.comment.text}</p>
                         ${rubbish}
@@ -62,6 +62,10 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 				this.showAll();
 			} else if (event.target.title === 'Скрыть комментарий') {
 				this.hideAll();
+			} else if (event.target.title === 'Фото автора комментария') {
+				this.uploadFriend();
+			} else if (event.target.title === 'Имя автора комментария') {
+				this.uploadFriend();
 			}
 		}
 
@@ -78,6 +82,35 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 			needElem.after(shortTextButton);
 			button.remove();
 		}
+
+		uploadFriend(){
+            let getUser = new URL (`/user/read/${this.comment.href}`, tensor);	
+            
+				fetch(getUser, {
+					method : 'GET',
+					mode: 'cors',
+					credentials: 'include'
+				}).then(response => response.json())
+                .then(result => {    
+                    this.options.parent.unmount();
+                    if ( window.innerWidth > 800 ) {
+                        // eslint-disable-next-line no-undef
+                        require(['page/profile'], function (Profile) {
+                            // eslint-disable-next-line no-undef
+                            let page = factory.create(Profile, result);
+                            page.mount(document.body);
+                        });
+                    } else {
+                        // eslint-disable-next-line no-undef
+                        require(['page/ProfileMobile'], function(profileMobile){
+                            // eslint-disable-next-line no-undef
+                            let page = factory.create(profileMobile, result);
+                            page.mount(document.body);
+                        });
+                    }
+                })
+				.catch(() => this.uploadFriend());
+        }
 
 		hideAll(){
 			let elem = document.getElementById(`${this.id}`);
@@ -135,10 +168,10 @@ define(['base/component', 'css!component/wall/wall'], function (Component) {
 
         _getAvatar(){
 			if (this.comment.avatar !== 'undefined'){
-				return `<img src="${new URL (this.comment.avatar, tensor)}" alt="${this.comment.name}" class="${this.useCSS.postAva}">`;
+				return `<img src="${new URL (this.comment.avatar, tensor)}" title="Фото автора комментария" alt="${this.comment.name}" class="${this.useCSS.postAva}">`;
 			}
 			else {
-				return `<p class="${this.useCSS.postCap}" title="Неизвестный пользователь"></p>`;
+				return `<p class="${this.useCSS.postCap}" title="Фото автора комментария"></p>`;
 			}
 			
 		}

@@ -191,10 +191,10 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 
 		_getAvatar(){
 			if (this.post.avatar !== 'undefined'){
-				return `<img src="${new URL (this.post.avatar, tensor)}" alt="${this.post.name}" class="${this.useCSS.postAva}">`;
+				return `<img src="${new URL (this.post.avatar, tensor)}" title="Фото автора поста" alt="${this.post.name}" class="${this.useCSS.postAva}">`;
 			}
 			else {
-				return `<p class="${this.useCSS.postCap}" title="Неизвестный пользователь"></p>`;
+				return `<p class="${this.useCSS.postCap}" title="Фото автора поста"></p>`;
 			}
 			
 		}
@@ -307,7 +307,7 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
                         <a id="${this.post.href}" class="${this.useCSS.postLink}">
                             ${avatar}
                         </a>
-                        <a id="${this.post.href}" class="${this.useCSS.postMaker}">${this.post.name}</a>
+                        <a id="${this.post.href}" class="${this.useCSS.postMaker}" title="Имя автора поста">${this.post.name}</a>
                         <span class="${this.useCSS.postDate}">${date}</span>
                     </div>
                     <p class="${this.useCSS.postText}">${this.post.text}</p>
@@ -351,9 +351,9 @@ define(['base/component','component/wall/comment', 'css!component/wall/wall'], f
 				this.openPost();
 			} else if (event.target.classList.contains('post-text')) {
 				this.openPost();
-			} else if (event.target.classList.contains('post-data__img')) {
+			} else if (event.target.title === 'Фото автора поста') {
 				this.uploadFriend();
-			} else if (event.target.classList.contains('post-data__name')) {
+			} else if (event.target.title === 'Имя автора поста') {
 				this.uploadFriend();
 			} else if (event.target.title === 'Удалить') {
 				this.deletePost();

@@ -169,17 +169,17 @@ define(['base/component', 'component/wall/post', 'css!component/wall/wall'], fun
 
 					if (textObject.type === 'post'){
 						this.wall[elem.id] = this.makeObjectPost(
-								elem.id,
-								elem.author.id,
-								elem.author.data.name,
-								elem.author.computed_data.photo_ref,
-								someData.date,
-								textObject.text,
-								someData.img,
-								isDelete,
-								isChange,
-								isComment
-							);	
+							elem.id,
+							elem.author.id,
+							elem.author.data.name,
+							elem.author.computed_data.photo_ref,
+							someData.date,
+							textObject.text,
+							someData.img,
+							isDelete,
+							isChange,
+							isComment
+						);	
 					} else if (textObject.type === 'comment') {
 
 						let comm = this.makeObjectPost(
