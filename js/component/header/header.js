@@ -61,6 +61,9 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    }
 
 	    renderStatus(last_activity){
+		if (this.options.id === user_id) {
+	    		return 'В сети';
+	    	}
 	      	//перевод даты в формат в unix
 	      	last_activity = Date.parse(last_activity);
 	      	last_activity = last_activity.toString().slice(0, -3);
