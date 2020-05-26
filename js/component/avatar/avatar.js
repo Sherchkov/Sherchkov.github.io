@@ -109,6 +109,7 @@ define(['base/component', 'css!component/avatar/avatar'], function (Component) {
         			style : `top:30%; height:auto; max-width:90%; width: 500px; background:transparent;`,
 	                children : ModalWarning,
 	                text : 'Вы уверены, что хотите удалить фотографию?',
+	                canselButton : 'Отмена',
 	                textButton : 'Удалить',
 	                dataButton : 'deletePhoto'
 	            });
