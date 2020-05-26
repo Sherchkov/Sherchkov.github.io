@@ -136,7 +136,6 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    	if (userParams.connect) {
 	    		if (userParams.connect.myFriends) {
 	    			for (let user of userParams.connect.myFriends){
-	    				console.log("user", user);
 	    				if (Number(user.user_from) === this.options.id || Number(user.user_to) === this.options.id) {
 	    					return this.determineUserIcon('delete', 'Удалить из друзей', 1, 'minus');
 	    				}
@@ -222,7 +221,6 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	    	    "credentials" : "include"
 	    	})
 	    	.then(response => {
-	    		console.log(response);
 	    		if (response.ok) {
 	    			return response.json();
 	    		}else{
@@ -467,7 +465,6 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
                 credentials: 'include'
             })
             .then(response => {
-            	console.log("response", response);
             	if ( !response.ok ) {
                     alert('Не получилось загрузить данные');
                 }
