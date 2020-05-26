@@ -24,22 +24,22 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 			           	  ` : ''}
 		              <span class="header__status"></span>
 		            </div>
-			    <div class="header__centre"></div>
+			   		<div class="header__centre"></div>
 		            <div class="header__right">
-		            ${this.options.id === user_id ? '<div class="header__edit" data-name="edit">Редактировать</div>' : ''}
-		              <div class="header__photo">
-		                <img class="header__img modalPhoto" src="${this.avatar}" alt="${options.data.name}" title="${options.data.name}">
-		              </div>
-		              ${this.options.id === user_id ? `
-			              <div class="header-menu">
-			              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
-							<div class="header-menu__list">
-							  <div class="header-menu__item header-menu_logout">Выход</div>
-							  <div class="header-menu__item header-menu_theme" night="${this.theme_night}">${this.theme_night === 'false' ? 'Ночной режим' : 'Обычный режим'}</div>
-							  ${this.options.mobile === true ? '' : `<div class="header-menu__item header-menu_changePosition" position="${this.mirror}">Поменять расположение</div>`}
-							</div>	
-			              </div>` : ''} 
-		            </div>
+			            ${this.options.id === user_id ? '<div class="header__edit" data-name="edit">Редактировать</div>' : ''}
+			              <div class="header__photo">
+			                <img class="header__img modalPhoto" src="${this.avatar}" alt="${options.data.name}" title="${options.data.name}">
+			              </div>
+			              ${this.options.id === user_id ? `
+				              <div class="header-menu">
+				              	<img class="header-menu_icon" src="img/icons/svg/dots.svg" alt="Меню" title="Меню">
+								<div class="header-menu__list">
+								  <div class="header-menu__item header-menu_logout">Выход</div>
+								  <div class="header-menu__item header-menu_theme" night="${this.theme_night}">${this.theme_night === 'false' ? 'Ночной режим' : 'Обычный режим'}</div>
+								  ${this.options.mobile === true ? '' : `<div class="header-menu__item header-menu_changePosition" position="${this.mirror}">Поменять расположение</div>`}
+								</div>	
+				              </div>` : '<div class="header__user"></div>'} 
+			        </div>
 		        </header>
 		      `;
 	    }
@@ -56,12 +56,14 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 		        if (this.options.mobile !== true) {
 		        	this.subscribeTo(this._changePositon, 'click', this.changePositon.bind(this));
 		        }
+	    	}else{
+	    		this.determineUser();
 	    	}
 			this.subscribeTo(this.getContainer(), 'click', this.clickController.bind(this));
 	    }
 
 	    renderStatus(last_activity){
-		if (this.options.id === user_id) {
+			if (this.options.id === user_id) {
 	    		return 'В сети';
 	    	}
 	      	//перевод даты в формат в unix
@@ -129,6 +131,51 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	      	return 'Был(а) в сети: '+date;
 	    }
 
+	    determineUser(){
+	    	let headerUser = this.getContainer().querySelector('.header__user');
+	    	if (userParams.connect) {
+	    		if (userParams.connect.myFriends) {
+	    			for (let user of userParams.connect.myFriends){
+	    				console.log("user", user);
+	    				if (Number(user.user_from) === this.options.id || Number(user.user_to) === this.options.id) {
+	    					return this.determineUserIcon('delete', 'Удалить из друзей', 1, 'minus');
+	    				}
+	    			}
+	    		}
+	    		if (userParams.connect.myRequests) {
+	    			for (let user of userParams.connect.myRequests){
+	    				if (Number(user.user_from) === this.options.id || Number(user.user_to) === this.options.id) {
+	    					return this.determineUserIcon('delete', 'Удалить из подписек', 2, 'minus');
+	    				}
+	    			}
+	    			
+	    		}
+	    		if (userParams.connect.mySubscribers) {
+	    			for (let user of userParams.connect.mySubscribers){
+	    				if (Number(user.user_from) === this.options.id || Number(user.user_to) === this.options.id) {
+	    					return this.determineUserIcon('add', 'Добавить подписчика в друзья', 3, 'plus');
+	    				}
+	    			}
+	    		}
+	    		return this.determineUserIcon('add', 'Добавить в друзья', 4, 'plus');
+	    	}else{
+	    		return this.determineUserIcon('add', 'Добавить в друзья', 4, 'plus');
+	    	}
+	    }
+
+	    determineUserIcon(action, title, titleNumber, icon){
+	    	let headerUser = this.getContainer().querySelector('.header__user');
+	    	headerUser.title = title;
+	    	headerUser.setAttribute('action', action);
+	    	headerUser.setAttribute('titleNumber', titleNumber);
+	    	if (icon === 'plus') {
+	    		headerUser.innerHTML = '<svg style="enable-background:new 0 0 15 15;" class="header__user_svg" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"><path d="M7.5,0C3.364,0,0,3.364,0,7.5S3.364,15,7.5,15S15,11.636,15,7.5S11.636,0,7.5,0z M7.5,14C3.916,14,1,11.084,1,7.5  S3.916,1,7.5,1S14,3.916,14,7.5S11.084,14,7.5,14z"/><polygon points="8,3.5 7,3.5 7,7 3.5,7 3.5,8 7,8 7,11.5 8,11.5 8,8 11.5,8 11.5,7 8,7 "/></svg>';
+	    	}else if (icon === 'minus'){
+	    		headerUser.innerHTML = '<svg enable-background="new 0 0 256 256" class="header__user_svg" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><path d="M178.666,134.4H77.331c-3.534,0-6.4-2.866-6.4-6.4s2.866-6.4,6.4-6.4h101.335c3.533,0,6.399,2.866,6.399,6.4  S182.199,134.4,178.666,134.4z M256,128C256,57.42,198.58,0,128,0C57.42,0,0,57.42,0,128c0,70.58,57.42,128,128,128  C198.58,256,256,198.58,256,128z M243.199,128c0,63.521-51.678,115.2-115.199,115.2c-63.522,0-115.2-51.679-115.2-115.2  C12.8,64.478,64.478,12.8,128,12.8C191.521,12.8,243.199,64.478,243.199,128z"/></svg>';
+	    	}
+	    }
+
+
 
 	    //переключение Редактировать/Сохранить
 	    clickController(event){
@@ -154,10 +201,105 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	        	this.showMenu();
 	        }else if (element.closest('.header__home')) {
 	        	this.goHome();
+	        }else if (element.closest('.header__user')) {
+	        	if (element.closest('.header__user').getAttribute('action') === 'add') {
+	        		this.addFriend(element.closest('.header__user').getAttribute('titleNumber'));
+	        	}else if (element.closest('.header__user').getAttribute('action') === 'delete') {
+	        		this.deleteFriend(element.closest('.header__user').getAttribute('titleNumber'));
+	        	}
 	        }
 	    }
 
+	    addFriend(lastTitle){
+	    	let urlencoded = new URLSearchParams();
+	    	urlencoded.append("user", this.options.id);
+	    	urlencoded.append("link_type", "friend");
+	    	fetch(globalUrlServer + '/user_link/create', {
+	    	  method: 'POST',
+	    	  mode: 'cors',
+	    	    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+	    	    body: urlencoded,
+	    	    "credentials" : "include"
+	    	})
+	    	.then(response => {
+	    		console.log(response);
+	    		if (response.ok) {
+	    			return response.json();
+	    		}else{
+	    			alert('Не удалось добавить в друзья');
+	    		}
+	    	})
+	    	.then(result => {
+	    		this.changeUser('add', lastTitle);
+	    	})
+	    	.catch(error => console.log('error', error));
+	    }
 
+	    deleteFriend(lastTitle){
+	    	let urlencoded = new URLSearchParams();
+	    	urlencoded.append("user", this.options.id);
+
+	    	fetch(globalUrlServer + '/user_link/delete', {
+	    	  method: 'POST',
+	    	  mode: 'cors',
+	    	    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+	    	    body: urlencoded,
+	    	    "credentials" : "include"
+	    	})
+	    	.then(response => {
+	    		if (response.ok) {
+	    			this.changeUser('delete', lastTitle);
+	    		}else{
+	    			alert('Не удалось удалить из друзей');
+	    		}
+	    	})
+	    	.catch(error => console.log('error', error));
+	    }
+
+	    changeUser(lastAction, lastTitle){
+	    	let text = ''
+	    	let newTitle = '';
+	    	let newtitleNumber = '';
+	    	let action = ''
+	    	let svg = '';
+	    	if (Number(lastTitle) === 1) {
+	    		text = 'Пользователь добавлен в подписчики';
+	    		newTitle = 'Добавить подписчика в друзья';
+	    		newtitleNumber = 3;
+	    	}else if (Number(lastTitle) === 2) {
+	    		text = 'Вы удалили подписку на пользователя';
+	    		newTitle = 'Добавить в друзья';
+	    		newtitleNumber = 4;
+	    	}else if (Number(lastTitle) === 3) {
+	    		text = 'Пользователь добавлен к вам в друзья';
+	    		newTitle = 'Удалить из друзей';
+	    		newtitleNumber = 1;
+	    	}else if (Number(lastTitle) === 4) {
+	    		text = 'Вы подписались на пользователя';
+	    		newTitle = 'Удалить из подписек';
+	    		newtitleNumber = 2;
+	    	}
+
+	    	if (lastAction === 'delete') {
+	    		action = 'add';
+	    		svg = 'plus';
+	    	}else if (lastAction === 'add') {
+	    		action = 'delete';
+	    		svg = 'minus';
+	    	}
+
+
+	    	this.determineUserIcon(action, newTitle, newtitleNumber, svg);
+	    	require(['modal/ActionModal', 'modal/ModalWarning'], function(ActionModal, ModalWarning){ 
+        		new ActionModal({
+        			theme : 'white',
+        			style : `top:30%; height:auto; max-width:90%; width: 500px; background:transparent;`,
+	                text : text,
+	                children : ModalWarning,
+	                canselButton : 'Закрыть'
+	            });
+        	});
+	    }
 	    /**
 	       * Изменяет блок content-data для редактирования
 	       * @param {element} кнопка Редактировать/Сохранить
