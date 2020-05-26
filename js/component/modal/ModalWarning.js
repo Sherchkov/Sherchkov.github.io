@@ -11,8 +11,8 @@ define(['base/component'], function (Component) {
 						${this.options.text}
 	            	</div>
 	            	<div class="warning-footer">
-	            		<button class="warning__cansel">Отмена</button>
-	            		<button class="warning__act" data-act="${this.options.dataButton}">${this.options.textButton}</button>
+	            		<button class="warning__cansel">${this.options.canselButton}</button>
+				${typeof(this.options.dataButton) !== 'undefined' ? `<button class="warning__act" data-act="${this.options.dataButton}">${this.options.textButton}</button>` : ''}
 	            	</div>
 	            </div>
 	        `;
@@ -21,8 +21,10 @@ define(['base/component'], function (Component) {
 	    afterMount() {
 	        this._closeButton = this.getContainer().querySelector('.warning__cansel');
 	        this.subscribeTo(this._closeButton, 'click', this.onClose.bind(this));
-	        this._act = this.getContainer().querySelector('.warning__act');
-	        this.subscribeTo(this._act, 'click', this.onClick.bind(this));
+	        if (this.options.dataButton) {
+	        	this._act = this.getContainer().querySelector('.warning__act');
+	        	this.subscribeTo(this._act, 'click', this.onClick.bind(this));
+	        } 
 	    }
 
 	    onClick(){
@@ -54,7 +56,7 @@ define(['base/component'], function (Component) {
 	    	  
 	    	})
 	    	.catch(error => {
-				alert('Не удалось удалить фотографию');
+			alert('Не удалось удалить фотографию');
 	    		console.log('error', error);
 	    	});
 	    }
