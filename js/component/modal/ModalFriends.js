@@ -138,7 +138,9 @@ define(['base/component', 'component/action/elemOfFriends', 'css!component/modal
 					this.friends.mySubscribers.unshift(subscriber);
 				}
 			}
-
+			if (this.options.id === user_id) {
+				userParams.connect = this.friends;
+			}
 			return true;
 		}
 
