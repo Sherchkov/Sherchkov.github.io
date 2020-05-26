@@ -19,6 +19,7 @@ define(['base/component', 'component/action/music', 'server/json', 'css!componen
 		}
 
 		afterMount() {
+			document.querySelector('.modal-content').classList.add('modal-content_big');
 			audioPlayer();
 		}
 	}
