@@ -119,4 +119,16 @@
 .header-menu__item:hover{
 	color: #828181;
 }
-
+.header__user{
+	margin-left: 5px;
+	cursor: pointer;
+}
+.header__user_svg{
+	display: block;
+	width: 20px;
+	height: 20px;
+	fill: #bfbfbf;
+}
+.header__user:hover .header__user_svg{
+	fill: #ffffff;
+}
