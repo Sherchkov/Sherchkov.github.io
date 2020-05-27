@@ -614,6 +614,9 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   			    return response.json();  
 	   			}else{
 	   				page.unmount();
+					if (document.body.innerHtml) {
+	   					document.body.innerHtml = '';
+	   				}
 	   				require(["page/Authorization"], function(Authorization){
 	   					page = factory.create(Authorization, {});
 	   					page.mount(document.body);
@@ -623,6 +626,9 @@ define(['base/component', "base/helpers", 'css!component/header/header'], functi
 	   		})
 	   		.then(result => {
 	   			page.unmount();
+				if (document.body.innerHtml) {
+	   				document.body.innerHtml = '';
+	   			}
 	   			if ( window.innerWidth > 800 ) {
 	   				require(["page/profile"], function (Profile) {
 	   					page = factory.create(Profile, result);
