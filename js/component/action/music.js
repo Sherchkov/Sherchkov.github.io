@@ -25,15 +25,17 @@ define (['jquery'], function(){
         });
 
         $('.audioPlayer')[0].addEventListener('loadeddata', () => {
-            if (!musicHeader) {
-                require(['component/action/player', 'server/json', 'component/player/player'], function(AudioPlayer, json){ 
-                    musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
-                    musicHeader.setPosition(currentSong);
-                    musicHeader.setStartTitle();
-                });
-            }else{
-                musicHeader.setPosition(currentSong);
-                musicHeader.setStartTitle();
+            if (!document.querySelector('.MainPageMobile')) {
+               if (!musicHeader) {
+                   require(['component/action/player', 'server/json', 'component/player/player'], function(AudioPlayer, json){ 
+                       musicHeader = new AudioPlayer(json.music, document.querySelector('#audioHeader'))
+                       musicHeader.setPosition(currentSong);
+                       musicHeader.setStartTitle();
+                   });
+               }else{
+                   musicHeader.setPosition(currentSong);
+                   musicHeader.setStartTitle();
+               } 
             }
         });
     }
