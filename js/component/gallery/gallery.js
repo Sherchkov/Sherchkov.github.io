@@ -7,7 +7,7 @@ define(['base/component', 'component/action/slider', 'server/json', 'css!compone
 	        return `
 	            <div class="content-gallery content_default">
 	            	<div class="content-gallery__head">
-						<span class="content-gallery__title">Мои фотографии</span>
+						<span class="content-gallery__title">${this.options.id === user_id ? 'Мои фотографии' : 'Фотографии пользователя'}</span>
 						${this.options.id === user_id ? '<button class="content-gallery__add">Добавить</button>' : ''}
 	            	</div>
 	                <div class="slider slider-mini">
